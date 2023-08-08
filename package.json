@@ -1,0 +1,80 @@
+{
+  "name": "samsung-biologic",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@ant-design/icons": "^5.0.1",
+    "@emotion/react": "^11.9.3",
+    "@emotion/styled": "^11.9.3",
+    "@reduxjs/toolkit": "^1.8.2",
+    "@testing-library/jest-dom": "^5.16.4",
+    "@testing-library/react": "^13.3.0",
+    "@testing-library/user-event": "^13.5.0",
+    "@tinymce/tinymce-react": "^4.3.0",
+    "@types/jest": "^27.5.2",
+    "@types/moment": "^2.13.0",
+    "@types/node": "^16.11.41",
+    "@types/node-sass": "^4.11.2",
+    "@types/react": "^18.0.14",
+    "@types/react-dom": "^18.0.5",
+    "@types/react-redux": "^7.1.24",
+    "@types/sass-loader": "^8.0.3",
+    "antd": "^4.23.5",
+    "axios": "^0.27.2",
+    "caver-js": "^1.8.2",
+    "dotenv": "^16.0.1",
+    "i18next": "^21.8.13",
+    "moment": "^2.29.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-i18next": "^11.18.0",
+    "react-redux": "^8.0.2",
+    "react-responsive-carousel": "^3.2.23",
+    "react-router-dom": "^6.3.0",
+    "react-scripts": "4.0.3",
+    "redux": "^4.2.0",
+    "sass": "^1.53.0",
+    "sass-loader": "^13.0.1",
+    "suneditor": "^2.44.12",
+    "suneditor-react": "^3.5.0",
+    "swiper": "6.8.4",
+    "typescript": "^4.7.4",
+    "web-vitals": "^2.1.4",
+    "workbox-cacheable-response": "^6.5.3",
+    "workbox-core": "^6.5.3",
+    "workbox-expiration": "^6.5.3",
+    "workbox-precaching": "^6.5.3",
+    "workbox-routing": "^6.5.3",
+    "workbox-strategies": "^6.5.3"
+  },
+  "scripts": {
+    "start": " react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "resolutions": {
+    "react-error-overlay": "6.0.9"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "webpack": "4.44.2"
+  }
+}
