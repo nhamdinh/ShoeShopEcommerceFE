@@ -1,11 +1,13 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Rating from "./Rating";
 import { useGetProductsQuery } from "../../store/components/products/productsApi";
 import Loading from "../LoadingError/Loading";
+import Message from "../LoadingError/Error";
 
 const ShopSection = ({ pagenumber, keyword }: any) => {
   const navigate = useNavigate();
+  const [dataFetched, setdataFetched] = useState<any>([]);
 
   const { data, error, isSuccess, isLoading } = useGetProductsQuery(
     {
@@ -19,6 +21,12 @@ const ShopSection = ({ pagenumber, keyword }: any) => {
       skip: false,
     }
   );
+  useEffect(() => {
+    if (isSuccess) {
+      setdataFetched(data?.products);
+    }
+  }, [data]);
+
   return (
     <>
       <div className="container">
@@ -31,11 +39,13 @@ const ShopSection = ({ pagenumber, keyword }: any) => {
                     <Loading />
                   </div>
                 ) : error ? (
-                  <></>
+                  <Message
+                    variant="alert-danger"
+                    mess={JSON.stringify(error)}
+                  />
                 ) : (
-                  /*                   <Message variant="alert-danger" mess={error.error}></Message>
-                   */ <>
-                    {data?.products.map((product: any) => (
+                  <>
+                    {dataFetched.map((product: any) => (
                       <div
                         className="shop col-lg-4 col-md-6 col-sm-6"
                         key={product._id}

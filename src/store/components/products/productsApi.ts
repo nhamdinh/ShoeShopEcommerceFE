@@ -23,17 +23,23 @@ export const productsApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ["GetProducts"],
+  tagTypes: ["GetProducts", "GetProductsDetail"],
   endpoints: (builder) => ({
     getProducts: builder.query({
       query: (data) => ({
         url: `/products`,
         method: "GET",
-        params: data,
       }),
       providesTags: ["GetProducts"],
+    }),
+    getProductsDetail: builder.query({
+      query: (data) => ({
+        url: `/products/${data.id}`,
+        method: "GET",
+      }),
+      providesTags: ["GetProductsDetail"],
     }),
   }),
 });
 
-export const { useGetProductsQuery } = productsApi;
+export const { useGetProductsQuery, useGetProductsDetailQuery } = productsApi;
