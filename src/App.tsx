@@ -1,16 +1,18 @@
-import "./App.css";
+import "./App.scss";
 import "./responsive.css";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { PrivateRoutes } from "./routers";
+import TopHeader from "./components/TopHeader";
 
 const App = () => {
   console.log("env:", process.env.REACT_PUBLIC_ENV);
-
+  const location = useLocation();
   return (
     <div className="app-wrapper">
-      <Header />
+      <TopHeader />
+      {location.pathname.includes("login") ? <></> : <Header />}
       <Routes>
         {PrivateRoutes.map((item, index) => (
           <Route key={index} path={item.path} element={item.element} />

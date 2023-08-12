@@ -1,4 +1,6 @@
+import CartScreen from "../screens/CartScreen";
 import HomeScreen from "../screens/HomeScreen";
+import Login from "../screens/Login";
 import SingleProduct from "../screens/SingleProduct";
 
 export const PrivateRoutes = [
@@ -9,5 +11,13 @@ export const PrivateRoutes = [
   {
     path: "/product-detail",
     element: <SingleProduct />,
+  },
+  {
+    path: "/cart/:id",
+    element: <CartScreen />,
+  },
+  {
+    path: "/login",
+    element: <Login />,
   },
 ];
