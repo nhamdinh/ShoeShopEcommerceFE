@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Header from "../components/Header";
 import Rating from "../components/homeComponents/Rating";
-import { Link } from "react-router-dom";
 import Message from "../components/LoadingError/Error";
 import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 
 import Loading from "../components/LoadingError/Loading";
 import moment from "moment";
@@ -13,13 +13,13 @@ import { useGetProductsDetailQuery } from "../store/components/products/products
 const SingleProduct = ({ history, match }: any) => {
   const [rating, setRating] = useState<any>(0);
   const [comment, setComment] = useState<any>("");
+  const navigate = useNavigate();
 
   const dispatch = useDispatch();
 
   const productId = getUrlParams("id");
   const [product, setdataFetched] = useState<any>({});
-  const [qty, setQty] = useState<any>(product?.countInStock);
-  console.log(qty);
+  const [qty, setQty] = useState<any>(1);
   const { data, error, isSuccess, isLoading } = useGetProductsDetailQuery(
     {
       id: productId,
@@ -33,7 +33,7 @@ const SingleProduct = ({ history, match }: any) => {
   useEffect(() => {
     if (isSuccess) {
       setdataFetched(data);
-      setQty(data?.countInStock);
+      setQty(data?.countInStock || 1);
     }
   }, [data]);
 
@@ -58,10 +58,10 @@ const SingleProduct = ({ history, match }: any) => {
   //   // dispatch(listProductDetails(productId));
   // }, [dispatch, productId, successCreateReview]);
 
-  // const AddToCartHandle = (e) => {
-  //   e.preventDefault();
-  //   history.push(`/cart/${productId}?qty=${qty}`);
-  // };
+  const AddToCartHandle = (e: any) => {
+    e.preventDefault();
+    navigate(`/cart/${productId}?qty=${qty}`);
+  };
   // const submitHandler = (e) => {
   //   e.preventDefault();
   //   // dispatch(
@@ -119,19 +119,17 @@ const SingleProduct = ({ history, match }: any) => {
                           <h6>Quantity</h6>
                           <select
                             value={qty}
-                            onChange={(e) => setQty(e.target.value)}
+                            onChange={(e) => setQty(+e.target.value)}
                           >
-                            {["xxx", "xxx", "xxx"].map(
-                              (x: any, index: number) => (
-                                <option key={index + 1} value={index + 1}>
-                                  {index + 1}
-                                </option>
-                              )
-                            )}
+                            {[1, 2, 3].map((x: any, index: number) => (
+                              <option key={index} value={x}>
+                                {x}
+                              </option>
+                            ))}
                           </select>
                         </div>
                         <button
-                          // onClick={AddToCartHandle}
+                          onClick={AddToCartHandle}
                           className="round-black-btn"
                         >
                           Add To Cart
