@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-globals */
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { API_LINK } from "../../../utils/constants";
+import { ACCESSTOKEN_STORAGE, API_LINK } from "../../../utils/constants";
 
 export const productsApi = createApi({
   reducerPath: "productsApis",
@@ -12,7 +12,7 @@ export const productsApi = createApi({
       // Get token from store (userSlice)
       // @ts-ignore
       //   const apiKey = process.env.REACT_APP_API_KEY;
-      const accessToken = localStorage.getItem("accessToken");
+      const accessToken = localStorage.getItem(ACCESSTOKEN_STORAGE);
 
       // Add token to headers
       if (accessToken) {

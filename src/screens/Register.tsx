@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import Message from "../components/LoadingError/Error";
 import Loading from "../components/LoadingError/Loading";
 import { useNavigate } from "react-router-dom";
-import { NAME_STORAGE } from "../utils/constants";
+import { ACCESSTOKEN_STORAGE, NAME_STORAGE } from "../utils/constants";
 import { useRegisterMutation } from "../store/components/auth/authApi";
 
 const Register = ({ location, history }: any) => {
@@ -25,7 +25,7 @@ const Register = ({ location, history }: any) => {
     const data = res?.data;
 
     if (data) {
-      localStorage.setItem("accessToken", data.token);
+      localStorage.setItem(ACCESSTOKEN_STORAGE, data.token);
       localStorage.setItem(NAME_STORAGE, data.name);
       navigate("/");
     } else {

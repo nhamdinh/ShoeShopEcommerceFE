@@ -4,7 +4,7 @@ import Message from "../components/LoadingError/Error";
 import Loading from "../components/LoadingError/Loading";
 import { useNavigate } from "react-router-dom";
 import { useLoginMutation } from "../store/components/auth/authApi";
-import { NAME_STORAGE } from "../utils/constants";
+import { ACCESSTOKEN_STORAGE, NAME_STORAGE } from "../utils/constants";
 
 const Login = () => {
   window.scrollTo(0, 0);
@@ -24,7 +24,7 @@ const Login = () => {
     const data = res?.data;
 
     if (data) {
-      localStorage.setItem("accessToken", data.token);
+      localStorage.setItem(ACCESSTOKEN_STORAGE, data.token);
       localStorage.setItem(NAME_STORAGE, data.name);
       navigate("/");
     } else {

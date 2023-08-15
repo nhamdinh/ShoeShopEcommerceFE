@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-globals */
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { API_LINK } from "../../../utils/constants";
+import { ACCESSTOKEN_STORAGE, API_LINK } from "../../../utils/constants";
 
 export const authApi = createApi({
   reducerPath: "authApis",
@@ -12,7 +12,7 @@ export const authApi = createApi({
       // Get token from store (userSlice)
       // @ts-ignore
       //   const apiKey = process.env.REACT_APP_API_KEY;
-      const accessToken = localStorage.getItem("accessToken");
+      const accessToken = localStorage.getItem(ACCESSTOKEN_STORAGE);
 
       // Add token to headers
       if (accessToken) {
@@ -23,7 +23,7 @@ export const authApi = createApi({
       return headers;
     },
   }),
-  tagTypes: [],
+  tagTypes: ["getProfile__TAG"],
   endpoints: (builder) => ({
     login: builder.mutation({
       query: (data) => ({
@@ -45,6 +45,7 @@ export const authApi = createApi({
         url: `/users/profile`,
         method: "GET",
       }),
+      providesTags: ["getProfile__TAG"],
     }),
     updateProfile: builder.mutation({
       query: (data) => ({
@@ -52,6 +53,7 @@ export const authApi = createApi({
         method: "PUT",
         body: data,
       }),
+      invalidatesTags: ["getProfile__TAG"],
     }),
   }),
 });

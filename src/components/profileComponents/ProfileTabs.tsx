@@ -37,13 +37,6 @@ const ProfileTabs = ({ userInfo }: any) => {
     //@ts-ignore
     const data = res?.data;
     console.log(data);
-    // if (data) {
-    //   localStorage.setItem("accessToken", data.token);
-    //   localStorage.setItem(NAME_STORAGE, data.name);
-    //   navigate("/");
-    // } else {
-    //   setisError(true);
-    // }
   };
 
   useEffect(() => {
@@ -53,7 +46,11 @@ const ProfileTabs = ({ userInfo }: any) => {
 
   const submitHandler = (e: any) => {
     e.preventDefault();
-    onUpdateProfile({ name: name, email: email });
+    if (password !== confirmPassword) {
+    } else {
+      onUpdateProfile({ name: name, email: email, password: password });
+    }
+
     // Password match
   };
   return (
