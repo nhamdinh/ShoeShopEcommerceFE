@@ -1,5 +1,4 @@
-export const getUserLogin = (state: any) => state.auth.isUserLogin;
-export const getRegisterStep = (state: any) => state.auth.step;
+export const getUserInfo = (state: any) => state.auth.userInfo;
 
 // custom dialog for confirm
 export const getDialogContent = (state: any) => state.dialog.content;

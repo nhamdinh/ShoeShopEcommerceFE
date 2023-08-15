@@ -1,23 +1,29 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface IfAuth {
-  dataAuth: any;
+  userInfo: any;
+  accessToken: any;
 }
 
 const initialState: IfAuth = {
-  dataAuth: [],
+  userInfo: {},
+  accessToken: "",
 };
 
 const authSlice = createSlice({
   name: "authSlice",
   initialState,
   reducers: {
-    setStoAuth: (state: IfAuth, action: PayloadAction<IfAuth>) => {
-      state.dataAuth = action.payload.dataAuth;
+    userLogout: (state: IfAuth, action: PayloadAction) => {
+      state.accessToken = "";
+      localStorage.clear();
+    },
+    setUserInfo: (state: IfAuth, action: PayloadAction) => {
+      state.userInfo = action.payload;
     },
   },
 });
 
 const { reducer, actions } = authSlice;
-export const { setStoAuth } = actions;
+export const { userLogout, setUserInfo } = actions;
 export default reducer;

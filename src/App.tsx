@@ -12,7 +12,12 @@ const App = () => {
   return (
     <div className="app-wrapper">
       <TopHeader />
-      {location.pathname.includes("login") ? <></> : <Header />}
+      {location.pathname.includes("login") ||
+      location.pathname.includes("register") ? (
+        <></>
+      ) : (
+        <Header />
+      )}
       <Routes>
         {PrivateRoutes.map((item, index) => (
           <Route key={index} path={item.path} element={item.element} />

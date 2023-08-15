@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { useGetProfileQuery } from "../store/components/auth/authApi";
 import { NAME_STORAGE } from "../utils/constants";
+import { setUserInfo, userLogout } from "../store/components/auth/authSlice";
 
 const Header = () => {
   const [keyword, setKeyword] = useState<any>();
@@ -13,10 +14,6 @@ const Header = () => {
   const cartItems = [];
   const userLogin = true;
 
-  const logoutHandler = () => {
-    // dispatch(logout());
-  };
-
   const submitHandler = (e: any) => {
     e.preventDefault();
     if (keyword.trim()) {
@@ -25,6 +22,7 @@ const Header = () => {
       navigate("/");
     }
   };
+  const [userInfo, setdataFetched] = useState<any>({});
 
   const { data, error, isSuccess, isLoading } = useGetProfileQuery(
     {},
@@ -36,10 +34,16 @@ const Header = () => {
 
   useEffect(() => {
     if (isSuccess) {
+      setdataFetched(data);
+      dispatch(setUserInfo({ ...data }));
       localStorage.setItem(NAME_STORAGE, data.name);
     }
   }, [data]);
 
+  const logoutHandler = () => {
+    setdataFetched({});
+    dispatch(userLogout());
+  };
   // console.log(data);
   return (
     <div className="header">
@@ -53,7 +57,7 @@ const Header = () => {
                 </Link>
               </div>
               <div className="col-6 d-flex align-items-center justify-content-end Login-Register">
-                {data?.name ? (
+                {userInfo?.name ? (
                   <div className="btn-group">
                     <button
                       type="button"
@@ -69,13 +73,9 @@ const Header = () => {
                         Profile
                       </Link>
 
-                      <Link
-                        className="dropdown-item"
-                        to="#"
-                        onClick={logoutHandler}
-                      >
+                      <a className="dropdown-item" onClick={logoutHandler}>
                         Logout
-                      </Link>
+                      </a>
                     </div>
                   </div>
                 ) : (
@@ -144,7 +144,7 @@ const Header = () => {
               </form>
             </div>
             <div className="col-md-3 d-flex align-items-center justify-content-end Login-Register">
-              {data?.name ? (
+              {userInfo?.name ? (
                 <div className="btn-group">
                   <button
                     type="button"
@@ -153,20 +153,16 @@ const Header = () => {
                     aria-haspopup="true"
                     aria-expanded="false"
                   >
-                    Hi, {data?.name}
+                    Hi, {userInfo?.name}
                   </button>
                   <div className="dropdown-menu">
                     <Link className="dropdown-item" to="/profile">
                       Profile
                     </Link>
 
-                    <Link
-                      className="dropdown-item"
-                      to="#"
-                      onClick={logoutHandler}
-                    >
+                    <a className="dropdown-item" onClick={logoutHandler}>
                       Logout
-                    </Link>
+                    </a>
                   </div>
                 </div>
               ) : (
