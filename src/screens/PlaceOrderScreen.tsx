@@ -1,16 +1,56 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Message from "../components/LoadingError/Error";
+import { useCheckAddressMutation } from "../store/components/orders/ordersApi";
+import { getUserInfo } from "../store/selector/RootSelector";
+import { CART_STORAGE } from "../utils/constants";
+import { formatMoney } from "../utils/commonFunction";
 
 const PlaceOrderScreen = () => {
   window.scrollTo(0, 0);
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const dispatch = useDispatch();
+  const userInfo = useSelector(getUserInfo);
   const cart: any = {};
+  console.log(cart)
   const userLogin: any = {};
-  const { userInfo } = userLogin;
+  const [address, setaddress] = useState<any>({});
+  const [totalPrice, settotalPrice] = useState<any>(0);
+
+  const [checkAddress, { isLoading: LoadingcheckAddress }] =
+    useCheckAddressMutation();
+
+  const onCheckAddress = async () => {
+    const res = await checkAddress({});
+    //@ts-ignore
+    const data = res?.data;
+    if (data) {
+      setaddress(data);
+      // if (data?.error) navigate("/shipping");
+    } else {
+    }
+  };
+
+  useEffect(() => {
+    onCheckAddress();
+  }, []);
+
+  const [cartItems, setcartItems] = useState<any>([]);
+  useEffect(() => {
+    let cartStorage: any = localStorage.getItem(CART_STORAGE);
+    let cartParse = cartStorage ? JSON.parse(cartStorage) : null;
+    let cartItems: any = cartParse ? cartParse.cartItems : [];
+    let totalPrice_tem = 0;
+    cartItems.map((cartItem: any) => {
+      totalPrice_tem += cartItem.qty * cartItem.price;
+    });
+    settotalPrice(totalPrice_tem);
+    setcartItems(cartItems);
+  }, [location.pathname]);
 
   // Calculate Price
   const addDecimals = (num: any) => {
@@ -87,7 +127,7 @@ const PlaceOrderScreen = () => {
                 <h5>
                   <strong>Order info</strong>
                 </h5>
-                <p>Shipping: {cart?.shippingAddress?.country}</p>
+                <p>Shipping: {address?.country}</p>
                 <p>Pay method: {cart?.paymentMethod}</p>
               </div>
             </div>
@@ -105,9 +145,8 @@ const PlaceOrderScreen = () => {
                   <strong>Deliver to</strong>
                 </h5>
                 <p>
-                  Address: {cart?.shippingAddress?.city},{" "}
-                  {cart?.shippingAddress?.address},{" "}
-                  {cart?.shippingAddress?.postalCode}
+                  Address: {address?.street}, {address?.city},{" "}
+                  {address?.postalCode}
                 </p>
               </div>
             </div>
@@ -116,19 +155,26 @@ const PlaceOrderScreen = () => {
 
         <div className="row order-products justify-content-between">
           <div className="col-lg-8">
-            {cart?.cartItems?.length === 0 ? (
-              <Message variant="alert-info mt-5">Your cart is empty</Message>
+            {cartItems?.length === 0 ? (
+              <Message
+                variant="alert-info mt-5"
+                mess="Your cart is empty"
+              ></Message>
             ) : (
               <>
-                {cart?.cartItems?.map((item: any, index: any) => (
+                {cartItems?.map((item: any, index: any) => (
                   <div className="order-product row" key={index}>
                     <div className="col-md-3 col-6">
                       <img src={item.image} alt={item.name} />
                     </div>
                     <div className="col-md-5 col-6 d-flex align-items-center">
-                      <Link to={`/products/${item.product}`}>
-                        <h6>{item.name}</h6>
-                      </Link>
+                      <h6
+                        onClick={() => {
+                          navigate(`/product-detail?id=${item?._id}`);
+                        }}
+                      >
+                        {item.name}
+                      </h6>
                     </div>
                     <div className="mt-3 mt-md-0 col-md-2 col-6  d-flex align-items-center flex-column justify-content-center ">
                       <h4>QUANTITY</h4>
@@ -136,7 +182,7 @@ const PlaceOrderScreen = () => {
                     </div>
                     <div className="mt-3 mt-md-0 col-md-2 col-6 align-items-end  d-flex flex-column justify-content-center ">
                       <h4>SUBTOTAL</h4>
-                      <h6>${item.qty * item.price}</h6>
+                      <h6>${formatMoney(item.qty * item.price)}</h6>
                     </div>
                   </div>
                 ))}
@@ -169,18 +215,21 @@ const PlaceOrderScreen = () => {
                   <td>
                     <strong>Total</strong>
                   </td>
-                  <td>${cart?.totalPrice}</td>
+                  <td>${formatMoney(totalPrice)}</td>
                 </tr>
               </tbody>
             </table>
-            {cart?.cartItems?.length === 0 ? null : (
+            {cartItems?.length === 0 ? null : (
               <button type="submit" onClick={placeOrderHandler}>
                 PLACE ORDER
               </button>
             )}
             {error && (
               <div className="my-3 col-12">
-                <Message variant="alert-danger">{error}</Message>
+                <Message
+                  variant="alert-danger"
+                  mess={JSON.stringify(error)}
+                ></Message>
               </div>
             )}
           </div>

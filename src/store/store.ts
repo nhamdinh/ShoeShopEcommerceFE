@@ -5,6 +5,7 @@ import {
   Middleware,
 } from "@reduxjs/toolkit";
 import { productsApi } from "./components/products/productsApi";
+import { ordersApi } from "./components/orders/ordersApi";
 import { authApi } from "./components/auth/authApi";
 import authReducer, { userLogout } from "./components/auth/authSlice";
 
@@ -19,6 +20,7 @@ import { faqApi } from "../pages/FaqManagement/faqApi";
 import { advertisementApi } from "../pages/AdvertisementManagement/advertisementApi"; */
 const rootReducer = {
   [productsApi.reducerPath]: productsApi.reducer,
+  [ordersApi.reducerPath]: ordersApi.reducer,
   auth: authReducer,
   [authApi.reducerPath]: authApi.reducer,
   /*  [memberApi.reducerPath]: memberApi.reducer,
@@ -50,6 +52,7 @@ const store = configureStore({
       serializableCheck: false,
     }).concat([
       rtkQueryErrorLogger,
+      ordersApi.middleware,
       productsApi.middleware,
       authApi.middleware,
       /*  memberApi.middleware,

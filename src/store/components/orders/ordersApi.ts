@@ -2,8 +2,8 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { ACCESSTOKEN_STORAGE, API_LINK } from "../../../utils/constants";
 
-export const productsApi = createApi({
-  reducerPath: "productsApis",
+export const ordersApi = createApi({
+  reducerPath: "ordersApis",
 
   baseQuery: fetchBaseQuery({
     baseUrl: API_LINK,
@@ -25,21 +25,30 @@ export const productsApi = createApi({
   }),
   tagTypes: ["GetProducts", "GetProductsDetail"],
   endpoints: (builder) => ({
-    getProducts: builder.query({
+    createCart: builder.mutation({
       query: (data) => ({
-        url: `/products/get-all`,
-        method: "GET",
+        url: `carts/create-cart`,
+        method: "POST",
       }),
-      providesTags: ["GetProducts"],
     }),
-    getProductsDetail: builder.query({
+    checkAddress: builder.mutation({
       query: (data) => ({
-        url: `/products/${data.id}`,
-        method: "GET",
+        url: `address/check-address`,
+        method: "POST",
       }),
-      providesTags: ["GetProductsDetail"],
+    }),
+    createAddress: builder.mutation({
+      query: (data) => ({
+        url: `address/create-address`,
+        method: "POST",
+        body: data,
+      }),
     }),
   }),
 });
 
-export const { useGetProductsQuery, useGetProductsDetailQuery } = productsApi;
+export const {
+  useCreateCartMutation,
+  useCheckAddressMutation,
+  useCreateAddressMutation,
+} = ordersApi;

@@ -1,33 +1,44 @@
 import React, { useEffect, useState } from "react";
 import Header from "./../components/Header";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getUrlParams } from "../utils/commonFunction";
+import { CART_STORAGE } from "../utils/constants";
+import { formatMoney } from "../utils/commonFunction";
 
-const CartScreen = ({ match, location, history }: any) => {
+const CartScreen = () => {
   window.scrollTo(0, 0);
   const dispatch = useDispatch();
-  const productId = window.location.pathname
-    ? window.location.pathname.split("/")[2]
-    : "";
-  //   const qty = location.search ? Number(location.search.split("=")[1]) : 1;
-  const qty = +getUrlParams("qty");
+  const location = useLocation();
+  const navigate = useNavigate();
 
-  console.log(productId);
-
-  const [cart, setcart] = useState<any>([]);
   const [cartItems, setcartItems] = useState<any>([]);
+  const [idCart, setidCart] = useState<any>("");
+  const [productId, setproductId] = useState<any>(
+    location.pathname ? location.pathname.split("/")[2] : ""
+  );
+  const [qty, setqty] = useState<any>(
+    location.search ? location.search.split("=")[1] : ""
+  );
 
+  console.log(idCart);
   const total = 100;
-
+  //@ts-ignore
+  const [iterator, setiterator] = useState<any>([...Array(10).keys()]);
+  
   useEffect(() => {
-    if (productId) {
-      //   dispatch(addToCart(productId, qty));
-    }
-  }, [productId, qty]);
+    let cartStorage: any = localStorage.getItem(CART_STORAGE);
+    let cartParse = cartStorage ? JSON.parse(cartStorage) : null;
+    let cartItems: any = cartParse ? cartParse.cartItems : [];
+    setcartItems(cartItems);
+    setidCart(cartParse?.id);
+    setproductId(location.pathname ? location.pathname.split("/")[2] : "");
+    setqty(location.search ? location.search.split("=")[1] : "");
+  }, [location.pathname]);
 
-  const checkOutHandler = () => {
-    history.push("/login?redirect=shipping");
+  const checkOutHandler = (e: any) => {
+    // navigate("/login?redirect=shipping");
+    e.preventDefault();
+    navigate("/shipping");
   };
 
   const removeFromCartHandle = (id: any) => {
@@ -62,37 +73,41 @@ const CartScreen = ({ match, location, history }: any) => {
             {cartItems.map((item: any) => (
               <div className="cart-iterm row">
                 <div
-                  onClick={() => removeFromCartHandle(item.product)}
+                  onClick={() => removeFromCartHandle(item?._id)}
                   className="remove-button d-flex justify-content-center align-items-center"
                 >
                   <i className="fas fa-times"></i>
                 </div>
                 <div className="cart-image col-md-3">
-                  <img src={item.image} alt={item.name} />
+                  <img src={item?.image} alt={item?.name} />
                 </div>
                 <div className="cart-text col-md-5 d-flex align-items-center">
-                  <Link to={`/products/${item.product}`}>
-                    <h4>{item.name}</h4>
-                  </Link>
+                  <h4
+                    onClick={() => {
+                      navigate(`/product-detail?id=${item?._id}`);
+                    }}
+                  >
+                    {item?.name}
+                  </h4>
                 </div>
                 <div className="cart-qty col-md-2 col-sm-5 mt-md-5 mt-3 mt-md-0 d-flex flex-column justify-content-center">
                   <h6>QUANTITY</h6>
                   <select
-                    value={item.qty}
+                    value={item?.qty}
                     onChange={(e) => {
-                      // dispatch(addToCart(item.product, Number(e.target.value)))
+                      // dispatch(addToCart(item?._id, Number(e.target.value)))
                     }}
                   >
-                    {[1, 2, 3].map((x: any, index: number) => (
-                      <option key={index} value={x}>
-                        {x}
+                    {iterator.map((x: any, index: number) => (
+                      <option key={index} value={x + 1}>
+                        {x + 1}
                       </option>
                     ))}
                   </select>
                 </div>
                 <div className="cart-price mt-3 mt-md-0 col-md-2 align-items-sm-end align-items-start  d-flex flex-column justify-content-center col-sm-7">
                   <h6>PRICE</h6>
-                  <h4>${item.price}</h4>
+                  <h4>${formatMoney(item?.price * item?.qty)}</h4>
                 </div>
               </div>
             ))}

@@ -1,25 +1,68 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Header from "../components/Header";
 import { useNavigate } from "react-router-dom";
+import {
+  useCheckAddressMutation,
+  useCreateAddressMutation,
+} from "../store/components/orders/ordersApi";
 
 const ShippingScreen = () => {
   window.scrollTo(0, 0);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const cart: any = {};
-  const { shippingAddress } = cart;
+  const [street, setStreet] = useState<any>("");
+  const [city, setCity] = useState<any>("");
+  const [postalCode, setPostalCode] = useState<any>("");
+  const [country, setCountry] = useState<any>("");
 
-  const [address, setAddress] = useState(shippingAddress?.address);
-  const [city, setCity] = useState(shippingAddress?.city);
-  const [postalCode, setPostalCode] = useState(shippingAddress?.postalCode);
-  const [country, setCountry] = useState(shippingAddress?.country);
+  const [checkAddress, { isLoading: LoadingcheckAddress }] =
+    useCheckAddressMutation();
+
+  const onCheckAddress = async () => {
+    const res = await checkAddress({});
+    //@ts-ignore
+    const data = res?.data;
+    if (data) {
+
+      setStreet(data?.street);
+      setCity(data?.city);
+      setPostalCode(data?.postalCode);
+      setCountry(data?.country);
+      // if (data?.error) navigate("/shipping");
+    } else {
+    }
+  };
+
+  useEffect(() => {
+    onCheckAddress();
+  }, []);
+
+  const [createAddress, { isLoading }] = useCreateAddressMutation();
+
+  const onCreateAddress = async (values: any) => {
+    const res = await createAddress(values);
+    //@ts-ignore
+    const data = res?.data;
+
+    if (data) {
+      console.log(data);
+      navigate("/payment");
+    } else {
+    }
+  };
 
   const submitHandler = (e: any) => {
     e.preventDefault();
-    // dispatch(saveShippingAddress({ address, city, postalCode, country }));
-    navigate("/payment");
+    onCreateAddress({
+      street: street,
+      city: city,
+      postalCode: postalCode,
+      country: country,
+    });
+
+    // dispatch(saveShippingAddress({ street, city, postalCode, country }));
   };
   return (
     <>
@@ -31,10 +74,10 @@ const ShippingScreen = () => {
           <h6>DELIVERY ADDRESS</h6>
           <input
             type="text"
-            placeholder="Enter address"
-            value={address}
+            placeholder="Enter street"
+            value={street}
             // required
-            onChange={(e) => setAddress(e.target.value)}
+            onChange={(e) => setStreet(e.target.value)}
           />
           <input
             type="text"

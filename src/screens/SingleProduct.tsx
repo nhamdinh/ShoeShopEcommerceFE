@@ -9,6 +9,8 @@ import Loading from "../components/LoadingError/Loading";
 import moment from "moment";
 import { getUrlParams } from "../utils/commonFunction";
 import { useGetProductsDetailQuery } from "../store/components/products/productsApi";
+import { useCreateCartMutation } from "../store/components/orders/ordersApi";
+import { CART_STORAGE } from "../utils/constants";
 
 const SingleProduct = ({ history, match }: any) => {
   const [rating, setRating] = useState<any>(0);
@@ -20,7 +22,12 @@ const SingleProduct = ({ history, match }: any) => {
   const productId = getUrlParams("id");
   const [product, setdataFetched] = useState<any>({});
   const [qty, setQty] = useState<any>(1);
-  const { data, error, isSuccess, isLoading } = useGetProductsDetailQuery(
+  const {
+    data: dataFetch,
+    error,
+    isSuccess,
+    isLoading,
+  } = useGetProductsDetailQuery(
     {
       id: productId,
     },
@@ -29,14 +36,13 @@ const SingleProduct = ({ history, match }: any) => {
       skip: false,
     }
   );
-
+  //@ts-ignore
+  const [iterator, setiterator] = useState<any>([...Array(10).keys()]);
   useEffect(() => {
     if (isSuccess) {
-      setdataFetched(data);
-      setQty(data?.countInStock || 1);
+      setdataFetched(dataFetch);
     }
-  }, [data]);
-
+  }, [dataFetch]);
   // const productDetails = useSelector((state) => state.productDetails);
   // const { loading, error, product } = productDetails;
   // const userLogin = useSelector((state) => state.userLogin);
@@ -58,9 +64,72 @@ const SingleProduct = ({ history, match }: any) => {
   //   // dispatch(listProductDetails(productId));
   // }, [dispatch, productId, successCreateReview]);
 
+  const [createCart, { isLoading: LoadingcreateCart }] =
+    useCreateCartMutation();
+
+  const onCreateCart = async () => {
+    const res = await createCart({});
+    //@ts-ignore
+    const data = res?.data;
+
+    if (data) {
+      let cartStorage: any = localStorage.getItem(CART_STORAGE);
+      let cartParse: any = cartStorage ? JSON.parse(cartStorage) : null;
+      let cartItems: any = cartParse ? cartParse.cartItems : [];
+
+      let hasItem = false;
+      if (cartItems.length > 0) {
+        cartItems.map((ca: any) => {
+          if (ca._id === productId) {
+            hasItem = true;
+          }
+        });
+      }
+      if (hasItem) {
+        updateCart(data, cartItems);
+      } else {
+        createCart1(data, cartItems);
+      }
+
+      navigate(`/cart/${productId}?qty=${qty}`);
+    } else {
+    }
+  };
+
+  const updateCart = (data: any, cartItems: any) => {
+    cartItems.map((ca: any) => {
+      if (ca._id === productId) {
+        ca.qty = +qty;
+      }
+    });
+    localStorage.setItem(
+      CART_STORAGE,
+      JSON.stringify({
+        id: data?._id,
+        cartItems: [...cartItems],
+      })
+    );
+  };
+
+  const createCart1 = (data: any, cartItems: any) => {
+    localStorage.setItem(
+      CART_STORAGE,
+      JSON.stringify({
+        id: data?._id,
+        cartItems: [
+          ...cartItems,
+          {
+            ...dataFetch,
+            qty: +qty,
+          },
+        ],
+      })
+    );
+  };
+
   const AddToCartHandle = (e: any) => {
     e.preventDefault();
-    navigate(`/cart/${productId}?qty=${qty}`);
+    onCreateCart();
   };
   // const submitHandler = (e) => {
   //   e.preventDefault();
@@ -121,9 +190,9 @@ const SingleProduct = ({ history, match }: any) => {
                             value={qty}
                             onChange={(e) => setQty(+e.target.value)}
                           >
-                            {[1, 2, 3].map((x: any, index: number) => (
-                              <option key={index} value={x}>
-                                {x}
+                            {iterator.map((x: any, index: number) => (
+                              <option key={index} value={x + 1}>
+                                {x + 1}
                               </option>
                             ))}
                           </select>
@@ -132,7 +201,7 @@ const SingleProduct = ({ history, match }: any) => {
                           onClick={AddToCartHandle}
                           className="round-black-btn"
                         >
-                          Add To Cart
+                          {LoadingcreateCart ? <Loading /> : "Add To Cart"}
                         </button>
                       </>
                     ) : null}
@@ -147,7 +216,9 @@ const SingleProduct = ({ history, match }: any) => {
               <div className="col-md-6">
                 <h6 className="mb-3">REVIEWS</h6>
                 {/*                 {product?.reviews.length === 0 && (
-                  <Message variant={"alert-info mt-3"}>No Reviews</Message>
+                  <Message variant={"alert-info mt-3"
+                                  mess="No Reviews"
+                }></Message>
                 )} */}
                 {/*       {product?.reviews.map((review) => (
                   <div

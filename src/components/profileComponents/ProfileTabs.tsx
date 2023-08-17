@@ -4,6 +4,8 @@ import Message from "../LoadingError/Error";
 import Loading from "../LoadingError/Loading";
 import { NAME_STORAGE } from "../../utils/constants";
 import { useUpdateProfileMutation } from "../../store/components/auth/authApi";
+import { toast } from "react-toastify";
+import Toast from "../LoadingError/Toast";
 
 const ProfileTabs = ({ userInfo }: any) => {
   const [name, setName] = useState<any>(userInfo.name);
@@ -11,7 +13,7 @@ const ProfileTabs = ({ userInfo }: any) => {
 
   const [password, setPassword] = useState<any>("");
   const [confirmPassword, setConfirmPassword] = useState<any>("");
-  const toastId = React.useRef(null);
+  const toastId = React.useRef<any>(null);
 
   const Toastobjects = {
     pauseOnFocusLoss: false,
@@ -36,7 +38,13 @@ const ProfileTabs = ({ userInfo }: any) => {
 
     //@ts-ignore
     const data = res?.data;
-    console.log(data);
+    if (data) {
+      if (!toast.isActive(toastId.current)) {
+        toastId.current = toast.success("Profile Updated", Toastobjects);
+      }
+    } else {
+      setisError(true);
+    }
   };
 
   useEffect(() => {
@@ -47,6 +55,9 @@ const ProfileTabs = ({ userInfo }: any) => {
   const submitHandler = (e: any) => {
     e.preventDefault();
     if (password !== confirmPassword) {
+      if (!toast.isActive(toastId.current)) {
+        toastId.current = toast.error("Password does not match", Toastobjects);
+      }
     } else {
       onUpdateProfile({ name: name, email: email, password: password });
     }
@@ -55,8 +66,10 @@ const ProfileTabs = ({ userInfo }: any) => {
   };
   return (
     <>
-      {/* <Toast /> */}
-      {error && <Message variant="alert-danger">{error}</Message>}
+      <Toast />
+      {error && (
+        <Message variant="alert-danger" mess={JSON.stringify(error)}></Message>
+      )}
       <form className="row  form-container" onSubmit={submitHandler}>
         <div className="col-md-6">
           <div className="form">

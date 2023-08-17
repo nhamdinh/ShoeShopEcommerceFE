@@ -1,5 +1,6 @@
 import "./App.scss";
 import "./responsive.css";
+import 'react-toastify/dist/ReactToastify.css';
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import { Routes, Route, useLocation } from "react-router-dom";
