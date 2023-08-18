@@ -29,12 +29,19 @@ export const ordersApi = createApi({
       query: (data) => ({
         url: `carts/create-cart`,
         method: "POST",
+        body: data,
       }),
     }),
-    checkAddress: builder.mutation({
+    checkCart: builder.query({
+      query: (data) => ({
+        url: `carts/check-cart`,
+        method: "GET",
+      }),
+    }),
+    checkAddress: builder.query({
       query: (data) => ({
         url: `address/check-address`,
-        method: "POST",
+        method: "GET",
       }),
     }),
     createAddress: builder.mutation({
@@ -44,11 +51,20 @@ export const ordersApi = createApi({
         body: data,
       }),
     }),
+    createOrder: builder.mutation({
+      query: (data) => ({
+        url: `orders/create-order`,
+        method: "POST",
+        body: data,
+      }),
+    }),
   }),
 });
 
 export const {
   useCreateCartMutation,
-  useCheckAddressMutation,
+  useCheckCartQuery,
+  useCheckAddressQuery,
   useCreateAddressMutation,
+  useCreateOrderMutation,
 } = ordersApi;

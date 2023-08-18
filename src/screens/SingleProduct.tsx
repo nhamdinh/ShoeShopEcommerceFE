@@ -10,7 +10,6 @@ import moment from "moment";
 import { getUrlParams } from "../utils/commonFunction";
 import { useGetProductsDetailQuery } from "../store/components/products/productsApi";
 import { useCreateCartMutation } from "../store/components/orders/ordersApi";
-import { CART_STORAGE } from "../utils/constants";
 
 const SingleProduct = ({ history, match }: any) => {
   const [rating, setRating] = useState<any>(0);
@@ -67,69 +66,30 @@ const SingleProduct = ({ history, match }: any) => {
   const [createCart, { isLoading: LoadingcreateCart }] =
     useCreateCartMutation();
 
-  const onCreateCart = async () => {
-    const res = await createCart({});
+  const onCreateCart = async (value: any) => {
+    const res = await createCart(value);
     //@ts-ignore
     const data = res?.data;
 
     if (data) {
-      let cartStorage: any = localStorage.getItem(CART_STORAGE);
-      let cartParse: any = cartStorage ? JSON.parse(cartStorage) : null;
-      let cartItems: any = cartParse ? cartParse.cartItems : [];
-
-      let hasItem = false;
-      if (cartItems.length > 0) {
-        cartItems.map((ca: any) => {
-          if (ca._id === productId) {
-            hasItem = true;
-          }
-        });
-      }
-      if (hasItem) {
-        updateCart(data, cartItems);
-      } else {
-        createCart1(data, cartItems);
-      }
-
       navigate(`/cart/${productId}?qty=${qty}`);
     } else {
     }
   };
 
-  const updateCart = (data: any, cartItems: any) => {
-    cartItems.map((ca: any) => {
-      if (ca._id === productId) {
-        ca.qty = +qty;
-      }
-    });
-    localStorage.setItem(
-      CART_STORAGE,
-      JSON.stringify({
-        id: data?._id,
-        cartItems: [...cartItems],
-      })
-    );
-  };
-
-  const createCart1 = (data: any, cartItems: any) => {
-    localStorage.setItem(
-      CART_STORAGE,
-      JSON.stringify({
-        id: data?._id,
-        cartItems: [
-          ...cartItems,
-          {
-            ...dataFetch,
-            qty: +qty,
-          },
-        ],
-      })
-    );
-  };
-
   const AddToCartHandle = (e: any) => {
     e.preventDefault();
-    onCreateCart();
+    onCreateCart({
+      cartItems: [
+        {
+          name: product?.name,
+          image: product?.image,
+          price: product?.price,
+          qty: qty,
+          product: productId,
+        },
+      ],
+    });
   };
   // const submitHandler = (e) => {
   //   e.preventDefault();

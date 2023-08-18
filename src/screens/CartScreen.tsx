@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import Header from "./../components/Header";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { CART_STORAGE } from "../utils/constants";
 import { formatMoney } from "../utils/commonFunction";
+import { useCheckCartQuery } from "../store/components/orders/ordersApi";
 
 const CartScreen = () => {
   window.scrollTo(0, 0);
@@ -20,17 +20,26 @@ const CartScreen = () => {
     location.search ? location.search.split("=")[1] : ""
   );
 
-  console.log(idCart);
   const total = 100;
   //@ts-ignore
   const [iterator, setiterator] = useState<any>([...Array(10).keys()]);
-  
+
+  const { data, error, isSuccess, isLoading } = useCheckCartQuery(
+    {},
+    {
+      refetchOnMountOrArgChange: true,
+      skip: false,
+    }
+  );
+
   useEffect(() => {
-    let cartStorage: any = localStorage.getItem(CART_STORAGE);
-    let cartParse = cartStorage ? JSON.parse(cartStorage) : null;
-    let cartItems: any = cartParse ? cartParse.cartItems : [];
-    setcartItems(cartItems);
-    setidCart(cartParse?.id);
+    if (isSuccess) {
+      setcartItems(data?.cartItems);
+      setidCart(data?._id);
+    }
+  }, [data]);
+
+  useEffect(() => {
     setproductId(location.pathname ? location.pathname.split("/")[2] : "");
     setqty(location.search ? location.search.split("=")[1] : "");
   }, [location.pathname]);
@@ -84,7 +93,7 @@ const CartScreen = () => {
                 <div className="cart-text col-md-5 d-flex align-items-center">
                   <h4
                     onClick={() => {
-                      navigate(`/product-detail?id=${item?._id}`);
+                      navigate(`/product-detail?id=${item?.product}`);
                     }}
                   >
                     {item?.name}

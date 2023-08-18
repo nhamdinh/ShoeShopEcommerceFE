@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { ACCESSTOKEN_STORAGE, NAME_STORAGE } from "../utils/constants";
 import { useRegisterMutation } from "../store/components/auth/authApi";
 
-const Register = ({ location, history }: any) => {
+const Register = () => {
   window.scrollTo(0, 0);
   const [name, setName] = useState<any>("");
   const [email, setEmail] = useState<any>("");

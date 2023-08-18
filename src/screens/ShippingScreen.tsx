@@ -3,7 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import Header from "../components/Header";
 import { useNavigate } from "react-router-dom";
 import {
-  useCheckAddressMutation,
+  useCheckAddressQuery,
+  // useCheckAddressMutation,
   useCreateAddressMutation,
 } from "../store/components/orders/ordersApi";
 
@@ -17,27 +18,27 @@ const ShippingScreen = () => {
   const [postalCode, setPostalCode] = useState<any>("");
   const [country, setCountry] = useState<any>("");
 
-  const [checkAddress, { isLoading: LoadingcheckAddress }] =
-    useCheckAddressMutation();
-
-  const onCheckAddress = async () => {
-    const res = await checkAddress({});
-    //@ts-ignore
-    const data = res?.data;
-    if (data) {
-
-      setStreet(data?.street);
-      setCity(data?.city);
-      setPostalCode(data?.postalCode);
-      setCountry(data?.country);
-      // if (data?.error) navigate("/shipping");
-    } else {
+  const {
+    data: dataCheckAddress,
+    error: errorCheckAddress,
+    isSuccess: isSuccessCheckAddress,
+    isLoading: isLoadingCheckAddress,
+  } = useCheckAddressQuery(
+    {},
+    {
+      refetchOnMountOrArgChange: true,
+      skip: false,
     }
-  };
+  );
 
   useEffect(() => {
-    onCheckAddress();
-  }, []);
+    if (isSuccessCheckAddress) {
+      setStreet(dataCheckAddress?.street);
+      setCity(dataCheckAddress?.city);
+      setPostalCode(dataCheckAddress?.postalCode);
+      setCountry(dataCheckAddress?.country);
+    }
+  }, [dataCheckAddress]);
 
   const [createAddress, { isLoading }] = useCreateAddressMutation();
 

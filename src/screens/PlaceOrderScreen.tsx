@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import Header from "../components/Header";
 import Message from "../components/LoadingError/Error";
-import { useCheckAddressMutation } from "../store/components/orders/ordersApi";
+import {
+  useCheckAddressQuery,
+  useCheckCartQuery,
+  useCreateOrderMutation,
+} from "../store/components/orders/ordersApi";
 import { getUserInfo } from "../store/selector/RootSelector";
-import { CART_STORAGE } from "../utils/constants";
 import { formatMoney } from "../utils/commonFunction";
 
 const PlaceOrderScreen = () => {
@@ -16,41 +18,60 @@ const PlaceOrderScreen = () => {
   const dispatch = useDispatch();
   const userInfo = useSelector(getUserInfo);
   const cart: any = {};
-  console.log(cart)
-  const userLogin: any = {};
+
   const [address, setaddress] = useState<any>({});
   const [totalPrice, settotalPrice] = useState<any>(0);
 
-  const [checkAddress, { isLoading: LoadingcheckAddress }] =
-    useCheckAddressMutation();
-
-  const onCheckAddress = async () => {
-    const res = await checkAddress({});
-    //@ts-ignore
-    const data = res?.data;
-    if (data) {
-      setaddress(data);
-      // if (data?.error) navigate("/shipping");
-    } else {
+  const {
+    data: dataCheckAddress,
+    error: errorCheckAddress,
+    isSuccess: isSuccessCheckAddress,
+    isLoading: isLoadingCheckAddress,
+  } = useCheckAddressQuery(
+    {},
+    {
+      refetchOnMountOrArgChange: true,
+      skip: false,
     }
-  };
+  );
 
   useEffect(() => {
-    onCheckAddress();
-  }, []);
+    if (isSuccessCheckAddress) {
+      setaddress(dataCheckAddress);
+      if (dataCheckAddress?.error) navigate("/shipping");
+    }
+  }, [dataCheckAddress]);
 
   const [cartItems, setcartItems] = useState<any>([]);
+  const [idCart, setidCart] = useState<any>("");
+
+  const {
+    data: dataCheckCart,
+    error: errorCheckCart,
+    isSuccess,
+    isLoading,
+  } = useCheckCartQuery(
+    {},
+    {
+      refetchOnMountOrArgChange: true,
+      skip: false,
+    }
+  );
+
   useEffect(() => {
-    let cartStorage: any = localStorage.getItem(CART_STORAGE);
-    let cartParse = cartStorage ? JSON.parse(cartStorage) : null;
-    let cartItems: any = cartParse ? cartParse.cartItems : [];
-    let totalPrice_tem = 0;
-    cartItems.map((cartItem: any) => {
-      totalPrice_tem += cartItem.qty * cartItem.price;
-    });
-    settotalPrice(totalPrice_tem);
-    setcartItems(cartItems);
-  }, [location.pathname]);
+    if (isSuccess) {
+      setcartItems(dataCheckCart?.cartItems);
+      setidCart(dataCheckCart?._id);
+
+      let totalPrice_tem = 0;
+      dataCheckCart?.cartItems?.map((cartItem: any) => {
+        totalPrice_tem += cartItem.qty * cartItem.price;
+      });
+      settotalPrice(totalPrice_tem);
+    }
+  }, [dataCheckCart]);
+
+  console.log(cartItems);
 
   // Calculate Price
   const addDecimals = (num: any) => {
@@ -80,6 +101,20 @@ const PlaceOrderScreen = () => {
   //     dispatch({ type: ORDER_CREATE_RESET });
   //   }
   // }, [history, dispatch, success, order]);
+
+  const [createOrder, { isLoading: LoadingcreateOrder }] =
+    useCreateOrderMutation();
+
+  const onCreateOrder = async (values: any) => {
+    const res = await createOrder(values);
+    //@ts-ignore
+    const data = res?.data;
+
+    if (data) {
+      console.log(data);
+    } else {
+    }
+  };
 
   const placeOrderHandler = () => {
     // dispatch(
