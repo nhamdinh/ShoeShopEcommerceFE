@@ -1,6 +1,7 @@
 import CartScreen from "../screens/CartScreen";
 import HomeScreen from "../screens/HomeScreen";
 import Login from "../screens/Login";
+import OrderScreen from "../screens/OrderScreen";
 import PaymentScreen from "../screens/PaymentScreen";
 import PlaceOrderScreen from "../screens/PlaceOrderScreen";
 import ProfileScreen from "../screens/ProfileScreen";
@@ -36,6 +37,10 @@ export const PrivateRoutes = [
   {
     path: "/placeorder",
     element: <PlaceOrderScreen />,
+  },
+  {
+    path: "/order/:id",
+    element: <OrderScreen />,
   },
   {
     path: "/register",
