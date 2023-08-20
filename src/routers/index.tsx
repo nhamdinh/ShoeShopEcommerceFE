@@ -1,6 +1,7 @@
 import CartScreen from "../screens/CartScreen";
 import HomeScreen from "../screens/HomeScreen";
 import Login from "../screens/Login";
+import NotFound from "../screens/NotFound";
 import OrderScreen from "../screens/OrderScreen";
 import PaymentScreen from "../screens/PaymentScreen";
 import PlaceOrderScreen from "../screens/PlaceOrderScreen";
@@ -12,6 +13,10 @@ import SingleProduct from "../screens/SingleProduct";
 export const PrivateRoutes = [
   {
     path: "/",
+    element: <HomeScreen />,
+  },
+  {
+    path: "/search/:keyword",
     element: <HomeScreen />,
   },
   {
@@ -49,5 +54,9 @@ export const PrivateRoutes = [
   {
     path: "/login",
     element: <Login />,
+  },
+  {
+    path: "*",
+    element: <NotFound />,
   },
 ];

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Header from "../components/Header";
 import moment from "moment";
@@ -10,11 +10,9 @@ const ProfileScreen = () => {
   window.scrollTo(0, 0);
 
   const dispatch = useDispatch();
+  const [tab, setTab] = useState<any>(1);
 
-  // const userLogin = useSelector((state) => state.userLogin);
   const userInfo = useSelector(getUserInfo);
-  const orderListMy: any = {};
-  const { loading, error, orders } = orderListMy;
 
   return (
     <div className="container mt-lg-5 mt-3">
@@ -53,6 +51,9 @@ const ProfileScreen = () => {
                   role="tab"
                   aria-controls="v-pills-home"
                   aria-selected="true"
+                  onClick={() => {
+                    setTab(1);
+                  }}
                 >
                   Profile Settings
                 </button>
@@ -65,6 +66,9 @@ const ProfileScreen = () => {
                   role="tab"
                   aria-controls="v-pills-profile"
                   aria-selected="false"
+                  onClick={() => {
+                    setTab(2);
+                  }}
                 >
                   Orders List
                   {/* <span className="badge2">{orders ? orders.length : 0}</span> */}
@@ -93,7 +97,7 @@ const ProfileScreen = () => {
             role="tabpanel"
             aria-labelledby="v-pills-profile-tab"
           >
-            <Orders />
+            {tab === 2 && <Orders />}
           </div>
         </div>
       </div>
