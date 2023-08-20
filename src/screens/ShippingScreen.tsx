@@ -66,45 +66,40 @@ const ShippingScreen = () => {
     // dispatch(saveShippingAddress({ street, city, postalCode, country }));
   };
   return (
-    <>
-      <div className="container d-flex justify-content-center align-items-center login-center">
-        <form
-          className="Login col-md-8 col-lg-4 col-11"
-          onSubmit={submitHandler}
-        >
-          <h6>DELIVERY ADDRESS</h6>
-          <input
-            type="text"
-            placeholder="Enter street"
-            value={street}
-            // required
-            onChange={(e) => setStreet(e.target.value)}
-          />
-          <input
-            type="text"
-            placeholder="Enter city"
-            value={city}
-            // required
-            onChange={(e) => setCity(e.target.value)}
-          />
-          <input
-            type="text"
-            placeholder="Enter postal code"
-            value={postalCode}
-            // required
-            onChange={(e) => setPostalCode(e.target.value)}
-          />
-          <input
-            type="text"
-            placeholder="Enter country"
-            value={country}
-            // required
-            onChange={(e) => setCountry(e.target.value)}
-          />
-          <button type="submit">Continue</button>
-        </form>
-      </div>
-    </>
+    <div className="container d-flex justify-content-center align-items-center login-center">
+      <form className="Login col-md-8 col-lg-4 col-11" onSubmit={submitHandler}>
+        <h6>DELIVERY ADDRESS</h6>
+        <input
+          type="text"
+          placeholder="Enter street"
+          value={street}
+          // required
+          onChange={(e) => setStreet(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="Enter city"
+          value={city}
+          // required
+          onChange={(e) => setCity(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="Enter postal code"
+          value={postalCode}
+          // required
+          onChange={(e) => setPostalCode(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="Enter country"
+          value={country}
+          // required
+          onChange={(e) => setCountry(e.target.value)}
+        />
+        <button type="submit">Continue</button>
+      </form>
+    </div>
   );
 };
 

@@ -15,6 +15,7 @@ const ShopSection = ({ pagenumber, keyword }: any) => {
       limit: 100,
       order: "desc",
       orderBy: "createdAt",
+      keyword: keyword ? keyword : "",
     },
     {
       refetchOnMountOrArgChange: true,

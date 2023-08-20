@@ -27,7 +27,7 @@ export const productsApi = createApi({
   endpoints: (builder) => ({
     getProducts: builder.query({
       query: (data) => ({
-        url: `/products/get-all`,
+        url: `/products/get-all?keyword=${data?.keyword}`,
         method: "GET",
       }),
       providesTags: ["GetProducts"],
@@ -39,7 +39,19 @@ export const productsApi = createApi({
       }),
       providesTags: ["GetProductsDetail"],
     }),
+    createReviewProduct: builder.mutation({
+      query: (data) => ({
+        url: `/products/${data.productId}/review`,
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["GetProductsDetail"],
+    }),
   }),
 });
 
-export const { useGetProductsQuery, useGetProductsDetailQuery } = productsApi;
+export const {
+  useGetProductsQuery,
+  useGetProductsDetailQuery,
+  useCreateReviewProductMutation,
+} = productsApi;

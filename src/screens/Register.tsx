@@ -39,61 +39,59 @@ const Register = () => {
   };
 
   return (
-    <>
-      <div className="container d-flex flex-column justify-content-center align-items-center login-center">
-        {isError && (
-          <Message variant="alert-danger" mess={JSON.stringify(error)} />
-        )}
+    <div className="container d-flex flex-column justify-content-center align-items-center login-center">
+      {isError && (
+        <Message variant="alert-danger" mess={JSON.stringify(error)} />
+      )}
 
-        <form
-          className="Login col-md-8 col-lg-4 col-11"
-          onSubmit={(e) => {
-            e.preventDefault();
+      <form
+        className="Login col-md-8 col-lg-4 col-11"
+        onSubmit={(e) => {
+          e.preventDefault();
 
-            onRegister({
-              name: name,
-              email: email,
-              password: password,
-            });
+          onRegister({
+            name: name,
+            email: email,
+            password: password,
+          });
+        }}
+      >
+        <input
+          type="text"
+          placeholder="Username"
+          value={name}
+          onChange={(e) => {
+            setName(e.target.value);
+            setisError(false);
           }}
-        >
-          <input
-            type="text"
-            placeholder="Username"
-            value={name}
-            onChange={(e) => {
-              setName(e.target.value);
-              setisError(false);
-            }}
-          />
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => {
-              setEmail(e.target.value);
-              setisError(false);
-            }}
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => {
-              setPassword(e.target.value);
-              setisError(false);
-            }}
-          />
+        />
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => {
+            setEmail(e.target.value);
+            setisError(false);
+          }}
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => {
+            setPassword(e.target.value);
+            setisError(false);
+          }}
+        />
 
-          <button type="submit">{isLoading ? <Loading /> : "Register"}</button>
-          <p>
-            <Link to="/login">
-              I Have Account <strong>Login</strong>
-            </Link>
-          </p>
-        </form>
-      </div>
-    </>
+        <button type="submit">{isLoading ? <Loading /> : "Register"}</button>
+        <p>
+          <Link to="/login">
+            I Have Account <strong>Login</strong>
+          </Link>
+        </p>
+      </form>
+    </div>
   );
 };
 

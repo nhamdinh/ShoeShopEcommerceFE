@@ -33,48 +33,46 @@ const Login = () => {
   };
 
   return (
-    <>
-      <div className="container d-flex flex-column justify-content-center align-items-center login-center">
-        {isError && (
-          <Message variant="alert-danger" mess="Invalid Email or Password" />
-        )}
-        <form
-          className="Login col-md-8 col-lg-4 col-11"
-          onSubmit={(e) => {
-            e.preventDefault();
-            // onLogin({ email: "admin@example.com", password: "123456" });
-            onLogin({ email: email, password: password });
+    <div className="container d-flex flex-column justify-content-center align-items-center login-center">
+      {isError && (
+        <Message variant="alert-danger" mess="Invalid Email or Password" />
+      )}
+      <form
+        className="Login col-md-8 col-lg-4 col-11"
+        onSubmit={(e) => {
+          e.preventDefault();
+          // onLogin({ email: "admin@example.com", password: "123456" });
+          onLogin({ email: email, password: password });
+        }}
+      >
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => {
+            setEmail(e.target.value);
+            setisError(false);
+          }}
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => {
+            setPassword(e.target.value);
+            setisError(false);
+          }}
+        />
+        <button type="submit">{isLoading ? <Loading /> : "Login"}</button>
+        <p
+          onClick={() => {
+            navigate("/register");
           }}
         >
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => {
-              setEmail(e.target.value);
-              setisError(false);
-            }}
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => {
-              setPassword(e.target.value);
-              setisError(false);
-            }}
-          />
-          <button type="submit">{isLoading ? <Loading /> : "Login"}</button>
-          <p
-            onClick={() => {
-              navigate("/register");
-            }}
-          >
-            Create Account
-          </p>
-        </form>
-      </div>
-    </>
+          Create Account
+        </p>
+      </form>
+    </div>
   );
 };
 

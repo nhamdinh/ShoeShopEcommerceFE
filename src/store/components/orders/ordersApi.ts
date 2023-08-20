@@ -23,7 +23,7 @@ export const ordersApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ["GetProducts", "GetProductsDetail"],
+  tagTypes: ["getOrderDetail__TAG"],
   endpoints: (builder) => ({
     createCart: builder.mutation({
       query: (data) => ({
@@ -58,6 +58,27 @@ export const ordersApi = createApi({
         body: data,
       }),
     }),
+    getOrderDetail: builder.query({
+      query: (data) => ({
+        url: `orders/detail/${data.orderId}`,
+        method: "GET",
+      }),
+      providesTags: ["getOrderDetail__TAG"],
+    }),
+    payOrder: builder.mutation({
+      query: (data) => ({
+        url: `orders/${data.orderId}/pay`,
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: ["getOrderDetail__TAG"],
+    }),
+    getOrderUser: builder.query({
+      query: (data) => ({
+        url: `orders/all`,
+        method: "GET",
+      }),
+    }),
   }),
 });
 
@@ -67,4 +88,7 @@ export const {
   useCheckAddressQuery,
   useCreateAddressMutation,
   useCreateOrderMutation,
+  useGetOrderDetailQuery,
+  usePayOrderMutation,
+  useGetOrderUserQuery,
 } = ordersApi;

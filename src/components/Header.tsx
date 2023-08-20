@@ -34,7 +34,6 @@ const Header = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      console.log("Header Header Header")
       setdataFetched(data);
       dispatch(setUserInfo({ ...data }));
       localStorage.setItem(NAME_STORAGE, data.name);
