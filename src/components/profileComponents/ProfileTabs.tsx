@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../LoadingError/Error";
 import Loading from "../LoadingError/Loading";
-import { NAME_STORAGE } from "../../utils/constants";
+import { NAME_STORAGE, Toastobjects } from "../../utils/constants";
 import { useUpdateProfileMutation } from "../../store/components/auth/authApi";
 import { toast } from "react-toastify";
 import Toast from "../LoadingError/Toast";
@@ -13,14 +13,6 @@ const ProfileTabs = ({ userInfo }: any) => {
 
   const [password, setPassword] = useState<any>("");
   const [confirmPassword, setConfirmPassword] = useState<any>("");
-  const toastId = React.useRef<any>(null);
-
-  const Toastobjects = {
-    pauseOnFocusLoss: false,
-    draggable: false,
-    pauseOnHover: false,
-    autoClose: 2000,
-  };
 
   const dispatch = useDispatch();
 
@@ -39,9 +31,7 @@ const ProfileTabs = ({ userInfo }: any) => {
     //@ts-ignore
     const data = res?.data;
     if (data) {
-      if (!toast.isActive(toastId.current)) {
-        toastId.current = toast.success("Profile Updated", Toastobjects);
-      }
+      toast.success("Profile Updated", Toastobjects);
     } else {
       setisError(true);
     }
@@ -55,9 +45,7 @@ const ProfileTabs = ({ userInfo }: any) => {
   const submitHandler = (e: any) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      if (!toast.isActive(toastId.current)) {
-        toastId.current = toast.error("Password does not match", Toastobjects);
-      }
+      toast.error("Password does not match", Toastobjects);
     } else {
       onUpdateProfile({ name: name, email: email, password: password });
     }

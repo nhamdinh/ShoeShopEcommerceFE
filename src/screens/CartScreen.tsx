@@ -19,8 +19,8 @@ const CartScreen = () => {
   const [qty, setqty] = useState<any>(
     location.search ? location.search.split("=")[1] : ""
   );
+  const [total, settotal] = useState<any>(0);
 
-  const total = 100;
   //@ts-ignore
   const [iterator, setiterator] = useState<any>([...Array(10).keys()]);
 
@@ -34,7 +34,14 @@ const CartScreen = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      setcartItems(data?.cartItems || []);
+      let cartItems_temp: any = data?.cartItems || [];
+      let total_temp = 0;
+      cartItems_temp.map((cart: any) => {
+        total_temp += cart?.price * cart?.qty;
+      });
+
+      settotal(+total_temp);
+      setcartItems(cartItems_temp);
       setidCart(data?._id);
     }
   }, [data]);

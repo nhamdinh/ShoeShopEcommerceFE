@@ -16,6 +16,7 @@ import { useCreateCartMutation } from "../store/components/orders/ordersApi";
 import { getUserInfo } from "../store/selector/RootSelector";
 import Toast from "../components/LoadingError/Toast";
 import { toast } from "react-toastify";
+import { Toastobjects } from "../utils/constants";
 
 const SingleProduct = ({ history, match }: any) => {
   const [rating, setRating] = useState<any>(0);
@@ -25,7 +26,7 @@ const SingleProduct = ({ history, match }: any) => {
   const userInfo = useSelector(getUserInfo);
   const productId = getUrlParams("id");
   const [product, setdataFetched] = useState<any>({});
-  console.log(userInfo);
+
   const [qty, setQty] = useState<any>(1);
   const {
     data: dataFetch,
@@ -77,14 +78,6 @@ const SingleProduct = ({ history, match }: any) => {
       ],
     });
   };
-  const toastId = React.useRef<any>(null);
-
-  const Toastobjects = {
-    pauseOnFocusLoss: false,
-    draggable: false,
-    pauseOnHover: false,
-    autoClose: 2000,
-  };
 
   const [
     createReviewProduct,
@@ -97,9 +90,7 @@ const SingleProduct = ({ history, match }: any) => {
     const data = res?.data;
 
     if (data) {
-      if (!toast.isActive(toastId.current)) {
-        toastId.current = toast.success(data?.message, Toastobjects);
-      }
+      toast.success(data?.message, Toastobjects);
     } else {
     }
   };
