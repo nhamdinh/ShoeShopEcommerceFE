@@ -50,5 +50,5 @@ export const formatMoneyCurrency = (text: any) => {
   let length = string.length;
   let string_slice = string.substr(0, length - 3);
   let string_slice3 = string.substr(length - 3, length - 1);
-  return +addCommas(removeNonNumeric(string_slice)) + string_slice3;
+  return addCommas(removeNonNumeric(string_slice)) + string_slice3;
 };
