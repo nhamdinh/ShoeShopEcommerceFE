@@ -8,7 +8,8 @@ import {
   useCreateOrderMutation,
 } from "../store/components/orders/ordersApi";
 import { getUserInfo } from "../store/selector/RootSelector";
-import { formatMoney } from "../utils/commonFunction";
+import { formatMoneyCurrency } from "../utils/commonFunction";
+import { SHIPPINGPRICE, TAXPRICE } from "../utils/constants";
 
 const PlaceOrderScreen = () => {
   window.scrollTo(0, 0);
@@ -16,12 +17,12 @@ const PlaceOrderScreen = () => {
 
   const userInfo = useSelector(getUserInfo);
   const cart: any = {
-    shippingPrice: 35,
-    taxPrice: 79,
+    shippingPrice: SHIPPINGPRICE,
   };
 
   const [address, setaddress] = useState<any>({});
   const [totalPrice, settotalPrice] = useState<any>(0);
+  const [taxPrice, settaxPrice] = useState<any>(0);
   const [totalPriceItems, settotalPriceItems] = useState<any>(0);
 
   const {
@@ -69,8 +70,11 @@ const PlaceOrderScreen = () => {
       dataCheckCart?.cartItems?.map((cartItem: any) => {
         totalPrice_tem += cartItem.qty * cartItem.price;
       });
+      let taxPrice_tem = (totalPrice_tem * TAXPRICE).toFixed(2);
+
+      settaxPrice(taxPrice_tem);
       settotalPriceItems(totalPrice_tem);
-      settotalPrice(totalPrice_tem + cart.shippingPrice + cart.taxPrice);
+      settotalPrice(+totalPrice_tem + +cart.shippingPrice + +taxPrice_tem);
     }
   }, [dataCheckCart]);
 
@@ -96,7 +100,7 @@ const PlaceOrderScreen = () => {
       shippingAddress: address?._id,
       paymentMethod: "Paypal",
       shippingPrice: +cart.shippingPrice,
-      taxPrice: +cart.taxPrice,
+      taxPrice: +taxPrice,
       totalPriceItems: +totalPriceItems,
       totalPrice: +totalPrice,
     });
@@ -188,7 +192,7 @@ const PlaceOrderScreen = () => {
                   </div>
                   <div className="mt-3 mt-md-0 col-md-2 col-6 align-items-end  d-flex flex-column justify-content-center ">
                     <h4>SUBTOTAL</h4>
-                    <h6>${formatMoney(item.qty * item.price)}</h6>
+                    <h6>${formatMoneyCurrency(item.qty * item.price)}</h6>
                   </div>
                 </div>
               ))}
@@ -203,7 +207,7 @@ const PlaceOrderScreen = () => {
                 <td>
                   <strong>Products</strong>
                 </td>
-                <td>${formatMoney(totalPriceItems)}</td>
+                <td>${formatMoneyCurrency(totalPriceItems)}</td>
               </tr>
               <tr>
                 <td>
@@ -215,13 +219,13 @@ const PlaceOrderScreen = () => {
                 <td>
                   <strong>Tax</strong>
                 </td>
-                <td>${cart?.taxPrice}</td>
+                <td>${taxPrice}</td>
               </tr>
               <tr>
                 <td>
                   <strong>Total</strong>
                 </td>
-                <td>${formatMoney(totalPrice)}</td>
+                <td>${formatMoneyCurrency(totalPrice)}</td>
               </tr>
             </tbody>
           </table>
