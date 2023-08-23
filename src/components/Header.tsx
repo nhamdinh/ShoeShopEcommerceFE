@@ -31,7 +31,6 @@ const Header = () => {
       skip: false,
     }
   );
-
   useEffect(() => {
     if (isSuccess) {
       setdataFetched(data);
@@ -43,6 +42,7 @@ const Header = () => {
   const logoutHandler = () => {
     setdataFetched({});
     dispatch(userLogout());
+    // navigate("/")
   };
   // console.log(data);
   return (

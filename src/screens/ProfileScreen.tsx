@@ -5,6 +5,7 @@ import moment from "moment";
 import ProfileTabs from "../components/profileComponents/ProfileTabs";
 import { getUserInfo } from "../store/selector/RootSelector";
 import Orders from "../components/profileComponents/Orders";
+import { formatCustomerPhoneNumber } from "../utils/commonFunction";
 
 const ProfileScreen = () => {
   window.scrollTo(0, 0);
@@ -26,7 +27,8 @@ const ProfileScreen = () => {
               </div>
               <div className="author-card-details col-md-7">
                 <h5 className="author-card-name mb-2">
-                  <strong>{userInfo?.name}</strong>
+                  <strong>{userInfo?.name}</strong> <br/>
+                  <strong>{formatCustomerPhoneNumber(userInfo?.phone)}</strong>
                 </h5>
                 <span className="author-card-position">
                   <>Joined {moment(userInfo?.createdAt).format("LL")}</>

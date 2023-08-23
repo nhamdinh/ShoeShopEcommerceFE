@@ -25,9 +25,11 @@ const SingleProduct = ({ history, match }: any) => {
 
   const userInfo = useSelector(getUserInfo);
   const productId = getUrlParams("id");
-  const [product, setdataFetched] = useState<any>({});
 
   const [qty, setQty] = useState<any>(1);
+  
+  const [product, setdataFetched] = useState<any>({});
+
   const {
     data: dataFetch,
     error,
@@ -42,13 +44,15 @@ const SingleProduct = ({ history, match }: any) => {
       skip: false,
     }
   );
-  //@ts-ignore
-  const [iterator, setiterator] = useState<any>([...Array(10).keys()]);
+
   useEffect(() => {
     if (isSuccess) {
       setdataFetched(dataFetch);
     }
   }, [dataFetch]);
+
+  //@ts-ignore
+  const [iterator, setiterator] = useState<any>([...Array(10).keys()]);
 
   const [createCart, { isLoading: LoadingcreateCart }] =
     useCreateCartMutation();

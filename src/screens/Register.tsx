@@ -6,14 +6,15 @@ import Loading from "../components/LoadingError/Loading";
 import { useNavigate } from "react-router-dom";
 import { ACCESSTOKEN_STORAGE, NAME_STORAGE } from "../utils/constants";
 import { useRegisterMutation } from "../store/components/auth/authApi";
+import { formatPhone } from "../utils/commonFunction";
 
 const Register = () => {
   window.scrollTo(0, 0);
   const [name, setName] = useState<any>("");
   const [email, setEmail] = useState<any>("");
   const [password, setPassword] = useState<any>("");
+  const [phone, setphone] = useState<any>("");
   const [isError, setisError] = useState<any>(false);
-  // console.log(err);
   const navigate = useNavigate();
 
   const [register, { isLoading, error }] = useRegisterMutation();
@@ -33,9 +34,13 @@ const Register = () => {
     }
   };
 
-  const submitHandler = (e: any) => {
-    e.preventDefault();
-    // dispatch(register(name, email, password));
+  const isValid = () => {
+    return !(
+      phone.length !== 10 ||
+      name === "" ||
+      email === "" ||
+      password === ""
+    );
   };
 
   return (
@@ -48,12 +53,14 @@ const Register = () => {
         className="Login col-md-8 col-lg-4 col-11"
         onSubmit={(e) => {
           e.preventDefault();
-
-          onRegister({
-            name: name,
-            email: email,
-            password: password,
-          });
+          console.log(isValid());
+          if (isValid())
+            onRegister({
+              name: name,
+              email: email,
+              password: password,
+              phone: phone,
+            });
         }}
       >
         <input
@@ -83,7 +90,16 @@ const Register = () => {
             setisError(false);
           }}
         />
-
+        <input
+          type="text"
+          placeholder="Phone(10)"
+          maxLength={10}
+          value={phone}
+          onChange={(e) => {
+            setphone(formatPhone(e.target.value));
+            setisError(false);
+          }}
+        />
         <button type="submit">{isLoading ? <Loading /> : "Register"}</button>
         <p>
           <Link to="/login">

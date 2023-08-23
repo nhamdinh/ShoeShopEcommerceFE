@@ -16,7 +16,11 @@ const authSlice = createSlice({
   reducers: {
     userLogout: (state: IfAuth, action: PayloadAction) => {
       state.accessToken = "";
+      state.userInfo = {};
       localStorage.clear();
+      if (typeof window !== "undefined") {
+        window.location.href = "/";
+      }
     },
     setUserInfo: (state: IfAuth, action: PayloadAction) => {
       state.userInfo = action.payload;

@@ -52,3 +52,13 @@ export const formatMoneyCurrency = (text: any) => {
   let string_slice3 = string.substr(length - 3, length - 1);
   return addCommas(removeNonNumeric(string_slice)) + string_slice3;
 };
+
+export const formatCustomerPhoneNumber = (value: string) => {
+  if (!value) return;
+  //KOC 516
+  return `${value.slice(0, 4)}-${value.slice(4, 7)}-${value.slice(7)}`;
+};
+
+export const formatPhone = (val: string) => {
+  return val.replace(" ", "").replace(/[^0-9 ]+/g, "");
+};

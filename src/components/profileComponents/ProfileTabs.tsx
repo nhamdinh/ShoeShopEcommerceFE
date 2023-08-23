@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../LoadingError/Error";
 import Loading from "../LoadingError/Loading";
-import { NAME_STORAGE, Toastobjects } from "../../utils/constants";
+import { Toastobjects } from "../../utils/constants";
 import { useUpdateProfileMutation } from "../../store/components/auth/authApi";
 import { toast } from "react-toastify";
 import Toast from "../LoadingError/Toast";

@@ -14,6 +14,7 @@ import {
 import Toast from "../components/LoadingError/Toast";
 import { toast } from "react-toastify";
 import { Toastobjects } from "../utils/constants";
+import { formatCustomerPhoneNumber } from "../utils/commonFunction";
 
 const OrderScreen = () => {
   window.scrollTo(0, 0);
@@ -36,7 +37,7 @@ const OrderScreen = () => {
       skip: false,
     }
   );
-
+    console.log(dataFetch)
   useEffect(() => {
     if (isSuccess) {
       setorderDetails(dataFetch);
@@ -115,6 +116,7 @@ const OrderScreen = () => {
                       <strong>Customer</strong>
                     </h5>
                     <p>{order?.user?.name}</p>
+                    <p>{formatCustomerPhoneNumber(order?.user?.phone)}</p>
                     <p>
                       <a href={`mailto:${order?.user?.email}`}>
                         {order?.user?.email}
