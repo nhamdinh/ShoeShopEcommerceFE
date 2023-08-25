@@ -2,6 +2,7 @@
   "name": "shop-ecommerce",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:5000/api/",
   "dependencies": {
     "@ant-design/icons": "^5.0.1",
     "@emotion/react": "^11.9.3",
@@ -50,7 +51,7 @@
     "workbox-strategies": "^6.5.3"
   },
   "scripts": {
-    "start": " react-scripts --openssl-legacy-provider  start",
+    "start": " react-scripts  start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
