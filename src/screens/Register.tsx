@@ -60,6 +60,7 @@ const Register = () => {
               email: email,
               password: password,
               phone: phone,
+              isAdmin: false,
             });
         }}
       >

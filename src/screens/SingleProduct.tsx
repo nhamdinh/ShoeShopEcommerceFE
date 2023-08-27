@@ -9,6 +9,7 @@ import Loading from "../components/LoadingError/Loading";
 import moment from "moment";
 import { getUrlParams } from "../utils/commonFunction";
 import {
+  useCheckIsBuyerQuery,
   useCreateReviewProductMutation,
   useGetProductsDetailQuery,
 } from "../store/components/products/productsApi";
@@ -27,7 +28,7 @@ const SingleProduct = ({ history, match }: any) => {
   const productId = getUrlParams("id");
 
   const [qty, setQty] = useState<any>(1);
-  
+
   const [product, setdataFetched] = useState<any>({});
 
   const {
@@ -50,6 +51,29 @@ const SingleProduct = ({ history, match }: any) => {
       setdataFetched(dataFetch);
     }
   }, [dataFetch]);
+
+  const [hasBuyer, sethasBuyer] = useState<any>(false);
+
+  const {
+    data: dataCheck,
+    error: errorCheck,
+    isSuccess: isSuccessCheck,
+    isLoading: isLoadingCheck,
+  } = useCheckIsBuyerQuery(
+    {
+      id: productId,
+    },
+    {
+      refetchOnMountOrArgChange: true,
+      skip: false,
+    }
+  );
+
+  useEffect(() => {
+    if (isSuccessCheck) {
+      sethasBuyer(dataCheck?.hasBuyer);
+    }
+  }, [dataCheck]);
 
   //@ts-ignore
   const [iterator, setiterator] = useState<any>([...Array(10).keys()]);
@@ -206,7 +230,8 @@ const SingleProduct = ({ history, match }: any) => {
                 )}
               </div>
               <div className="col-md-6">
-                <h6>WRITE A CUSTOMER REVIEW</h6>
+                <h6>WRITE A CUSTOMER REVIEW </h6>
+                <h6>( IF YOU HAVE MADE A PURCHASE ) </h6>
                 <div className="my-4">
                   {LoadingcreateReview && <Loading />}
                   {errorcreateReview && (
@@ -217,41 +242,45 @@ const SingleProduct = ({ history, match }: any) => {
                   )}
                 </div>
                 {userInfo?.name ? (
-                  <form onSubmit={submitHandler}>
-                    <div className="my-4">
-                      <strong>Rating</strong>
-                      <select
-                        value={rating}
-                        onChange={(e) => setRating(e.target.value)}
-                        className="col-12 bg-light p-3 mt-2 border-0 rounded"
-                      >
-                        <option value="">Select...</option>
-                        <option value="1">1 - Poor</option>
-                        <option value="2">2 - Fair</option>
-                        <option value="3">3 - Good</option>
-                        <option value="4">4 - Very Good</option>
-                        <option value="5">5 - Excellent</option>
-                      </select>
-                    </div>
-                    <div className="my-4">
-                      <strong>Comment</strong>
-                      <textarea
-                        maxLength={255}
-                        rows={3}
-                        value={comment}
-                        onChange={(e) => setComment(e.target.value)}
-                        className="col-12 bg-light p-3 mt-2 border-0 rounded"
-                      ></textarea>
-                    </div>
-                    <div className="my-3">
-                      <button
-                        disabled={LoadingcreateReview}
-                        className="col-12 bg-black border-0 p-3 rounded text-white"
-                      >
-                        SUBMIT
-                      </button>
-                    </div>
-                  </form>
+                  hasBuyer ? (
+                    <form onSubmit={submitHandler}>
+                      <div className="my-4">
+                        <strong>Rating</strong>
+                        <select
+                          value={rating}
+                          onChange={(e) => setRating(e.target.value)}
+                          className="col-12 bg-light p-3 mt-2 border-0 rounded"
+                        >
+                          <option value="">Select...</option>
+                          <option value="1">1 - Poor</option>
+                          <option value="2">2 - Fair</option>
+                          <option value="3">3 - Good</option>
+                          <option value="4">4 - Very Good</option>
+                          <option value="5">5 - Excellent</option>
+                        </select>
+                      </div>
+                      <div className="my-4">
+                        <strong>Comment</strong>
+                        <textarea
+                          maxLength={255}
+                          rows={3}
+                          value={comment}
+                          onChange={(e) => setComment(e.target.value)}
+                          className="col-12 bg-light p-3 mt-2 border-0 rounded"
+                        ></textarea>
+                      </div>
+                      <div className="my-3">
+                        <button
+                          disabled={LoadingcreateReview}
+                          className="col-12 bg-black border-0 p-3 rounded text-white"
+                        >
+                          SUBMIT
+                        </button>
+                      </div>
+                    </form>
+                  ) : (
+                    <></>
+                  )
                 ) : (
                   <div className="my-3">
                     <div>

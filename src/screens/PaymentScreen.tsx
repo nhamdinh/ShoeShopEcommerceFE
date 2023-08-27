@@ -8,13 +8,6 @@ const PaymentScreen = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const cart: any = {};
-  const { shippingAddress } = cart;
-
-  // if (!shippingAddress) {
-  //   navigate("/shipping");
-  // }
-
   const [paymentMethod, setPaymentMethod] = useState("PayPal");
 
   const submitHandler = (e: any) => {
