@@ -8,7 +8,10 @@ import {
   useCreateOrderMutation,
 } from "../store/components/orders/ordersApi";
 import { getUserInfo } from "../store/selector/RootSelector";
-import { formatCustomerPhoneNumber, formatMoneyCurrency } from "../utils/commonFunction";
+import {
+  formatCustomerPhoneNumber,
+  formatMoneyCurrency,
+} from "../utils/commonFunction";
 import { SHIPPINGPRICE, TAXPRICE } from "../utils/constants";
 
 const PlaceOrderScreen = () => {
@@ -74,7 +77,9 @@ const PlaceOrderScreen = () => {
 
       settaxPrice(taxPrice_tem);
       settotalPriceItems(totalPrice_tem);
-      settotalPrice((+totalPrice_tem + +cart.shippingPrice + +taxPrice_tem).toFixed(2));
+      settotalPrice(
+        (+totalPrice_tem + +cart.shippingPrice + +taxPrice_tem).toFixed(2)
+      );
     }
   }, [dataCheckCart]);
 
@@ -103,6 +108,7 @@ const PlaceOrderScreen = () => {
       taxPrice: +taxPrice,
       totalPriceItems: +totalPriceItems,
       totalPrice: +totalPrice,
+      user: { ...userInfo },
     });
   };
 

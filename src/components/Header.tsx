@@ -53,7 +53,7 @@ const Header = () => {
             <div className="row ">
               <div className="col-6 d-flex align-items-center">
                 <Link className="navbar-brand" to="/">
-                  <img alt="logo" src="/images/logo.png" />
+                  <img alt="logo" src="https://w.ladicdn.com/5bf3dc7edc60303c34e4991f/logo-02-20200903083638.svg" />
                 </Link>
               </div>
               <div className="col-6 d-flex align-items-center justify-content-end Login-Register">
@@ -127,7 +127,7 @@ const Header = () => {
           <div className="row">
             <div className="col-md-3 col-4 d-flex align-items-center">
               <Link className="navbar-brand" to="/">
-                <img alt="logo" src="/images/logo.png" />
+                <img alt="logo" src="https://w.ladicdn.com/5bf3dc7edc60303c34e4991f/logo-02-20200903083638.svg" />
               </Link>
             </div>
             <div className="col-md-6 col-8 d-flex align-items-center">

@@ -47,6 +47,12 @@ export const productsApi = createApi({
       }),
       invalidatesTags: ["GetProductsDetail"],
     }),
+    checkIsBuyer: builder.query({
+      query: (data) => ({
+        url: `/products/${data.id}/user-buyer`,
+        method: "GET",
+      }),
+    }),
   }),
 });
 
@@ -54,4 +60,5 @@ export const {
   useGetProductsQuery,
   useGetProductsDetailQuery,
   useCreateReviewProductMutation,
+  useCheckIsBuyerQuery,
 } = productsApi;

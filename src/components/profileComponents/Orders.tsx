@@ -61,32 +61,42 @@ const Orders = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {orders?.map((order: any) => (
-                    <tr
-                      className={`${
-                        order?.isPaid ? "alert-success" : "alert-danger"
-                      }`}
-                      key={order?._id}
-                    >
-                      <td>
-                        <span
-                          className="link"
-                          onClick={() => {
-                            navigate(`/order/${order?._id}`);
-                          }}
-                        >
-                          {order?._id}
-                        </span>
-                      </td>
-                      <td>{order?.isPaid ? <>Paid</> : <>Not Paid</>}</td>
-                      <td>
-                        {order?.isPaid
-                          ? moment(order?.paidAt).calendar()
-                          : moment(order?.createdAt).calendar()}
-                      </td>
-                      <td>${order?.totalPrice}</td>
-                    </tr>
-                  ))}
+                  {orders?.map((order: any) => {
+                    return (
+                      <tr
+                        className={`${
+                          order?.isPaid ? "alert-success" : "alert-danger"
+                        }`}
+                        key={order?._id}
+                      >
+                        <td>
+                          <span
+                            className="link"
+                            onClick={() => {
+                              navigate(`/order/${order?._id}`);
+                            }}
+                          >
+                            {order?._id}
+                          </span>
+                        </td>
+                        <td>
+                          {order?.isDelivered ? (
+                            <>Delivered</>
+                          ) : order?.isPaid ? (
+                            <>Paid</>
+                          ) : (
+                            <>Not Paid</>
+                          )}
+                        </td>
+                        <td>
+                          {order?.isPaid
+                            ? moment(order?.paidAt).calendar()
+                            : moment(order?.createdAt).calendar()}
+                        </td>
+                        <td>${order?.totalPrice}</td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>

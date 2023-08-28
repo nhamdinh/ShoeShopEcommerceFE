@@ -37,7 +37,6 @@ const OrderScreen = () => {
       skip: false,
     }
   );
-    console.log(dataFetch)
   useEffect(() => {
     if (isSuccess) {
       setorderDetails(dataFetch);
