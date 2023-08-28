@@ -2,10 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../LoadingError/Error";
 import Loading from "../LoadingError/Loading";
-import { Toastobjects } from "../../utils/constants";
 import { useUpdateProfileMutation } from "../../store/components/auth/authApi";
-import { toast } from "react-toastify";
-import Toast from "../LoadingError/Toast";
+import { openToast } from "../../store/components/customDialog/toastSlice";
 
 const ProfileTabs = ({ userInfo }: any) => {
   const [name, setName] = useState<any>(userInfo.name);
@@ -31,8 +29,21 @@ const ProfileTabs = ({ userInfo }: any) => {
     //@ts-ignore
     const data = res?.data;
     if (data) {
-      toast.success("Profile Updated", Toastobjects);
+      dispatch(
+        openToast({
+          isOpen: Date.now(),
+          content: "Updated Profile Success",
+          step: 1,
+        })
+      );
     } else {
+      dispatch(
+        openToast({
+          isOpen: Date.now(),
+          content: "Update Profile Failed",
+          step: 2,
+        })
+      );
       setisError(true);
     }
   };
@@ -45,7 +56,13 @@ const ProfileTabs = ({ userInfo }: any) => {
   const submitHandler = (e: any) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      toast.error("Password does not match", Toastobjects);
+      dispatch(
+        openToast({
+          isOpen: Date.now(),
+          content: "Password Does Not Match",
+          step: 2,
+        })
+      );
     } else {
       onUpdateProfile({ name: name, email: email, password: password });
     }
@@ -54,7 +71,6 @@ const ProfileTabs = ({ userInfo }: any) => {
   };
   return (
     <>
-      <Toast />
       {error && (
         <Message variant="alert-danger" mess={JSON.stringify(error)}></Message>
       )}

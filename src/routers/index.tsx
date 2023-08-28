@@ -24,7 +24,7 @@ export const PrivateRoutes = [
     element: <SingleProduct />,
   },
   {
-    path: "/cart/:id",
+    path: "/cart",
     element: <CartScreen />,
   },
   {

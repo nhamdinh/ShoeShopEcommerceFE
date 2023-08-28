@@ -4,15 +4,27 @@ import { Link, useNavigate } from "react-router-dom";
 import { useGetProfileQuery } from "../store/components/auth/authApi";
 import { NAME_STORAGE } from "../utils/constants";
 import { setUserInfo, userLogout } from "../store/components/auth/authSlice";
+import { useCheckCartQuery } from "../store/components/orders/ordersApi";
 
 const Header = () => {
   const [keyword, setKeyword] = useState<any>();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const cart = [];
-  const cartItems = [];
-  const userLogin = true;
+  const [cartItems, setcartItems] = useState<any>([]);
+  const { data: dataCart, isSuccess: isSuccessCart } = useCheckCartQuery(
+    {},
+    {
+      refetchOnMountOrArgChange: true,
+      skip: false,
+    }
+  );
+
+  useEffect(() => {
+    if (isSuccessCart) {
+      setcartItems(dataCart?.cartItems || []);
+    }
+  }, [dataCart]);
 
   const submitHandler = (e: any) => {
     e.preventDefault();
@@ -53,7 +65,10 @@ const Header = () => {
             <div className="row ">
               <div className="col-6 d-flex align-items-center">
                 <Link className="navbar-brand" to="/">
-                  <img alt="logo" src="https://w.ladicdn.com/5bf3dc7edc60303c34e4991f/logo-02-20200903083638.svg" />
+                  <img
+                    alt="logo"
+                    src="https://w.ladicdn.com/5bf3dc7edc60303c34e4991f/logo-02-20200903083638.svg"
+                  />
                 </Link>
               </div>
               <div className="col-6 d-flex align-items-center justify-content-end Login-Register">
@@ -101,7 +116,10 @@ const Header = () => {
                   </div>
                 )}
 
-                <Link to="/cart" className="cart-mobile-icon">
+                <Link
+                  to="/cart"
+                  className="cart-mobile-icon"
+                >
                   <i className="fas fa-shopping-bag"></i>
                   <span className="badge">{cartItems.length}</span>
                 </Link>
@@ -127,7 +145,10 @@ const Header = () => {
           <div className="row">
             <div className="col-md-3 col-4 d-flex align-items-center">
               <Link className="navbar-brand" to="/">
-                <img alt="logo" src="https://w.ladicdn.com/5bf3dc7edc60303c34e4991f/logo-02-20200903083638.svg" />
+                <img
+                  alt="logo"
+                  src="https://w.ladicdn.com/5bf3dc7edc60303c34e4991f/logo-02-20200903083638.svg"
+                />
               </Link>
             </div>
             <div className="col-md-6 col-8 d-flex align-items-center">

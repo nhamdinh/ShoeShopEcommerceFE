@@ -1,0 +1,9 @@
+@import "~antd/dist/antd.css";
+
+.ant-btn:hover,
+.ant-btn:focus {
+  border-color: transparent;
+}
+.ant-btn {
+  border-color: transparent;
+}

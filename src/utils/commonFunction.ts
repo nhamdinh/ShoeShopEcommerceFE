@@ -62,3 +62,7 @@ export const formatCustomerPhoneNumber = (value: string) => {
 export const formatPhone = (val: string) => {
   return val.replace(" ", "").replace(/[^0-9 ]+/g, "");
 };
+
+export const rawMarkup = (rawMarkup = "") => {
+  return { __html: rawMarkup };
+};

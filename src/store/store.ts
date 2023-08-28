@@ -8,10 +8,11 @@ import { productsApi } from "./components/products/productsApi";
 import { ordersApi } from "./components/orders/ordersApi";
 import { authApi } from "./components/auth/authApi";
 import authReducer, { userLogout } from "./components/auth/authSlice";
+import toastReducer from "./components/customDialog/toastSlice";
+import dialogReducer from "./components/customDialog/dialogSlice";
 
 /*import authReducer, { userLogout } from "../pages/Auth/authSlice";
 import modalReducer from "../components/customModal/modalSlice";
-import dialogReducer from "../components/customDialog/dialogSlice";
 import { memberApi } from "../pages/MemberManagement/memberApi";
 import { settlementApi } from "../pages/SettlementManagement/settlementApi";
 import { dispatchApi } from "../pages/DispatchManagement/dispatchApi";
@@ -29,8 +30,9 @@ const rootReducer = {
   [notificationApi.reducerPath]: notificationApi.reducer,
   [faqApi.reducerPath]: faqApi.reducer,
   [advertisementApi.reducerPath]: advertisementApi.reducer,
-  modal: modalReducer,
-  dialog: dialogReducer, */
+  modal: modalReducer,*/
+  dialog: dialogReducer,
+  toastR: toastReducer,
 };
 const rtkQueryErrorLogger: Middleware =
   (api: MiddlewareAPI) => (next) => (action) => {
