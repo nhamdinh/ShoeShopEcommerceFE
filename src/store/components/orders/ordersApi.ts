@@ -31,6 +31,7 @@ export const ordersApi = createApi({
         method: "POST",
         body: data,
       }),
+      invalidatesTags: ["checkCart__TAG"],
     }),
     removeFromCart: builder.mutation({
       query: (data) => ({
