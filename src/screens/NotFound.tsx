@@ -1,6 +1,7 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const NotFound = () => {
+  const navigate = useNavigate();
   return (
     <div className="container my-5">
       <div className="row justify-content-center align-items-center">
@@ -10,10 +11,13 @@ const NotFound = () => {
           src="/images/not-found.png"
           alt="Not-found"
         />
-        <button className="col-md-3 col-sm-6 col-12 btn btn-success mt-5">
-          <Link to="/" className="text-white text-decoration-none">
-            Home page
-          </Link>
+        <button
+          onClick={() => {
+            navigate("/");
+          }}
+          className="col-md-3 col-sm-6 col-12 btn btn-success mt-5"
+        >
+          <div className="text-white text-decoration-none">Home page</div>
         </button>
       </div>
     </div>

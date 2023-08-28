@@ -23,7 +23,7 @@ export const ordersApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ["getOrderDetail__TAG"],
+  tagTypes: ["getOrderDetail__TAG", "checkCart__TAG"],
   endpoints: (builder) => ({
     createCart: builder.mutation({
       query: (data) => ({
@@ -31,12 +31,22 @@ export const ordersApi = createApi({
         method: "POST",
         body: data,
       }),
+      invalidatesTags: ["checkCart__TAG"],
+    }),
+    removeFromCart: builder.mutation({
+      query: (data) => ({
+        url: `carts/${data.cartId}/remove`,
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: ["checkCart__TAG"],
     }),
     checkCart: builder.query({
       query: (data) => ({
         url: `carts/check-cart`,
         method: "GET",
       }),
+      providesTags: ["checkCart__TAG"],
     }),
     checkAddress: builder.query({
       query: (data) => ({
@@ -91,4 +101,5 @@ export const {
   useGetOrderDetailQuery,
   usePayOrderMutation,
   useGetOrderUserQuery,
+  useRemoveFromCartMutation,
 } = ordersApi;

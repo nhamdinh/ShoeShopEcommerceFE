@@ -16,7 +16,7 @@ const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [login, { isLoading }] = useLoginMutation();
+  const [login, { isLoading, error }] = useLoginMutation();
 
   const onLogin = async (values: any) => {
     const res = await login(values);
@@ -35,7 +35,7 @@ const Login = () => {
   return (
     <div className="container d-flex flex-column justify-content-center align-items-center login-center">
       {isError && (
-        <Message variant="alert-danger" mess="Invalid Email or Password" />
+        <Message variant="alert-danger" mess={JSON.stringify(error)} />
       )}
       <form
         className="Login col-md-8 col-lg-4 col-11"
