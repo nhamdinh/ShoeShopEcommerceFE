@@ -5,6 +5,7 @@ import {
   Middleware,
 } from "@reduxjs/toolkit";
 import { productsApi } from "./components/products/productsApi";
+import productsReducer from "./components/products/productsSlice";
 import { ordersApi } from "./components/orders/ordersApi";
 import { authApi } from "./components/auth/authApi";
 import authReducer, { userLogout } from "./components/auth/authSlice";
@@ -32,6 +33,7 @@ const rootReducer = {
   [advertisementApi.reducerPath]: advertisementApi.reducer,
   modal: modalReducer,*/
   dialog: dialogReducer,
+  cart: productsReducer,
   toastR: toastReducer,
 };
 const rtkQueryErrorLogger: Middleware =
