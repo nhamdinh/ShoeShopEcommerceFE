@@ -106,6 +106,8 @@
   }
   .product-name {
     font-size: 23px;
+    line-height: 30px;
+
   }
   .author-card-avatar {
     display: none;

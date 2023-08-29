@@ -1,5 +1,6 @@
 export const getUserInfo = (state: any) => state.auth.userInfo;
 export const getCartInfo = (state: any) => state.cart.cart;
+export const getDataProducts = (state: any) => state.cart.dataProducts;
 
 // custom dialog for confirm
 // custom dialog for confirm

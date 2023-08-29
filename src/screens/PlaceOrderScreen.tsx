@@ -4,10 +4,9 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import Message from "../components/LoadingError/Error";
 import {
   useCheckAddressQuery,
-  useCheckCartQuery,
   useCreateOrderMutation,
 } from "../store/components/orders/ordersApi";
-import { getUserInfo } from "../store/selector/RootSelector";
+import { getCartInfo, getUserInfo } from "../store/selector/RootSelector";
 import {
   formatCustomerPhoneNumber,
   formatMoneyCurrency,
@@ -16,6 +15,8 @@ import { SHIPPINGPRICE, TAXPRICE } from "../utils/constants";
 
 const PlaceOrderScreen = () => {
   window.scrollTo(0, 0);
+  const cartInfo = useSelector(getCartInfo);
+
   const navigate = useNavigate();
 
   const userInfo = useSelector(getUserInfo);
@@ -51,37 +52,22 @@ const PlaceOrderScreen = () => {
   const [cartItems, setcartItems] = useState<any>([]);
   const [idCart, setidCart] = useState<any>("");
 
-  const {
-    data: dataCheckCart,
-    error: errorCheckCart,
-    isSuccess,
-    isLoading,
-  } = useCheckCartQuery(
-    {},
-    {
-      refetchOnMountOrArgChange: true,
-      skip: false,
-    }
-  );
-
   useEffect(() => {
-    if (isSuccess) {
-      setcartItems(dataCheckCart?.cartItems || []);
-      setidCart(dataCheckCart?._id);
+    setcartItems(cartInfo?.cartItems || []);
+    setidCart(cartInfo?._id);
 
-      let totalPrice_tem = 0;
-      dataCheckCart?.cartItems?.map((cartItem: any) => {
-        totalPrice_tem += cartItem.qty * cartItem.price;
-      });
-      let taxPrice_tem = (totalPrice_tem * TAXPRICE).toFixed(2);
+    let totalPrice_tem = 0;
+    cartInfo?.cartItems?.map((cartItem: any) => {
+      totalPrice_tem += cartItem.qty * cartItem.price;
+    });
+    let taxPrice_tem = (totalPrice_tem * TAXPRICE).toFixed(2);
 
-      settaxPrice(taxPrice_tem);
-      settotalPriceItems(totalPrice_tem);
-      settotalPrice(
-        (+totalPrice_tem + +cart.shippingPrice + +taxPrice_tem).toFixed(2)
-      );
-    }
-  }, [dataCheckCart]);
+    settaxPrice(taxPrice_tem);
+    settotalPriceItems(totalPrice_tem);
+    settotalPrice(
+      (+totalPrice_tem + +cart.shippingPrice + +taxPrice_tem).toFixed(2)
+    );
+  }, [cartInfo]);
 
   const [createOrder, { isLoading: LoadingcreateOrder, error }] =
     useCreateOrderMutation();
