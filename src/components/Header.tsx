@@ -6,11 +6,8 @@ import { NAME_STORAGE } from "../utils/constants";
 import { setUserInfo, userLogout } from "../store/components/auth/authSlice";
 import { useCheckCartQuery } from "../store/components/orders/ordersApi";
 import { setStoCart } from "../store/components/products/productsSlice";
-import { getCartInfo } from "../store/selector/RootSelector";
 
 const Header = () => {
-  const cartInfo = useSelector(getCartInfo);
-  console.log(cartInfo);
   const [keyword, setKeyword] = useState<any>();
   const dispatch = useDispatch();
   const navigate = useNavigate();

@@ -3,59 +3,41 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { formatMoney } from "../utils/commonFunction";
 import {
-  useCheckCartQuery,
   useCreateCartMutation,
   useRemoveFromCartMutation,
 } from "../store/components/orders/ordersApi";
 import { openToast } from "../store/components/customDialog/toastSlice";
 import { openDialog } from "../store/components/customDialog/dialogSlice";
 import Loading from "../components/LoadingError/Loading";
+import { getCartInfo } from "../store/selector/RootSelector";
 
 const CartScreen = () => {
   window.scrollTo(0, 0);
+
+  const cartInfo = useSelector(getCartInfo);
+
   const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
 
   const [cartItems, setcartItems] = useState<any>([]);
   const [idCart, setidCart] = useState<any>("");
-  // const [productId, setproductId] = useState<any>(
-  //   location.pathname ? location.pathname.split("/")[2] : ""
-  // );
-  // const [qty, setqty] = useState<any>(
-  //   location.search ? location.search.split("=")[1] : ""
-  // );
+
   const [total, settotal] = useState<any>(0);
 
-  const { data, error, isSuccess, isLoading } = useCheckCartQuery(
-    {},
-    {
-      refetchOnMountOrArgChange: true,
-      skip: false,
-    }
-  );
-
   useEffect(() => {
-    if (isSuccess) {
-      let cartItems_temp: any = data?.cartItems || [];
-      let total_temp = 0;
-      cartItems_temp.map((cart: any) => {
-        total_temp += cart?.price * cart?.qty;
-      });
+    let cartItems_temp: any = cartInfo?.cartItems || [];
+    let total_temp = 0;
+    cartItems_temp.map((cart: any) => {
+      total_temp += cart?.price * cart?.qty;
+    });
 
-      settotal(+total_temp);
-      setcartItems(cartItems_temp);
-      setidCart(data?._id);
-    }
-  }, [data]);
-
-  // useEffect(() => {
-  //   setproductId(location.pathname ? location.pathname.split("/")[2] : "");
-  //   setqty(location.search ? location.search.split("=")[1] : "");
-  // }, [location.pathname]);
+    settotal(+total_temp);
+    setcartItems(cartItems_temp);
+    setidCart(cartInfo?._id);
+  }, [cartInfo]);
 
   const checkOutHandler = (e: any) => {
-    // navigate("/login?redirect=shipping");
     e.preventDefault();
     navigate("/shipping");
   };
@@ -194,7 +176,6 @@ function CompTableCart({ item, idCart }: any) {
   };
 
   const AddToCartHandle = (item: any) => {
-    console.log(item);
     onCreateCart({
       cartItems: [
         {

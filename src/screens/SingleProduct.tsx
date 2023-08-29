@@ -13,11 +13,12 @@ import {
   useGetProductsDetailQuery,
 } from "../store/components/products/productsApi";
 import { useCreateCartMutation } from "../store/components/orders/ordersApi";
-import { getUserInfo } from "../store/selector/RootSelector";
+import { getCartInfo, getUserInfo } from "../store/selector/RootSelector";
 import { openToast } from "../store/components/customDialog/toastSlice";
 
 const SingleProduct = () => {
   const dispatch = useDispatch();
+  const cartInfo = useSelector(getCartInfo);
 
   const [rating, setRating] = useState<any>(0);
   const [comment, setComment] = useState<any>("");
@@ -27,6 +28,13 @@ const SingleProduct = () => {
   const productId = getUrlParams("id");
 
   const [qty, setQty] = useState<any>(1);
+
+  useEffect(() => {
+    let cartItems_temp: any = cartInfo?.cartItems || [];
+    cartItems_temp?.map((item: any) => {
+      if (productId === item?.product) setQty(item?.qty);
+    });
+  }, [cartInfo, productId]);
 
   const [product, setdataFetched] = useState<any>({});
 
