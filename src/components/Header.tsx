@@ -1,3 +1,4 @@
+import "./style.scss";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
@@ -5,12 +6,42 @@ import { useGetProfileQuery } from "../store/components/auth/authApi";
 import { NAME_STORAGE } from "../utils/constants";
 import { setUserInfo, userLogout } from "../store/components/auth/authSlice";
 import { useCheckCartQuery } from "../store/components/orders/ordersApi";
-import { setStoCart } from "../store/components/products/productsSlice";
+import {
+  setStoCart,
+  setStoProducts,
+} from "../store/components/products/productsSlice";
+import { useGetProductsQuery } from "../store/components/products/productsApi";
+import { getDataProducts } from "../store/selector/RootSelector";
 
 const Header = () => {
-  const [keyword, setKeyword] = useState<any>();
+  const [keyword, setKeyword] = useState<any>("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const dataProducts1 = useSelector(getDataProducts);
+
+  const {
+    data: dataProducts,
+    error: errdataProducts,
+    isSuccess: isSuccessdataProducts,
+    isLoading: isLoadingdataProducts,
+  } = useGetProductsQuery(
+    {
+      page: 1,
+      limit: 100,
+      order: "desc",
+      orderBy: "createdAt",
+      keyword: "",
+    },
+    {
+      refetchOnMountOrArgChange: true,
+      skip: false,
+    }
+  );
+  useEffect(() => {
+    if (isSuccess) {
+      dispatch(setStoProducts(dataProducts?.products));
+    }
+  }, [dataProducts]);
 
   const [cartItems, setcartItems] = useState<any>([]);
   const { data: dataCart, isSuccess: isSuccessCart } = useCheckCartQuery(
@@ -28,10 +59,11 @@ const Header = () => {
     }
   }, [dataCart]);
 
-  const submitHandler = (e: any) => {
-    e.preventDefault();
-    if (keyword.trim()) {
-      navigate(`/search/${keyword}`);
+  const submitHandler = (value: any) => {
+    setKeyword(value);
+    console.log(value);
+    if (value.trim()) {
+      navigate(`/search/${value}`);
     } else {
       navigate("/");
     }
@@ -58,7 +90,7 @@ const Header = () => {
     dispatch(userLogout());
     // navigate("/")
   };
-  // console.log(data);
+
   return (
     <div className="header">
       <div className="container">
@@ -123,18 +155,51 @@ const Header = () => {
                   <span className="badge">{cartItems.length}</span>
                 </Link>
               </div>
-              <div className="col-12 d-flex align-items-center">
-                <form onSubmit={submitHandler} className="input-group">
+              <div className="col-12 d-flex align-items-center zxc">
+                <div className="input-group">
                   <input
                     type="search"
                     className="form-control rounded search"
                     placeholder="Search"
+                    value={keyword}
                     onChange={(e) => setKeyword(e.target.value)}
                   />
-                  <button type="submit" className="search-button">
+                  <button
+                    type="submit"
+                    onClick={() => {
+                      submitHandler(keyword);
+                    }}
+                    className="search-button"
+                  >
                     search
                   </button>
-                </form>
+                </div>
+
+                <div className="search-container">
+                  <div className="dropdown">
+                    {dataProducts1
+                      .filter((item: any) => {
+                        const searchTerm = keyword.toLowerCase();
+                        const fullName = item?.name.toLowerCase();
+
+                        return (
+                          searchTerm &&
+                          fullName.includes(searchTerm) &&
+                          fullName !== searchTerm
+                        );
+                      })
+                      .slice(0, 10)
+                      .map((item: any) => (
+                        <div
+                          className="dropdown-row"
+                          onClick={() => submitHandler(item?.name)}
+                          key={item?.name}
+                        >
+                          {item?.name}
+                        </div>
+                      ))}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -150,18 +215,52 @@ const Header = () => {
                 />
               </Link>
             </div>
-            <div className="col-md-6 col-8 d-flex align-items-center">
-              <form onSubmit={submitHandler} className="input-group">
+            <div className="col-md-6 col-8 d-flex align-items-center zxc">
+              <div className="input-group">
                 <input
                   type="search"
                   className="form-control rounded search"
                   placeholder="Search"
+                  value={keyword}
                   onChange={(e) => setKeyword(e.target.value)}
                 />
-                <button type="submit" className="search-button">
+                <button
+                  type="submit"
+                  onClick={() => {
+                    submitHandler(keyword);
+                  }}
+                  className="search-button"
+                >
                   search
                 </button>
-              </form>
+              </div>
+              <div className="search-container">
+                <div className="dropdown">
+                  {dataProducts1
+                    .filter((item: any) => {
+                      const searchTerm = keyword.toLowerCase();
+                      const fullName = item?.name.toLowerCase();
+                      // console.log(searchTerm);
+                      // console.log(fullName);
+                      return (
+                        searchTerm &&
+                        fullName.includes(searchTerm) &&
+                        fullName !== searchTerm
+                      );
+                    })
+                    .slice(0, 10)
+                    .map((item: any) => (
+                      <div
+                        className="dropdown-row"
+                        onClick={() => submitHandler(item?.name)}
+                        key={item?.name}
+                      >
+                        <div className="name">{item?.name}</div>
+                        <img src={item?.image} alt="" />
+                      </div>
+                    ))}
+                </div>
+              </div>
             </div>
             <div className="col-md-3 d-flex align-items-center justify-content-end Login-Register">
               {userInfo?.name ? (
