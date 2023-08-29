@@ -60,36 +60,6 @@ const CartScreen = () => {
     navigate("/shipping");
   };
 
-  const [createCart, { isLoading: LoadingcreateCart }] =
-    useCreateCartMutation();
-
-  const onCreateCart = async (value: any) => {
-    const res = await createCart(value);
-    //@ts-ignore
-    const data = res?.data;
-
-    if (data) {
-      // navigate(`/cart/${productId}?qty=${qty}`);
-      navigate(`/cart`);
-    } else {
-    }
-  };
-
-  const AddToCartHandle = (e: any) => {
-    e.preventDefault();
-    // onCreateCart({
-    //   cartItems: [
-    //     {
-    //       name: product?.name,
-    //       image: product?.image,
-    //       price: product?.price,
-    //       qty: qty,
-    //       product: productId,
-    //     },
-    //   ],
-    // });
-  };
-
   return (
     <div className="container">
       {/* Cart */}
@@ -140,6 +110,10 @@ const CartScreen = () => {
 };
 
 function CompTableCart({ item, idCart }: any) {
+  useEffect(() => {
+    setQty(item?.qty);
+  }, [item]);
+
   const navigate = useNavigate();
 
   const dispatch = useDispatch();

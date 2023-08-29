@@ -5,8 +5,12 @@ import { useGetProfileQuery } from "../store/components/auth/authApi";
 import { NAME_STORAGE } from "../utils/constants";
 import { setUserInfo, userLogout } from "../store/components/auth/authSlice";
 import { useCheckCartQuery } from "../store/components/orders/ordersApi";
+import { setStoCart } from "../store/components/products/productsSlice";
+import { getCartInfo } from "../store/selector/RootSelector";
 
 const Header = () => {
+  const cartInfo = useSelector(getCartInfo);
+  console.log(cartInfo);
   const [keyword, setKeyword] = useState<any>();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -23,6 +27,7 @@ const Header = () => {
   useEffect(() => {
     if (isSuccessCart) {
       setcartItems(dataCart?.cartItems || []);
+      dispatch(setStoCart({ ...dataCart }));
     }
   }, [dataCart]);
 
@@ -116,10 +121,7 @@ const Header = () => {
                   </div>
                 )}
 
-                <Link
-                  to="/cart"
-                  className="cart-mobile-icon"
-                >
+                <Link to="/cart" className="cart-mobile-icon">
                   <i className="fas fa-shopping-bag"></i>
                   <span className="badge">{cartItems.length}</span>
                 </Link>
