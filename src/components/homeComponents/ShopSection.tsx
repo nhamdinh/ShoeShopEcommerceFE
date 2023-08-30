@@ -112,6 +112,7 @@ const ShopSection = ({ pagenumber, keyword, brand }: any) => {
                   total={total}
                   page={currentPage}
                   keyword={keyword ?? ""}
+                  brand={brand ?? ""}
                 />
               </div>
             </div>

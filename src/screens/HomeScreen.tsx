@@ -10,7 +10,6 @@ const HomeScreen = () => {
   const [keyword, setkeyword] = useState<any>("");
   const [brand, setbrand] = useState<any>("");
   const [pagenumber, setpagenumber] = useState<any>(1);
-
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
     setkeyword(urlParams.get("search") ?? "");

@@ -21,7 +21,7 @@ const Header = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [brand, setbrand] = useState<any>("");
+  const [brand, setbrand] = useState<any>("All");
   const [brands, setbrands] = useState<any>([]);
   const {
     data: dataBrands,
@@ -41,7 +41,6 @@ const Header = () => {
   useEffect(() => {
     if (isSuccessBrands) {
       setbrands(dataBrands?.brands);
-      setbrand(dataBrands?.brands[0]?.brand);
     }
   }, [dataBrands]);
 
@@ -220,6 +219,29 @@ const Header = () => {
                   >
                     search
                   </button>
+
+                  <select
+                    className="search-button"
+                    value={brand}
+                    onChange={(e) => {
+                      setbrand(e.target.value);
+                      submitHandler(keyword, e.target.value);
+                    }}
+                  >
+                    <option className="option__br">All</option>
+
+                    {brands.map((bra: any, index: number) => {
+                      return (
+                        <option
+                          className="option__br"
+                          key={index}
+                          value={bra?.brand}
+                        >
+                          {bra?.brand}
+                        </option>
+                      );
+                    })}
+                  </select>
                 </div>
                 {dropdown && (
                   <div className="search-container">
@@ -310,9 +332,15 @@ const Header = () => {
                     submitHandler(keyword, e.target.value);
                   }}
                 >
+                  <option className="option__br">All</option>
+
                   {brands.map((bra: any, index: number) => {
                     return (
-                      <option key={index} value={bra?.brand}>
+                      <option
+                        className="option__br"
+                        key={index}
+                        value={bra?.brand}
+                      >
                         {bra?.brand}
                       </option>
                     );
