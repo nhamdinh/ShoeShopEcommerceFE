@@ -27,8 +27,9 @@ export const productsApi = createApi({
   endpoints: (builder) => ({
     getProducts: builder.query({
       query: (data) => ({
-        url: `/products/get-all?keyword=${data?.keyword}`,
+        url: `/products/get-all`,
         method: "GET",
+        params: data,
       }),
       providesTags: ["GetProducts"],
     }),
@@ -53,6 +54,12 @@ export const productsApi = createApi({
         method: "GET",
       }),
     }),
+    getBrands: builder.query({
+      query: (data) => ({
+        url: `/categorys/get-all-brands`,
+        method: "GET",
+      }),
+    }),
   }),
 });
 
@@ -61,4 +68,5 @@ export const {
   useGetProductsDetailQuery,
   useCreateReviewProductMutation,
   useCheckIsBuyerQuery,
+  useGetBrandsQuery,
 } = productsApi;

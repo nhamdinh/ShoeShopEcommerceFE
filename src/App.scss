@@ -71,6 +71,7 @@ textarea:focus {
   border: 0;
   text-transform: uppercase;
   font-size: 12px;
+  margin-right: 4px;
 }
 .Login-Register a {
   text-transform: uppercase;
@@ -648,6 +649,7 @@ textarea:focus {
 .pagination .page-link {
   padding: 10px 30px;
   color: black;
+  cursor: pointer;
 }
 .page-item.active .page-link {
   background-color: black;
