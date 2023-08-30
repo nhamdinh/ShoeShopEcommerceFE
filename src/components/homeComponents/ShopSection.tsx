@@ -4,18 +4,36 @@ import Rating from "./Rating";
 import { useGetProductsQuery } from "../../store/components/products/productsApi";
 import Loading from "../LoadingError/Loading";
 import Message from "../LoadingError/Error";
+import Pagination from "./Pagination";
+import { PAGE_SIZE } from "../../utils/constants";
 
 const ShopSection = ({ pagenumber, keyword }: any) => {
   const navigate = useNavigate();
   const [dataFetched, setdataFetched] = useState<any>([]);
 
-  const { data, error, isSuccess, isLoading } = useGetProductsQuery(
+  const [params, setParams] = useState<any>({
+    page: pagenumber ?? 1,
+    limit: PAGE_SIZE,
+    order: "desc",
+    orderBy: "createdAt",
+  });
+
+  useEffect(() => {
+    setParams({ ...params, page: pagenumber });
+  }, [pagenumber]);
+
+  const [currentPage, setCurrentPage] = useState<any>(1);
+  const [total, setTotal] = useState<any>(1);
+
+  const {
+    data: dataProducts,
+    error,
+    isSuccess,
+    isLoading,
+  } = useGetProductsQuery(
     {
-      page: 1,
-      limit: 100,
-      order: "desc",
-      orderBy: "createdAt",
-      keyword: keyword ? keyword : "",
+      ...params,
+      keyword: keyword ?? "",
     },
     {
       refetchOnMountOrArgChange: true,
@@ -24,9 +42,11 @@ const ShopSection = ({ pagenumber, keyword }: any) => {
   );
   useEffect(() => {
     if (isSuccess) {
-      setdataFetched(data?.products);
+      setdataFetched(dataProducts?.products);
+      setTotal(dataProducts?.totalPages);
+      setCurrentPage(dataProducts?.page)
     }
-  }, [data]);
+  }, [dataProducts]);
 
   return (
     <>
@@ -44,9 +64,9 @@ const ShopSection = ({ pagenumber, keyword }: any) => {
                     variant="alert-danger"
                     mess={JSON.stringify(error)}
                   />
-                ) : (
+                ) : dataFetched?.length > 0 ? (
                   <>
-                    {dataFetched.map((product: any) => (
+                    {dataFetched?.map((product: any) => (
                       <div
                         className="shop col-lg-4 col-md-6 col-sm-6"
                         key={product._id}
@@ -83,13 +103,15 @@ const ShopSection = ({ pagenumber, keyword }: any) => {
                       </div>
                     ))}
                   </>
+                ) : (
+                  <Message variant="alert-danger" mess="Product Not Found" />
                 )}
                 {/* Pagination */}
-                {/*  <Pagination
-                  pages={pages}
-                  page={page}
-                  keyword={keyword ? keyword : ""}
-                /> */}
+                <Pagination
+                  total={total}
+                  page={currentPage}
+                  keyword={keyword ?? ""}
+                />
               </div>
             </div>
           </div>

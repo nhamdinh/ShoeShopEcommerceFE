@@ -4,7 +4,7 @@ export const NAME_STORAGE = "name";
 export const ACCESSTOKEN_STORAGE = "accessToken";
 export const SHIPPINGPRICE = 9.99;
 export const TAXPRICE = 0.1;
-
+export const PAGE_SIZE = 2;
 export const Toastobjects = {
   pauseOnFocusLoss: false,
   draggable: false,

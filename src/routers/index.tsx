@@ -16,10 +16,6 @@ export const PrivateRoutes = [
     element: <HomeScreen />,
   },
   {
-    path: "/search/:keyword",
-    element: <HomeScreen />,
-  },
-  {
     path: "/product-detail",
     element: <SingleProduct />,
   },

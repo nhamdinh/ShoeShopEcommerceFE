@@ -16,7 +16,7 @@ export default function TopHeader() {
             >
               HOME
             </p>
-            <p onClick={() => {}}> +255 768 356 890 </p>
+            <p onClick={() => {}}> 0943 090 090 </p>
           </div>
           <div className=" col-12 col-lg-6 justify-content-center justify-content-lg-end d-flex align-items-center">
             <Link to="">

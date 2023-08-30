@@ -7,15 +7,17 @@ import { useLocation } from "react-router-dom";
 const HomeScreen = () => {
   window.scrollTo(0, 0);
   const location = useLocation();
+  const [keyword, setkeyword] = useState<any>("");
+  const [pagenumber, setpagenumber] = useState<any>(1);
 
-  const [keyword, setkeyword] = useState<any>(location.pathname.split("/")[2]);
   useEffect(() => {
-    setkeyword(location.pathname.split("/")[2]);
-  }, [location.pathname]);
-
+    const urlParams = new URLSearchParams(location.search);
+    setkeyword(urlParams.get("search") ?? "");
+    setpagenumber(urlParams.get("page") ?? 1);
+  }, [location.search]);
   return (
     <div>
-      <ShopSection keyword={keyword}/>
+      <ShopSection keyword={keyword} pagenumber={pagenumber} />
       <CalltoActionSection />
       <ContactInfo />
     </div>
