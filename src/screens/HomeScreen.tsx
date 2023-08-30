@@ -8,16 +8,18 @@ const HomeScreen = () => {
   window.scrollTo(0, 0);
   const location = useLocation();
   const [keyword, setkeyword] = useState<any>("");
+  const [brand, setbrand] = useState<any>("");
   const [pagenumber, setpagenumber] = useState<any>(1);
 
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
     setkeyword(urlParams.get("search") ?? "");
+    setbrand(urlParams.get("brand") ?? "");
     setpagenumber(urlParams.get("page") ?? 1);
   }, [location.search]);
   return (
     <div>
-      <ShopSection keyword={keyword} pagenumber={pagenumber} />
+      <ShopSection keyword={keyword} pagenumber={pagenumber} brand={brand} />
       <CalltoActionSection />
       <ContactInfo />
     </div>

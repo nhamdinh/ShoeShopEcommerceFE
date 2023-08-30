@@ -16,19 +16,20 @@ import { SHIPPINGPRICE, TAXPRICE } from "../utils/constants";
 const PlaceOrderScreen = () => {
   window.scrollTo(0, 0);
   const cartInfo = useSelector(getCartInfo);
-
+  console.log(cartInfo);
   const navigate = useNavigate();
 
   const userInfo = useSelector(getUserInfo);
   const cart: any = {
     shippingPrice: SHIPPINGPRICE,
+    paymentMethod: cartInfo?.paymentMethod,
   };
 
   const [address, setaddress] = useState<any>({});
   const [totalPrice, settotalPrice] = useState<any>(0);
   const [taxPrice, settaxPrice] = useState<any>(0);
   const [totalPriceItems, settotalPriceItems] = useState<any>(0);
-
+  console.log(address);
   const {
     data: dataCheckAddress,
     error: errorCheckAddress,
@@ -88,7 +89,10 @@ const PlaceOrderScreen = () => {
     onCreateOrder({
       orderItems: [...cartItems],
       cart: idCart,
-      shippingAddress: address?._id,
+      shippingAddress: {
+        ...address,
+        address: address?._id,
+      },
       paymentMethod: "Paypal",
       shippingPrice: +cart.shippingPrice,
       taxPrice: +taxPrice,

@@ -54,6 +54,12 @@ export const productsApi = createApi({
         method: "GET",
       }),
     }),
+    getBrands: builder.query({
+      query: (data) => ({
+        url: `/categorys/get-all-brands`,
+        method: "GET",
+      }),
+    }),
   }),
 });
 
@@ -62,4 +68,5 @@ export const {
   useGetProductsDetailQuery,
   useCreateReviewProductMutation,
   useCheckIsBuyerQuery,
+  useGetBrandsQuery,
 } = productsApi;

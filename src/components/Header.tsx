@@ -10,16 +10,44 @@ import {
   setStoCart,
   setStoProducts,
 } from "../store/components/products/productsSlice";
-import { useGetProductsQuery } from "../store/components/products/productsApi";
+import {
+  useGetBrandsQuery,
+  useGetProductsQuery,
+} from "../store/components/products/productsApi";
 import { getDataProducts } from "../store/selector/RootSelector";
 
 const Header = () => {
   const [keyword, setKeyword] = useState<any>("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const [brand, setbrand] = useState<any>("");
+  const [brands, setbrands] = useState<any>([]);
+  const {
+    data: dataBrands,
+    error: errBrands,
+    isSuccess: isSuccessBrands,
+    isLoading: isLoadingBrands,
+  } = useGetBrandsQuery(
+    {
+      page: 1,
+      limit: 1000,
+    },
+    {
+      refetchOnMountOrArgChange: true,
+      skip: false,
+    }
+  );
+  useEffect(() => {
+    if (isSuccessBrands) {
+      setbrands(dataBrands?.brands);
+      setbrand(dataBrands?.brands[0]?.brand);
+    }
+  }, [dataBrands]);
+
+  const [dropdown, setdropdown] = useState<any>(false);
   const dataProducts1 = useSelector(getDataProducts);
   const [dataProducts, setdataProducts] = useState<any>([]);
-  const [dropdown, setdropdown] = useState<any>(false);
   const {
     data: dataFetch,
     error: errdataProducts,
@@ -58,10 +86,10 @@ const Header = () => {
     }
   }, [dataCart]);
 
-  const submitHandler = (value: any) => {
+  const submitHandler = (value: any, bra: any) => {
     setKeyword(value);
-    if (value.trim()) {
-      navigate(`/?search=${value}`);
+    if (value.trim() || bra) {
+      navigate(`/?search=${value.trim()}&&brand=${bra}`);
     } else {
       navigate("/");
     }
@@ -101,7 +129,6 @@ const Header = () => {
           tabIndex={0}
           onBlur={(e) => {
             e.stopPropagation();
-
             // setdropdown(false);
           }}
         >
@@ -176,12 +203,18 @@ const Header = () => {
                       setKeyword(e.target.value);
                       setdropdown(true);
                     }}
+                    onKeyDown={(event) => {
+                      if (event.key === "Enter") {
+                        submitHandler(keyword, "");
+                        setdropdown(false);
+                      }
+                    }}
                   />
                   <button
                     type="submit"
                     onClick={() => {
                       setdropdown(false);
-                      submitHandler(keyword);
+                      submitHandler(keyword, "");
                     }}
                     className="search-button"
                   >
@@ -208,7 +241,7 @@ const Header = () => {
                             className="dropdown-row"
                             onClick={(e) => {
                               e.stopPropagation();
-                              submitHandler(item?.name);
+                              submitHandler(item?.name, "");
                             }}
                             key={item?.name}
                           >
@@ -252,17 +285,39 @@ const Header = () => {
                     setKeyword(e.target.value);
                     setdropdown(true);
                   }}
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter") {
+                      submitHandler(keyword, "");
+                      setdropdown(false);
+                    }
+                  }}
                 />
                 <button
                   type="submit"
                   onClick={() => {
                     setdropdown(false);
-                    submitHandler(keyword);
+                    submitHandler(keyword, "");
                   }}
                   className="search-button"
                 >
                   search
                 </button>
+                <select
+                  className="search-button"
+                  value={brand}
+                  onChange={(e) => {
+                    setbrand(e.target.value);
+                    submitHandler(keyword, e.target.value);
+                  }}
+                >
+                  {brands.map((bra: any, index: number) => {
+                    return (
+                      <option key={index} value={bra?.brand}>
+                        {bra?.brand}
+                      </option>
+                    );
+                  })}
+                </select>
               </div>
               {dropdown && (
                 <div className="search-container">
@@ -285,7 +340,7 @@ const Header = () => {
                           className="dropdown-row"
                           onClick={(e) => {
                             e.stopPropagation();
-                            submitHandler(item?.name);
+                            submitHandler(item?.name, "");
                           }}
                           key={item?.name}
                         >

@@ -7,20 +7,27 @@ import Message from "../LoadingError/Error";
 import Pagination from "./Pagination";
 import { PAGE_SIZE } from "../../utils/constants";
 
-const ShopSection = ({ pagenumber, keyword }: any) => {
+const ShopSection = ({ pagenumber, keyword, brand }: any) => {
   const navigate = useNavigate();
   const [dataFetched, setdataFetched] = useState<any>([]);
 
   const [params, setParams] = useState<any>({
     page: pagenumber ?? 1,
+    keyword: keyword ?? "",
+    brand: brand ?? "",
     limit: PAGE_SIZE,
     order: "desc",
     orderBy: "createdAt",
   });
 
   useEffect(() => {
-    setParams({ ...params, page: pagenumber });
-  }, [pagenumber]);
+    setParams({
+      ...params,
+      page: pagenumber ?? 1,
+      keyword: keyword ?? "",
+      brand: brand ?? "",
+    });
+  }, [pagenumber, keyword, brand]);
 
   const [currentPage, setCurrentPage] = useState<any>(1);
   const [total, setTotal] = useState<any>(1);
@@ -30,21 +37,15 @@ const ShopSection = ({ pagenumber, keyword }: any) => {
     error,
     isSuccess,
     isLoading,
-  } = useGetProductsQuery(
-    {
-      ...params,
-      keyword: keyword ?? "",
-    },
-    {
-      refetchOnMountOrArgChange: true,
-      skip: false,
-    }
-  );
+  } = useGetProductsQuery(params, {
+    refetchOnMountOrArgChange: true,
+    skip: false,
+  });
   useEffect(() => {
     if (isSuccess) {
       setdataFetched(dataProducts?.products);
       setTotal(dataProducts?.totalPages);
-      setCurrentPage(dataProducts?.page)
+      setCurrentPage(dataProducts?.page);
     }
   }, [dataProducts]);
 
