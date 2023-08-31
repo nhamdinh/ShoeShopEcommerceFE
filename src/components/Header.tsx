@@ -204,7 +204,7 @@ const Header = () => {
                     }}
                     onKeyDown={(event) => {
                       if (event.key === "Enter") {
-                        submitHandler(keyword, "");
+                        submitHandler(keyword, brand);
                         setdropdown(false);
                       }
                     }}
@@ -213,7 +213,7 @@ const Header = () => {
                     type="submit"
                     onClick={() => {
                       setdropdown(false);
-                      submitHandler(keyword, "");
+                      submitHandler(keyword, brand);
                     }}
                     className="search-button"
                   >
@@ -263,7 +263,7 @@ const Header = () => {
                             className="dropdown-row"
                             onClick={(e) => {
                               e.stopPropagation();
-                              submitHandler(item?.name, "");
+                              submitHandler(item?.name, brand);
                             }}
                             key={item?.name}
                           >
@@ -309,7 +309,7 @@ const Header = () => {
                   }}
                   onKeyDown={(event) => {
                     if (event.key === "Enter") {
-                      submitHandler(keyword, "");
+                      submitHandler(keyword, brand);
                       setdropdown(false);
                     }
                   }}
@@ -318,7 +318,7 @@ const Header = () => {
                   type="submit"
                   onClick={() => {
                     setdropdown(false);
-                    submitHandler(keyword, "");
+                    submitHandler(keyword, brand);
                   }}
                   className="search-button"
                 >
@@ -368,7 +368,7 @@ const Header = () => {
                           className="dropdown-row"
                           onClick={(e) => {
                             e.stopPropagation();
-                            submitHandler(item?.name, "");
+                            submitHandler(item?.name, brand);
                           }}
                           key={item?.name}
                         >
