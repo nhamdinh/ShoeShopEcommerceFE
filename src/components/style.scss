@@ -56,15 +56,27 @@
     }
 }
 .ChatBox {
-
+    #section-1 {
+        margin-top: 20px;
+    }
+    .ppp {
+        position: fixed;
+        right: 5%;
+        bottom: 5%;
+        box-shadow: 0 0 8px 0 blueviolet;
+        border-radius: 4px;
+        cursor: pointer;
+        z-index: 1;
+    }
     .box__chat {
         position: fixed;
         right: 0;
         left: 60%;
         bottom: 0;
-        box-shadow: 0 0 10px 0 black;
+        box-shadow: 0 0 8px 0 blueviolet;
         border-radius: 4px;
         z-index: 1;
+        cursor: pointer;
     }
     @keyframes showMessage {
         from {
@@ -83,30 +95,47 @@
         background: linear-gradient(rgb(222, 204, 204), rgb(230, 223, 108));
 
         .your__message {
-            background: #009bff;
             margin: 10px;
-            border-radius: 10px;
             padding: 10px;
             color: white;
             float: right;
             width: 50%;
             opacity: 0.4;
+            word-wrap: break-word;
 
             animation: showMessage 0.7s 0.2s linear forwards;
+            p {
+                font-size: 10px;
+                color: #000;
+            }
+            div {
+                background: #009bff;
+                border-radius: 10px;
+                padding: 10px;
+            }
         }
 
         .other__people {
-            background: #868686;
+            p {
+                font-size: 10px;
+                color: #000;
+            }
+
             margin: 10px;
-            border-radius: 10px;
             padding: 10px;
             color: white;
             text-align: left;
             float: left;
             width: 50%;
             opacity: 0.4;
-
             animation: showMessage 0.7s 0.2s linear forwards;
+            word-wrap: break-word;
+
+            div {
+                background: #868686;
+                border-radius: 10px;
+                padding: 10px;
+            }
         }
     }
 
@@ -152,7 +181,9 @@
     textarea:focus {
         outline: 0;
     }
-
+    .dn {
+        display: none;
+    }
     /* width */
     ::-webkit-scrollbar {
         width: 10px;

@@ -9,10 +9,12 @@ import TopHeader from "./components/TopHeader";
 import Toast from "./components/LoadingError/Toast";
 import CustomDialog from "./components/customDialog";
 import { REACT_ENV } from "./utils/constants";
+import ChatBox from "./components/ChatBox";
 
 const App = () => {
   console.log("env ::: ", REACT_ENV);
   const location = useLocation();
+
   return (
     <div className="app-wrapper">
       <TopHeader />
@@ -35,11 +37,10 @@ const App = () => {
           }
         />
       </Routes>
-
       <CustomDialog />
       <Toast />
       <Footer />
-
+      <ChatBox />{" "}
     </div>
   );
 };
