@@ -11,6 +11,9 @@ const ShopSection = ({ pagenumber, keyword, brand }: any) => {
   const navigate = useNavigate();
   const [dataFetched, setdataFetched] = useState<any>([]);
 
+  const [currentPage, setCurrentPage] = useState<any>(1);
+  const [total, setTotal] = useState<any>(1);
+
   const [params, setParams] = useState<any>({
     page: pagenumber ?? 1,
     keyword: keyword ?? "",
@@ -28,9 +31,6 @@ const ShopSection = ({ pagenumber, keyword, brand }: any) => {
       brand: brand ?? "",
     });
   }, [pagenumber, keyword, brand]);
-
-  const [currentPage, setCurrentPage] = useState<any>(1);
-  const [total, setTotal] = useState<any>(1);
 
   const {
     data: dataProducts,

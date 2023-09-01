@@ -55,3 +55,122 @@
         }
     }
 }
+.ChatBox {
+
+    .box__chat {
+        position: fixed;
+        right: 0;
+        left: 60%;
+        bottom: 0;
+        box-shadow: 0 0 10px 0 black;
+        border-radius: 4px;
+        z-index: 1;
+    }
+    @keyframes showMessage {
+        from {
+            opacity: 0.4;
+            scale: 1.05;
+        }
+        to {
+            opacity: 1;
+            scale: 1;
+        }
+    }
+    .box__chat_message {
+        min-height: 40vh;
+        max-height: 40vh;
+        overflow-y: auto;
+        background: linear-gradient(rgb(222, 204, 204), rgb(230, 223, 108));
+
+        .your__message {
+            background: #009bff;
+            margin: 10px;
+            border-radius: 10px;
+            padding: 10px;
+            color: white;
+            float: right;
+            width: 50%;
+            opacity: 0.4;
+
+            animation: showMessage 0.7s 0.2s linear forwards;
+        }
+
+        .other__people {
+            background: #868686;
+            margin: 10px;
+            border-radius: 10px;
+            padding: 10px;
+            color: white;
+            text-align: left;
+            float: left;
+            width: 50%;
+            opacity: 0.4;
+
+            animation: showMessage 0.7s 0.2s linear forwards;
+        }
+    }
+
+    .send__box {
+        width: 100%;
+        padding: 10px;
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        background-color: #fff;
+    }
+    .box__chat__name {
+        background-color: blueviolet;
+        border-top-left-radius: 4px;
+        border-top-right-radius: 4px;
+        padding: 10px;
+        flex: 20px;
+        color: white;
+        text-transform: capitalize;
+        font-weight: 600;
+        letter-spacing: 1px;
+    }
+    textarea {
+        width: 80%;
+        background: #ebf5ff;
+        border-radius: 8px;
+        float: left;
+        padding: 10px;
+    }
+
+    .send__box__button {
+        background: #6650ff;
+        color: white;
+        border: none;
+        cursor: pointer;
+        text-align: center;
+        padding: 10px;
+        border-radius: 6px;
+    }
+    .send__box__button:hover {
+        background: black;
+    }
+    textarea:focus {
+        outline: 0;
+    }
+
+    /* width */
+    ::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+        background: #dadada;
+        border-radius: 10px;
+    }
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+}

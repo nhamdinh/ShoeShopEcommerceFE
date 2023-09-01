@@ -1,11 +1,14 @@
+import "./style.scss";
 import { useEffect, useState } from "react";
 import CalltoActionSection from "../components/homeComponents/CalltoActionSection";
 import ContactInfo from "../components/homeComponents/ContactInfo";
 import ShopSection from "../components/homeComponents/ShopSection";
 import { useLocation } from "react-router-dom";
+import ChatBox from "../components/ChatBox";
 
 const HomeScreen = () => {
   window.scrollTo(0, 0);
+
   const location = useLocation();
   const [keyword, setkeyword] = useState<any>("");
   const [brand, setbrand] = useState<any>("");
@@ -17,11 +20,12 @@ const HomeScreen = () => {
     setpagenumber(urlParams.get("page") ?? 1);
   }, [location.search]);
   return (
-    <div>
+    <>
+      <ChatBox></ChatBox>
       <ShopSection keyword={keyword} pagenumber={pagenumber} brand={brand} />
       <CalltoActionSection />
       <ContactInfo />
-    </div>
+    </>
   );
 };
 
