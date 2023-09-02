@@ -21,7 +21,7 @@ const Header = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [brand, setbrand] = useState<any>("");
+  const [brand, setbrand] = useState<any>("All");
   const [brands, setbrands] = useState<any>([]);
   const {
     data: dataBrands,
@@ -41,7 +41,6 @@ const Header = () => {
   useEffect(() => {
     if (isSuccessBrands) {
       setbrands(dataBrands?.brands);
-      setbrand(dataBrands?.brands[0]?.brand);
     }
   }, [dataBrands]);
 
@@ -205,7 +204,7 @@ const Header = () => {
                     }}
                     onKeyDown={(event) => {
                       if (event.key === "Enter") {
-                        submitHandler(keyword, "");
+                        submitHandler(keyword, brand);
                         setdropdown(false);
                       }
                     }}
@@ -214,12 +213,35 @@ const Header = () => {
                     type="submit"
                     onClick={() => {
                       setdropdown(false);
-                      submitHandler(keyword, "");
+                      submitHandler(keyword, brand);
                     }}
                     className="search-button"
                   >
                     search
                   </button>
+
+                  <select
+                    className="search-button"
+                    value={brand}
+                    onChange={(e) => {
+                      setbrand(e.target.value);
+                      submitHandler(keyword, e.target.value);
+                    }}
+                  >
+                    <option className="option__br">All</option>
+
+                    {brands.map((bra: any, index: number) => {
+                      return (
+                        <option
+                          className="option__br"
+                          key={index}
+                          value={bra?.brand}
+                        >
+                          {bra?.brand}
+                        </option>
+                      );
+                    })}
+                  </select>
                 </div>
                 {dropdown && (
                   <div className="search-container">
@@ -241,7 +263,7 @@ const Header = () => {
                             className="dropdown-row"
                             onClick={(e) => {
                               e.stopPropagation();
-                              submitHandler(item?.name, "");
+                              submitHandler(item?.name, brand);
                             }}
                             key={item?.name}
                           >
@@ -287,7 +309,7 @@ const Header = () => {
                   }}
                   onKeyDown={(event) => {
                     if (event.key === "Enter") {
-                      submitHandler(keyword, "");
+                      submitHandler(keyword, brand);
                       setdropdown(false);
                     }
                   }}
@@ -296,7 +318,7 @@ const Header = () => {
                   type="submit"
                   onClick={() => {
                     setdropdown(false);
-                    submitHandler(keyword, "");
+                    submitHandler(keyword, brand);
                   }}
                   className="search-button"
                 >
@@ -310,9 +332,15 @@ const Header = () => {
                     submitHandler(keyword, e.target.value);
                   }}
                 >
+                  <option className="option__br">All</option>
+
                   {brands.map((bra: any, index: number) => {
                     return (
-                      <option key={index} value={bra?.brand}>
+                      <option
+                        className="option__br"
+                        key={index}
+                        value={bra?.brand}
+                      >
                         {bra?.brand}
                       </option>
                     );
@@ -340,7 +368,7 @@ const Header = () => {
                           className="dropdown-row"
                           onClick={(e) => {
                             e.stopPropagation();
-                            submitHandler(item?.name, "");
+                            submitHandler(item?.name, brand);
                           }}
                           key={item?.name}
                         >

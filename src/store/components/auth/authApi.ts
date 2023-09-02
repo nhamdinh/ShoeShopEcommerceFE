@@ -55,6 +55,13 @@ export const authApi = createApi({
       }),
       invalidatesTags: ["getProfile__TAG"],
     }),
+    getStory: builder.query({
+      query: (data) => ({
+        url: `/users/get-story`,
+        method: "GET",
+        params: data,
+      }),
+    }),
   }),
 });
 
@@ -63,4 +70,5 @@ export const {
   useLoginMutation,
   useRegisterMutation,
   useUpdateProfileMutation,
+  useGetStoryQuery,
 } = authApi;
