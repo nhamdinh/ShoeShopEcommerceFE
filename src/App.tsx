@@ -40,7 +40,12 @@ const App = () => {
       <CustomDialog />
       <Toast />
       <Footer />
-      <ChatBox />{" "}
+      {location.pathname.includes("login") ||
+      location.pathname.includes("register") ? (
+        <></>
+      ) : (
+        <ChatBox />
+      )}
     </div>
   );
 };

@@ -66,7 +66,8 @@
         box-shadow: 0 0 8px 0 blueviolet;
         border-radius: 4px;
         cursor: pointer;
-        z-index: 1;
+        z-index: 999;
+        border-radius: 50%;
     }
     .box__chat {
         position: fixed;
@@ -75,7 +76,7 @@
         bottom: 0;
         box-shadow: 0 0 8px 0 blueviolet;
         border-radius: 4px;
-        z-index: 1;
+        z-index: 999;
         cursor: pointer;
     }
     @keyframes showMessage {

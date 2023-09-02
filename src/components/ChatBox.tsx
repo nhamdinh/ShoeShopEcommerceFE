@@ -13,7 +13,7 @@ import { rawMarkup } from "../utils/commonFunction";
 export default function ChatBox() {
   const userInfo = useSelector(getUserInfo);
   const [stories, setStories] = useState<any>([]);
-  const [showMessageBox, setShowMessageBox] = useState<any>(true);
+  const [showMessageBox, setShowMessageBox] = useState<any>(false);
 
   const [params, setParams] = useState<any>({
     user1: "",
