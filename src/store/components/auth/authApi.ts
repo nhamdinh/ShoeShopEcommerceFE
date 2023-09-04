@@ -34,7 +34,8 @@ export const authApi = createApi({
     }),
     register: builder.mutation({
       query: (data) => ({
-        url: `users/register`,
+        // url: `users/register`,
+        url: `/send-email`,
         method: "POST",
         body: data,
       }),
@@ -62,6 +63,13 @@ export const authApi = createApi({
         params: data,
       }),
     }),
+    sendEmail: builder.mutation({
+      query: (data) => ({
+        url: `send-email`,
+        method: "POST",
+        body: data,
+      }),
+    }),
   }),
 });
 
@@ -71,4 +79,6 @@ export const {
   useRegisterMutation,
   useUpdateProfileMutation,
   useGetStoryQuery,
+  useSendEmailMutation,
+
 } = authApi;
