@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useSendEmailMutation } from "../../store/components/auth/authApi";
+import { useDispatch } from "react-redux";
+import { openToast } from "../../store/components/customDialog/toastSlice";
 
 const CalltoActionSection = () => {
   const [email, setemail] = useState<any>("");
-  console.log(email);
   const [sendEmail, { isLoading, error }] = useSendEmailMutation();
+  const dispatch = useDispatch();
 
   const onSendEmail = async (values: any) => {
     const res = await sendEmail(values);
@@ -14,6 +16,13 @@ const CalltoActionSection = () => {
 
     if (data) {
       console.log(data);
+      dispatch(
+        openToast({
+          isOpen: Date.now(),
+          content: "A Email Has been send !",
+          step: 1,
+        })
+      );
     } else {
     }
   };
