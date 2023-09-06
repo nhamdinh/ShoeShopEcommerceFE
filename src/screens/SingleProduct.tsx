@@ -97,6 +97,13 @@ const SingleProduct = () => {
       // navigate(`/cart/${productId}?qty=${qty}`);
       navigate(`/cart`);
     } else {
+      dispatch(
+        openToast({
+          isOpen: Date.now(),
+          content: "Need to Login First !",
+          step: 2,
+        })
+      );
     }
   };
 
