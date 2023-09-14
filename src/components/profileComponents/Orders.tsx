@@ -33,7 +33,7 @@ const Orders = () => {
       {isLoading ? (
         <Loading />
       ) : error ? (
-        <Message variant="alert-danger" mess={JSON.stringify(error)}></Message>
+        <Message variant="alert-danger" mess={error}></Message>
       ) : (
         <>
           {orders?.length === 0 ? (

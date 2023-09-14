@@ -12,7 +12,9 @@ export const productsApi = createApi({
       // Get token from store (userSlice)
       // @ts-ignore
       //   const apiKey = process.env.REACT_APP_API_KEY;
-      const accessToken = localStorage.getItem(ACCESSTOKEN_STORAGE);
+      const accessToken = localStorage.getItem(ACCESSTOKEN_STORAGE)
+        ? localStorage.getItem(ACCESSTOKEN_STORAGE)
+        : null;
 
       // Add token to headers
       if (accessToken) {

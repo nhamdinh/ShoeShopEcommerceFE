@@ -103,7 +103,7 @@ const OrderScreen = () => {
       {isLoading ? (
         <Loading />
       ) : error ? (
-        <Message variant="alert-danger" mess={JSON.stringify(error)}></Message>
+        <Message variant="alert-danger" mess={error}></Message>
       ) : (
         <>
           <div className="row  order-detail">
