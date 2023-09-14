@@ -165,7 +165,7 @@ const SingleProduct = () => {
       {isLoading ? (
         <Loading />
       ) : error ? (
-        <Message variant="alert-danger" mess={JSON.stringify(error)} />
+        <Message variant="alert-danger" mess={error} />
       ) : (
         <>
           <div className="row">

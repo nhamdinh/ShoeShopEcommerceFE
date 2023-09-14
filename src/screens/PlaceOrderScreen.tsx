@@ -235,7 +235,7 @@ const PlaceOrderScreen = () => {
             <div className="my-3 col-12">
               <Message
                 variant="alert-danger"
-                mess={JSON.stringify(error)}
+                mess={error}
               ></Message>
             </div>
           )}

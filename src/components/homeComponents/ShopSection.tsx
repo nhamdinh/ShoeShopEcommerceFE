@@ -63,7 +63,7 @@ const ShopSection = ({ pagenumber, keyword, brand }: any) => {
                 ) : error ? (
                   <Message
                     variant="alert-danger"
-                    mess={JSON.stringify(error)}
+                    mess={error}
                   />
                 ) : dataFetched?.length > 0 ? (
                   <>

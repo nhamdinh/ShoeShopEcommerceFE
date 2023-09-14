@@ -12,8 +12,9 @@ export const authApi = createApi({
       // Get token from store (userSlice)
       // @ts-ignore
       //   const apiKey = process.env.REACT_APP_API_KEY;
-      const accessToken = localStorage.getItem(ACCESSTOKEN_STORAGE);
-
+      const accessToken = localStorage.getItem(ACCESSTOKEN_STORAGE)
+        ? localStorage.getItem(ACCESSTOKEN_STORAGE)
+        : null;
       // Add token to headers
       if (accessToken) {
         headers.set("Authorization", `Bearer ${accessToken}`);
@@ -34,8 +35,7 @@ export const authApi = createApi({
     }),
     register: builder.mutation({
       query: (data) => ({
-        // url: `users/register`,
-        url: `/send-email`,
+        url: `users/register`,
         method: "POST",
         body: data,
       }),
@@ -80,5 +80,4 @@ export const {
   useUpdateProfileMutation,
   useGetStoryQuery,
   useSendEmailMutation,
-
 } = authApi;

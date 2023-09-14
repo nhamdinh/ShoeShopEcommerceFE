@@ -72,7 +72,7 @@ const ProfileTabs = ({ userInfo }: any) => {
   return (
     <>
       {error && (
-        <Message variant="alert-danger" mess={JSON.stringify(error)}></Message>
+        <Message variant="alert-danger" mess={error}></Message>
       )}
       <form className="row  form-container" onSubmit={submitHandler}>
         <div className="col-md-6">

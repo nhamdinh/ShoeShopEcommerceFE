@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Header from "../components/Header";
 import moment from "moment";
 import ProfileTabs from "../components/profileComponents/ProfileTabs";
 import { getUserInfo } from "../store/selector/RootSelector";

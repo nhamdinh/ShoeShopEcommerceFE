@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSendEmailMutation } from "../../store/components/auth/authApi";
 import { useDispatch } from "react-redux";
 import { openToast } from "../../store/components/customDialog/toastSlice";
+import Loading from "../LoadingError/Loading";
 
 const CalltoActionSection = () => {
   const [email, setemail] = useState<any>("");
@@ -16,6 +17,7 @@ const CalltoActionSection = () => {
 
     if (data) {
       console.log(data);
+      setemail("");
       dispatch(
         openToast({
           isOpen: Date.now(),
@@ -24,6 +26,23 @@ const CalltoActionSection = () => {
         })
       );
     } else {
+      //@ts-ignore
+      const error = res?.error;
+      const dataError = error?.data ?? [];
+      dataError.map((err: any) => {
+        const content = err?.msg ?? "Operate Failed";
+        const myTimeout = setTimeout(() => {
+          dispatch(
+            openToast({
+              isOpen: Date.now(),
+              content: content,
+              step: 2,
+            })
+          );
+        }, 100);
+
+        return () => clearTimeout(myTimeout);
+      });
     }
   };
 
@@ -45,14 +64,19 @@ const CalltoActionSection = () => {
                     setemail(e.target.value);
                   }}
                 />
-                <input
-                  onClick={() => {
-                    onSendEmail({ email: email });
-                  }}
-                  value="Yes. I want!"
-                  name="subscribe"
-                  type="submit"
-                />
+
+                {isLoading ? (
+                  <Loading />
+                ) : (
+                  <input
+                    onClick={() => {
+                      onSendEmail({ email: email });
+                    }}
+                    value="Yes. I want!"
+                    name="subscribe"
+                    type="submit"
+                  />
+                )}
               </div>
             </div>
           </div>
