@@ -35,20 +35,23 @@ const Login = () => {
       //@ts-ignore
       const error = res?.error;
       const dataError = error?.data ?? [];
-      dataError.map((err: any) => {
-        const content = err?.msg ?? "Operate Failed";
-        const myTimeout = setTimeout(() => {
-          dispatch(
-            openToast({
-              isOpen: Date.now(),
-              content: content,
-              step: 2,
-            })
-          );
-        }, 100);
+      if (dataError?.length > 0) {
+        console.log(dataError)
+        dataError.map((err: any) => {
+          const content = err?.msg ?? "Operate Failed";
+          const myTimeout = setTimeout(() => {
+            dispatch(
+              openToast({
+                isOpen: Date.now(),
+                content: content,
+                step: 2,
+              })
+            );
+          }, 100);
 
-        return () => clearTimeout(myTimeout);
-      });
+          return () => clearTimeout(myTimeout);
+        });
+      }
     }
   };
 

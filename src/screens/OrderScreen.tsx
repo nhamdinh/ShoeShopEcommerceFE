@@ -198,7 +198,7 @@ const OrderScreen = () => {
               {order?.orderItems?.length === 0 ? (
                 <Message
                   variant="alert-info mt-5"
-                  mess="Your order is empty"
+                  messText="Your order is empty"
                 ></Message>
               ) : (
                 <>

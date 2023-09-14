@@ -105,7 +105,7 @@ const ShopSection = ({ pagenumber, keyword, brand }: any) => {
                     ))}
                   </>
                 ) : (
-                  <Message variant="alert-danger" mess="Product Not Found" />
+                  <Message variant="alert-danger" messText="Product Not Found" />
                 )}
                 {/* Pagination */}
                 <Pagination
