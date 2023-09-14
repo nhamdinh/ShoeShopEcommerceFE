@@ -235,7 +235,10 @@ const SingleProduct = () => {
             <div className="col-md-6">
               <h6 className="mb-3">REVIEWS</h6>
               {product?.reviews?.length === 0 ? (
-                <Message variant="alert-info mt-3" mess="No Reviews"></Message>
+                <Message
+                  variant="alert-info mt-3"
+                  messText="No Reviews"
+                ></Message>
               ) : (
                 product?.reviews?.map((review: any) => (
                   <div
@@ -263,7 +266,7 @@ const SingleProduct = () => {
                 {errorcreateReview && (
                   <Message
                     variant="alert-danger"
-                    mess={JSON.stringify(errorcreateReview)}
+                    mess={errorcreateReview}
                   ></Message>
                 )}
               </div>

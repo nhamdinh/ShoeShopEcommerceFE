@@ -1,7 +1,9 @@
 import React from "react";
 
-const Message = ({ variant, mess }: any) => {
-  return (
+const Message = ({ variant, mess, messText }: any) => {
+  return messText ? (
+    <div className={`alert ${variant}`}>{messText}</div>
+  ) : (
     <div className={`alert ${variant}`}>
       {mess?.data?.message ?? "500 Internal Server Error"}
     </div>

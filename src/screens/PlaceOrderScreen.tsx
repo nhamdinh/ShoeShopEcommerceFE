@@ -165,7 +165,7 @@ const PlaceOrderScreen = () => {
           {cartItems?.length === 0 ? (
             <Message
               variant="alert-info mt-5"
-              mess="Your cart is empty"
+              messText="Your cart is empty"
             ></Message>
           ) : (
             <>
