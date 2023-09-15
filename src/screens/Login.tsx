@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import Message from "../components/LoadingError/Error";
 import Loading from "../components/LoadingError/Loading";
 import { useNavigate } from "react-router-dom";
 import { useLoginMutation } from "../store/components/auth/authApi";
 import { ACCESSTOKEN_STORAGE, NAME_STORAGE } from "../utils/constants";
+import { openToast } from "../store/components/customDialog/toastSlice";
 
 const Login = () => {
   window.scrollTo(0, 0);
@@ -19,6 +20,8 @@ const Login = () => {
   const [login, { isLoading, error }] = useLoginMutation();
 
   const onLogin = async (values: any) => {
+    setisError(false);
+
     const res = await login(values);
     //@ts-ignore
     const data = res?.data;
@@ -29,14 +32,32 @@ const Login = () => {
       navigate("/");
     } else {
       setisError(true);
+      //@ts-ignore
+      const error = res?.error;
+      const dataError = error?.data ?? [];
+      if (dataError?.length > 0) {
+        console.log(dataError)
+        dataError.map((err: any) => {
+          const content = err?.msg ?? "Operate Failed";
+          const myTimeout = setTimeout(() => {
+            dispatch(
+              openToast({
+                isOpen: Date.now(),
+                content: content,
+                step: 2,
+              })
+            );
+          }, 100);
+
+          return () => clearTimeout(myTimeout);
+        });
+      }
     }
   };
 
   return (
     <div className="container d-flex flex-column justify-content-center align-items-center login-center">
-      {isError && (
-        <Message variant="alert-danger" mess={JSON.stringify(error)} />
-      )}
+      {isError && <Message variant="alert-danger" mess={error} />}
       <form
         className="Login col-md-8 col-lg-4 col-11"
         onSubmit={(e) => {

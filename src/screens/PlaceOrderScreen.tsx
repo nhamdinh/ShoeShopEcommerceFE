@@ -165,7 +165,7 @@ const PlaceOrderScreen = () => {
           {cartItems?.length === 0 ? (
             <Message
               variant="alert-info mt-5"
-              mess="Your cart is empty"
+              messText="Your cart is empty"
             ></Message>
           ) : (
             <>
@@ -235,7 +235,7 @@ const PlaceOrderScreen = () => {
             <div className="my-3 col-12">
               <Message
                 variant="alert-danger"
-                mess={JSON.stringify(error)}
+                mess={error}
               ></Message>
             </div>
           )}
