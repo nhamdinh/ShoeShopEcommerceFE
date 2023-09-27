@@ -5,6 +5,7 @@ export const SOCKET_HOST = process.env.REACT_APP_SOCKET_HOST;
 /* env */
 export const NAME_STORAGE = "name";
 export const ACCESSTOKEN_STORAGE = "accessToken";
+export const REFRESHTOKEN_STORAGE = "refreshToken";
 export const SHIPPINGPRICE = 9.99;
 export const TAXPRICE = 0.1;
 export const PAGE_SIZE = 6;
