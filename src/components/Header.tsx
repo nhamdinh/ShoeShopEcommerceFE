@@ -2,7 +2,10 @@ import "./style.scss";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { useGetProfileQuery } from "../store/components/auth/authApi";
+import {
+  useGetProfileQuery,
+  useLogoutMutation,
+} from "../store/components/auth/authApi";
 import { NAME_STORAGE } from "../utils/constants";
 import { setUserInfo, userLogout } from "../store/components/auth/authSlice";
 import { useCheckCartQuery } from "../store/components/orders/ordersApi";
@@ -107,6 +110,7 @@ const Header = () => {
       skip: false,
     }
   );
+
   useEffect(() => {
     if (isSuccessProfile) {
       setdataFetched(dataProfile);
@@ -115,9 +119,16 @@ const Header = () => {
     }
   }, [dataProfile]);
 
-  const logoutHandler = () => {
-    setdataFetched({});
-    dispatch(userLogout());
+  useEffect(() => {
+    console.log(error);
+  }, [error]);
+
+  const [logout] = useLogoutMutation();
+
+  const logoutHandler = async () => {
+    await logout({});
+    // setdataFetched({});
+    // dispatch(userLogout());
   };
 
   return (

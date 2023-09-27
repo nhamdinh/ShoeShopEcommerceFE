@@ -4,7 +4,11 @@ import Message from "../components/LoadingError/Error";
 import Loading from "../components/LoadingError/Loading";
 import { useNavigate } from "react-router-dom";
 import { useLoginMutation } from "../store/components/auth/authApi";
-import { ACCESSTOKEN_STORAGE, NAME_STORAGE } from "../utils/constants";
+import {
+  ACCESSTOKEN_STORAGE,
+  NAME_STORAGE,
+  REFRESHTOKEN_STORAGE,
+} from "../utils/constants";
 import { openToast } from "../store/components/customDialog/toastSlice";
 
 const Login = () => {
@@ -27,8 +31,9 @@ const Login = () => {
     const data = res?.data;
 
     if (data) {
-      localStorage.setItem(ACCESSTOKEN_STORAGE, data.token);
-      localStorage.setItem(NAME_STORAGE, data.name);
+      localStorage.setItem(ACCESSTOKEN_STORAGE, data?.token);
+      localStorage.setItem(REFRESHTOKEN_STORAGE, data?.refreshToken);
+      localStorage.setItem(NAME_STORAGE, data?.name);
       navigate("/");
     } else {
       setisError(true);
@@ -36,7 +41,7 @@ const Login = () => {
       const error = res?.error;
       const dataError = error?.data ?? [];
       if (dataError?.length > 0) {
-        console.log(dataError)
+        console.log(dataError);
         dataError.map((err: any) => {
           const content = err?.msg ?? "Operate Failed";
           const myTimeout = setTimeout(() => {
