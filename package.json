@@ -54,7 +54,7 @@
     "workbox-strategies": "^6.5.3"
   },
   "scripts": {
-    "start": "env-cmd -f .env.development react-scripts   start",
+    "start": "env-cmd -f .env.development react-scripts --openssl-legacy-provider  start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
