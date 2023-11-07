@@ -113,9 +113,9 @@ const Header = () => {
 
   useEffect(() => {
     if (isSuccessProfile) {
-      setdataFetched(dataProfile);
-      dispatch(setUserInfo({ ...dataProfile }));
-      localStorage.setItem(NAME_STORAGE, dataProfile.name);
+      setdataFetched(dataProfile?.metadata);
+      dispatch(setUserInfo({ ...dataProfile?.metadata }));
+      localStorage.setItem(NAME_STORAGE, dataProfile?.metadata?.name);
     }
   }, [dataProfile]);
 
