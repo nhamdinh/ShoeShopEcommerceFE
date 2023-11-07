@@ -28,35 +28,35 @@ const Login = () => {
 
     const res = await login(values);
     //@ts-ignore
-    const data = res?.data;
+    const data = res?.data?.metadata;
 
     if (data) {
       localStorage.setItem(ACCESSTOKEN_STORAGE, data?.token);
       localStorage.setItem(REFRESHTOKEN_STORAGE, data?.refreshToken);
       localStorage.setItem(NAME_STORAGE, data?.name);
-      navigate("/");
+      // navigate("/");
     } else {
       setisError(true);
       //@ts-ignore
-      const error = res?.error;
-      const dataError = error?.data ?? [];
-      if (dataError?.length > 0) {
-        console.log(dataError);
-        dataError.map((err: any) => {
-          const content = err?.msg ?? "Operate Failed";
-          const myTimeout = setTimeout(() => {
-            dispatch(
-              openToast({
-                isOpen: Date.now(),
-                content: content,
-                step: 2,
-              })
-            );
-          }, 100);
+      // const error = res?.error;
+      // const dataError = error?.data ?? [];
+      // if (dataError?.length > 0) {
+      //   console.log(dataError);
+      //   dataError.map((err: any) => {
+      //     const content = err?.msg ?? "Operate Failed";
+      //     const myTimeout = setTimeout(() => {
+      //       dispatch(
+      //         openToast({
+      //           isOpen: Date.now(),
+      //           content: content,
+      //           step: 2,
+      //         })
+      //       );
+      //     }, 100);
 
-          return () => clearTimeout(myTimeout);
-        });
-      }
+      //     return () => clearTimeout(myTimeout);
+      //   });
+      // }
     }
   };
 
