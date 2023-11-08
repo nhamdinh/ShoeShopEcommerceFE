@@ -14,15 +14,67 @@ import {
   setStoProducts,
 } from "../store/components/products/productsSlice";
 import {
+  useCreateCoMutation,
   useGetBrandsQuery,
+  useGetCoQuery,
   useGetProductsQuery,
 } from "../store/components/products/productsApi";
 import { getDataProducts } from "../store/selector/RootSelector";
+
+import axios from "axios";
 
 const Header = () => {
   const [keyword, setKeyword] = useState<any>("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const [
+    createCo,
+    { isLoading: LoadingcreateReview, error: errorcreateReview },
+  ] = useCreateCoMutation();
+
+  const onCreateReviewProduct = async (values: any) => {
+    const res = await createCo({});
+    //@ts-ignore
+    const data = res?.data;
+    console.log(data);
+    if (data) {
+    } else {
+    }
+  };
+
+  let axiosConfig = {
+    withCredentials: true,
+    credentials: "include",
+  };
+
+  const loginUser = async (data: any) => {
+    try {
+      const res = await axios.get(
+        `http://localhost:5000/api/cookie`,
+        axiosConfig
+      );
+      console.log(res);
+      return res;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const {
+    data: datacookie,
+    error: errBrandsx,
+    isSuccess: isSuccessBrandsx,
+    isLoading: isLoadingBrandsx,
+  } = useGetCoQuery(
+    {},
+    {
+      refetchOnMountOrArgChange: true,
+      skip: false,
+    }
+  );
+
+  console.log(datacookie);
 
   const [brand, setbrand] = useState<any>("All");
   const [brands, setbrands] = useState<any>([]);
@@ -151,6 +203,7 @@ const Header = () => {
                     src="https://w.ladicdn.com/5bf3dc7edc60303c34e4991f/logo-02-20200903083638.svg"
                   />
                 </Link>
+                <button onClick={loginUser}>zzzzz</button>
               </div>
               <div className="col-6 d-flex align-items-center justify-content-end Login-Register">
                 {userInfo?.name ? (
@@ -306,6 +359,7 @@ const Header = () => {
                   src="https://w.ladicdn.com/5bf3dc7edc60303c34e4991f/logo-02-20200903083638.svg"
                 />
               </Link>
+              <button onClick={loginUser}>zzzzz</button>
             </div>
             <div className="col-md-6 col-8 d-flex align-items-center zxc">
               <div className="input-group">

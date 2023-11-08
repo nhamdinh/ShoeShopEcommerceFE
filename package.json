@@ -2,7 +2,6 @@
   "name": "shop-ecommerce",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:5000/api/",
   "dependencies": {
     "@ant-design/icons": "^5.0.1",
     "@emotion/react": "^11.9.3",
@@ -79,5 +78,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/http-proxy-middleware": "^1.0.0",
+    "http-proxy-middleware": "^2.0.6"
   }
 }
