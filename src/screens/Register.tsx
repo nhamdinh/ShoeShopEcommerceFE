@@ -21,46 +21,63 @@ const Register = () => {
   const navigate = useNavigate();
 
   const [register, { isLoading, error }] = useRegisterMutation();
+  // console.log(error);
 
   const onRegister = async (values: any) => {
-    const res = await register(values);
+    await register(values)
+      .then((res: any) => {
+        // console.log(res)
+        // res?.data = {
+        //   message: "register CREATED",
+        //   metadata: {
+        //     _id: "654a32065323eddeedb7ec6e",
+        //     name: "name2",
+        //   },
+        //   status: "success",
+        //   code: 201,
+        // };
+        const data = res?.data?.metadata;
 
-    //@ts-ignore
-    const data = res?.data;
+        if (data) {
+          localStorage.setItem(ACCESSTOKEN_STORAGE, data.token);
+          localStorage.setItem(NAME_STORAGE, data.name);
+          navigate("/");
+          dispatch(
+            openToast({
+              isOpen: Date.now(),
+              content: "Register User Success",
+              step: 1,
+            })
+          );
+        } else {
+          setisError(true);
+          // res?.error?.data = {
+          //   message: "Invalid email",
+          //   status: "error",
+          //   code: 422,
+          // };
 
-    if (data) {
-      localStorage.setItem(ACCESSTOKEN_STORAGE, data.token);
-      localStorage.setItem(NAME_STORAGE, data.name);
-      navigate("/");
-      dispatch(
-        openToast({
-          isOpen: Date.now(),
-          content: "Register User Success",
-          step: 1,
-        })
-      );
-    } else {
-      setisError(true);
-      //@ts-ignore
-      const error = res?.error;
-      const dataError = error?.data ?? [];
-      if (dataError?.length > 0) {
-        dataError.map((err: any) => {
-          const content = err?.msg ?? "Operate Failed";
-          const myTimeout = setTimeout(() => {
-            dispatch(
-              openToast({
-                isOpen: Date.now(),
-                content: content,
-                step: 2,
-              })
-            );
-          }, 100);
+          // const error = res?.error;
+          // const dataError = error?.data ?? [];
+          // if (dataError?.length > 0) {
+          //   dataError.map((err: any) => {
+          //     const content = err?.msg ?? "Operate Failed";
+          //     const myTimeout = setTimeout(() => {
+          //       dispatch(
+          //         openToast({
+          //           isOpen: Date.now(),
+          //           content: content,
+          //           step: 2,
+          //         })
+          //       );
+          //     }, 100);
 
-          return () => clearTimeout(myTimeout);
-        });
-      }
-    }
+          //     return () => clearTimeout(myTimeout);
+          //   });
+          // }
+        }
+      })
+      .catch((err: any) => {});
   };
 
   const isValid = () => {
@@ -80,7 +97,7 @@ const Register = () => {
         className="Login col-md-8 col-lg-4 col-11"
         onSubmit={(e) => {
           e.preventDefault();
-          console.log(isValid());
+          // console.log(isValid());
           if (isValid())
             onRegister({
               name: name,
