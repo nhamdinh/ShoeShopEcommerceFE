@@ -171,7 +171,11 @@ textarea:focus {
 .shopBack img {
   width: 100%;
   height: 250px;
-  object-fit: contain;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center center;
+  object-fit: cover;
 }
 .shoptext {
   padding-top: 10px;
@@ -203,7 +207,8 @@ textarea:focus {
   margin: 0 auto;
   background:
     linear-gradient(0deg, rgba(0, 0, 0, 0.226), rgba(0, 0, 0, 0.226)),
-    url("https://img.tgdd.vn/imgt/f_webp,fit_outside,quality_100/https://cdn.tgdd.vn/2023/08/banner/Banner-Big-TGDD-Desk-1920x450-4.jpg") no-repeat scroll center / cover;
+    url("https://img.tgdd.vn/imgt/f_webp,fit_outside,quality_100/https://cdn.tgdd.vn/2023/08/banner/Banner-Big-TGDD-Desk-1920x450-4.jpg")
+      no-repeat scroll center / cover;
   padding: 100px 0 100px;
 }
 .subscribe-head h2 {
@@ -298,6 +303,8 @@ textarea:focus {
   width: 90%;
   height: 700px;
   object-fit: contain;
+  // object-fit: cover;
+
 }
 .product-name {
   font-size: 25px;
@@ -660,4 +667,3 @@ textarea:focus {
 .pre-wrap {
   white-space: pre-wrap;
 }
-

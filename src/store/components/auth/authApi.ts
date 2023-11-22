@@ -77,11 +77,19 @@ export const authApi = createApi({
         body: data,
       }),
     }),
+    getProfileShop: builder.query({
+      query: (data) => ({
+        url: `/users/profile-shop`,
+        method: "GET",
+        params: data,
+      }),
+    }),
   }),
 });
 
 export const {
   useGetProfileQuery,
+  useGetProfileShopQuery,
   useLoginMutation,
   useLogoutMutation,
   useRegisterMutation,

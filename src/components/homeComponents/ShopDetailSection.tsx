@@ -2,14 +2,21 @@ import "./styles.scss";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Rating from "./Rating";
-import { useGetProductsQuery } from "../../store/components/products/productsApi";
+import { useGetPublishedProductsQuery } from "../../store/components/products/productsApi";
 import Loading from "../LoadingError/Loading";
 import Message from "../LoadingError/Error";
 import Pagination from "./Pagination";
 import { PAGE_SIZE } from "../../utils/constants";
 import { formatMoneyCurrency } from "../../utils/commonFunction";
+import moment from "moment";
 
-const ShopSection = ({ pagenumber, keyword, brand }: any) => {
+const ShopDetailSection = ({
+  pagenumber,
+  keyword,
+  brand,
+  shopId,
+  productShop,
+}: any) => {
   const navigate = useNavigate();
   const [dataFetched, setdataFetched] = useState<any>([]);
 
@@ -39,10 +46,15 @@ const ShopSection = ({ pagenumber, keyword, brand }: any) => {
     error,
     isSuccess,
     isLoading,
-  } = useGetProductsQuery(params, {
-    refetchOnMountOrArgChange: true,
-    skip: false,
-  });
+  } = useGetPublishedProductsQuery(
+    {
+      product_shop: shopId,
+    },
+    {
+      refetchOnMountOrArgChange: true,
+      skip: false,
+    }
+  );
   useEffect(() => {
     if (isSuccess) {
       setdataFetched(dataProducts?.metadata?.products);
@@ -50,11 +62,14 @@ const ShopSection = ({ pagenumber, keyword, brand }: any) => {
       setCurrentPage(dataProducts?.page);
     }
   }, [dataProducts]);
-
+  console.log(productShop);
   return (
     <>
       <div className="container">
         <div className="section">
+          <h1>{productShop?.productShopName}</h1>
+          <h2>Join in: {moment(productShop?.createdAt).calendar()}</h2>
+
           <div className="row">
             <div className="col-lg-12 col-md-12 article">
               <div className="shopcontainer row">
@@ -83,15 +98,7 @@ const ShopSection = ({ pagenumber, keyword, brand }: any) => {
                                 src={product?.product_thumb}
                                 alt={product?.product_name}
                               />
-                              <div
-                                className="shopBack__shopName"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  navigate(
-                                    `/shop/${product?.product_shop?._id}`
-                                  );
-                                }}
-                              >
+                              <div className="shopBack__shopName">
                                 {product?.product_shop?.productShopName}
                               </div>
                             </div>
@@ -141,4 +148,4 @@ const ShopSection = ({ pagenumber, keyword, brand }: any) => {
   );
 };
 
-export default ShopSection;
+export default ShopDetailSection;
