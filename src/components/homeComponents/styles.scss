@@ -1,0 +1,39 @@
+.section {
+    h1 {
+        font-weight: 600;
+        -webkit-text-shadow:
+            0 0 10px orangered,
+            0 0 20px orangered,
+            0 0 40px orangered,
+            0 0 80px orangered,
+            0 0 120px orangered;
+        text-shadow:
+            0 0 10px orangered,
+            0 0 20px orangered,
+            0 0 40px orangered,
+            0 0 80px orangered,
+            0 0 120px orangered;
+        color: #000;
+    }
+    .border-product {
+        .shopBack {
+            position: relative;
+            .shopBack__img {
+            }
+            .shopBack__shopName {
+                position: absolute;
+                color: #fff;
+                background-color: #d0011b;
+                z-index: 999;
+                top: 0;
+                left: 0;
+
+                font-size: 16px;
+                font-weight: 500;
+                line-height: 20px;
+                padding: 6px 12px;
+                cursor: pointer;
+            }
+        }
+    }
+}

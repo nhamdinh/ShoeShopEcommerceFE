@@ -71,7 +71,13 @@ export const productsApi = createApi({
         // body: data,
       }),
     }),
-
+    getPublishedProducts: builder.query({
+      query: (data) => ({
+        url: `/products/published/all`,
+        method: "GET",
+        params: data,
+      }),
+    }),
     getCo: builder.query({
       query: (data) => ({
         url: `/cookie`,
@@ -84,6 +90,7 @@ export const productsApi = createApi({
 
 export const {
   useGetProductsQuery,
+  useGetPublishedProductsQuery,
   useGetProductsDetailQuery,
   useCreateReviewProductMutation,
   useCreateCoMutation,
