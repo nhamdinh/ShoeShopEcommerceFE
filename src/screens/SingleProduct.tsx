@@ -55,7 +55,7 @@ const SingleProduct = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      setdataFetched(dataFetch);
+      setdataFetched(dataFetch?.metadata);
     }
   }, [dataFetch]);
 
@@ -112,9 +112,9 @@ const SingleProduct = () => {
     onCreateCart({
       cartItems: [
         {
-          name: product?.name,
-          image: product?.image,
-          price: product?.price,
+          name: product?.product_name,
+          image: product?.product_thumb,
+          price: product?.product_price,
           qty: qty,
           product: productId,
         },
@@ -171,20 +171,20 @@ const SingleProduct = () => {
           <div className="row">
             <div className="col-md-6">
               <div className="single-image">
-                <img src={product?.image} alt={product?.name} />
+                <img src={product?.product_thumb} alt={product?.product_name} />
               </div>
             </div>
             <div className="col-md-6">
               <div className="product-dtl">
                 <div className="product-info">
-                  <div className="product-name">{product?.name}</div>
+                  <div className="product-name">{product?.product_name}</div>
                 </div>
-                <p>{product?.description}</p>
+                <p>{product?.product_description}</p>
 
                 <div className="product-count col-lg-7 ">
                   <div className="flex-box d-flex justify-content-between align-items-center">
                     <h6>Price</h6>
-                    <span>${product?.price}</span>
+                    <span>${product?.product_price}</span>
                   </div>
                   <div className="flex-box d-flex justify-content-between align-items-center">
                     <h6>Status</h6>

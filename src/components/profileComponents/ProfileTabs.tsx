@@ -18,7 +18,6 @@ const ProfileTabs = ({ userInfo }: any) => {
 
   const userUpdateProfile: any = {};
 
-  const [isError, setisError] = useState<any>(false);
   // console.log(err);
 
   const [updateProfile, { isLoading, error }] = useUpdateProfileMutation();
@@ -44,7 +43,6 @@ const ProfileTabs = ({ userInfo }: any) => {
           step: 2,
         })
       );
-      setisError(true);
     }
   };
 
@@ -71,9 +69,7 @@ const ProfileTabs = ({ userInfo }: any) => {
   };
   return (
     <>
-      {error && (
-        <Message variant="alert-danger" mess={error}></Message>
-      )}
+      {error && <Message variant="alert-danger" mess={error}></Message>}
       <form className="row  form-container" onSubmit={submitHandler}>
         <div className="col-md-6">
           <div className="form">

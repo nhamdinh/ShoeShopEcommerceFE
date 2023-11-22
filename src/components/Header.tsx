@@ -74,7 +74,7 @@ const Header = () => {
     }
   );
 
-  console.log(datacookie);
+  // console.log(datacookie);
 
   const [brand, setbrand] = useState<any>("All");
   const [brands, setbrands] = useState<any>([]);
@@ -203,7 +203,7 @@ const Header = () => {
                     src="https://w.ladicdn.com/5bf3dc7edc60303c34e4991f/logo-02-20200903083638.svg"
                   />
                 </Link>
-                <button onClick={loginUser}>zzzzz</button>
+                {/* <button onClick={loginUser}>zzzzz</button> */}
               </div>
               <div className="col-6 d-flex align-items-center justify-content-end Login-Register">
                 {userInfo?.name ? (
@@ -359,7 +359,7 @@ const Header = () => {
                   src="https://w.ladicdn.com/5bf3dc7edc60303c34e4991f/logo-02-20200903083638.svg"
                 />
               </Link>
-              <button onClick={loginUser}>zzzzz</button>
+              {/* <button onClick={loginUser}>zzzzz</button> */}
             </div>
             <div className="col-md-6 col-8 d-flex align-items-center zxc">
               <div className="input-group">
