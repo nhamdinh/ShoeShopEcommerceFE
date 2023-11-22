@@ -34,7 +34,7 @@ const Login = () => {
       localStorage.setItem(ACCESSTOKEN_STORAGE, data?.token);
       localStorage.setItem(REFRESHTOKEN_STORAGE, data?.refreshToken);
       localStorage.setItem(NAME_STORAGE, data?.name);
-      // navigate("/");
+      navigate("/");
     } else {
       setisError(true);
       //@ts-ignore

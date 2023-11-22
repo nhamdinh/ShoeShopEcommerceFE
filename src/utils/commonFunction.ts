@@ -1,3 +1,5 @@
+import { REGEX_CURRENCY } from "./constants";
+
 export const passwordCheck = (pass: any) => {
   let regex =
     /^(?=[^0-9\n]*[0-9])(?=.*[a-zA-Z])(?=[^#?!@$%^&*\n-]*[#?!@$%^&*-]).{8,20}$/;
@@ -29,15 +31,26 @@ export const addCommas = (num: any, style = ",") => {
 export const formatMoney = (text: any) => {
   if (!text) {
     return "0";
-  } else {
-    if (+text < 0) {
-      text = +text * -1;
-      return "-" + addCommas(removeNonNumeric(text.toString()));
-    } else {
-      return addCommas(removeNonNumeric(text.toString()));
-    }
   }
+  if (+text < 0) {
+    text = +text * -1;
+    return "-" + text.toString().replace(REGEX_CURRENCY, "$1,");
+  }
+  return text.toString().replace(REGEX_CURRENCY, "$1,");
 };
+
+// export const formatMoney = (text: any) => {
+//   if (!text) {
+//     return "0";
+//   } else {
+//     if (+text < 0) {
+//       text = +text * -1;
+//       return "-" + addCommas(removeNonNumeric(text.toString()));
+//     } else {
+//       return addCommas(removeNonNumeric(text.toString()));
+//     }
+//   }
+// };
 
 export const formatMoneyCurrency = (text: any) => {
   if (!text) {
@@ -46,11 +59,21 @@ export const formatMoneyCurrency = (text: any) => {
   //format china currency delivery_type === 1
   // console.log(text)
   let numberText = +text;
+  if (+text < 0) {
+    numberText = +numberText * -1;
+  }
+
   let string = numberText.toFixed(2).toString();
   let length = string.length;
   let string_slice = string.substr(0, length - 3);
   let string_slice3 = string.substr(length - 3, length - 1);
-  return addCommas(removeNonNumeric(string_slice)) + string_slice3;
+  if (+text < 0)
+    return (
+      "-" +
+      string_slice.toString().replace(REGEX_CURRENCY, "$1,") +
+      string_slice3
+    );
+  return string_slice.toString().replace(REGEX_CURRENCY, "$1,") + string_slice3;
 };
 
 export const formatCustomerPhoneNumber = (value: string) => {

@@ -30,7 +30,7 @@ export const productsApi = createApi({
   endpoints: (builder) => ({
     getProducts: builder.query({
       query: (data) => ({
-        url: `/products/get-all`,
+        url: `/products/all`,
         method: "GET",
         params: data,
       }),
@@ -38,7 +38,7 @@ export const productsApi = createApi({
     }),
     getProductsDetail: builder.query({
       query: (data) => ({
-        url: `/products/${data.id}`,
+        url: `/products/detail/${data.id}`,
         method: "GET",
       }),
       providesTags: ["GetProductsDetail"],

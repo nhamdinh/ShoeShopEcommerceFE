@@ -9,6 +9,7 @@ export const REFRESHTOKEN_STORAGE = "refreshToken";
 export const SHIPPINGPRICE = 9.99;
 export const TAXPRICE = 0.1;
 export const PAGE_SIZE = 6;
+export const REGEX_CURRENCY = /(\d)(?=(\d{3})+(?!\d))/g
 export const Toastobjects = {
   pauseOnFocusLoss: false,
   draggable: false,
