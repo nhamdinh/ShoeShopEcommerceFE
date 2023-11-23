@@ -19,7 +19,7 @@ import {
   useGetCoQuery,
   useGetProductsQuery,
 } from "../store/components/products/productsApi";
-import { getDataProducts } from "../store/selector/RootSelector";
+import { getDataProducts, getUserInfo } from "../store/selector/RootSelector";
 
 import axios from "axios";
 
@@ -148,7 +148,8 @@ const Header = () => {
       navigate("/");
     }
   };
-  const [userInfo, setdataFetched] = useState<any>({});
+  // const [userInfo, setdataFetched] = useState<any>({});
+  const userInfo = useSelector(getUserInfo);
 
   const {
     data: dataProfile,
@@ -165,7 +166,7 @@ const Header = () => {
 
   useEffect(() => {
     if (isSuccessProfile) {
-      setdataFetched(dataProfile?.metadata);
+      // setdataFetched(dataProfile?.metadata);
       dispatch(setUserInfo({ ...dataProfile?.metadata }));
       localStorage.setItem(NAME_STORAGE, dataProfile?.metadata?.name);
     }
@@ -178,9 +179,10 @@ const Header = () => {
   const [logout] = useLogoutMutation();
 
   const logoutHandler = async () => {
-    await logout({});
+    // await logout({});
     // setdataFetched({});
-    // dispatch(userLogout());
+    dispatch(userLogout());
+    navigate("/");
   };
 
   return (
