@@ -63,6 +63,14 @@ export const authApi = createApi({
       }),
       invalidatesTags: ["getProfile__TAG"],
     }),
+    updateIsShop: builder.mutation({
+      query: (data) => ({
+        url: `/users/update-is-shop`,
+        method: "PUT",
+        // body: data,
+      }),
+/*       invalidatesTags: ["getProfile__TAG"],
+ */    }),
     getStory: builder.query({
       query: (data) => ({
         url: `/users/get-story`,
@@ -94,6 +102,7 @@ export const {
   useLogoutMutation,
   useRegisterMutation,
   useUpdateProfileMutation,
+  useUpdateIsShopMutation,
   useGetStoryQuery,
   useSendEmailMutation,
 } = authApi;

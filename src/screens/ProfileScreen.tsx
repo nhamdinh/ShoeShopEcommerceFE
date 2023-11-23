@@ -1,18 +1,25 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
 import ProfileTabs from "../components/profileComponents/ProfileTabs";
 import { getUserInfo } from "../store/selector/RootSelector";
 import Orders from "../components/profileComponents/Orders";
 import { formatCustomerPhoneNumber } from "../utils/commonFunction";
+import SellerTabs from "../components/profileComponents/SellerTabs";
+import AddProductMain from "../components/Products/AddProductMain";
 
 const ProfileScreen = () => {
   window.scrollTo(0, 0);
 
   const dispatch = useDispatch();
-  const [tab, setTab] = useState<any>(1);
+  const [tab, setTab] = useState<any>(4);
 
   const userInfo = useSelector(getUserInfo);
+  const [isShop, setisShop] = useState<any>(userInfo.isShop);
+
+  useEffect(() => {
+    setisShop(userInfo.isShop);
+  }, [userInfo]);
 
   return (
     <div className="container mt-lg-5 mt-3">
@@ -26,7 +33,7 @@ const ProfileScreen = () => {
               </div>
               <div className="author-card-details col-md-7">
                 <h5 className="author-card-name mb-2">
-                  <strong>{userInfo?.name}</strong> <br/>
+                  <strong>{userInfo?.name}</strong> <br />
                   <strong>{formatCustomerPhoneNumber(userInfo?.phone)}</strong>
                 </h5>
                 <span className="author-card-position">
@@ -74,6 +81,60 @@ const ProfileScreen = () => {
                   Orders List
                   {/* <span className="badge2">{orders ? orders.length : 0}</span> */}
                 </button>
+                {!isShop && (
+                  <button
+                    className="nav-link d-flex justify-content-between"
+                    id="v-pills-profile-tab"
+                    data-bs-toggle="pill"
+                    data-bs-target="#v-pills-profile"
+                    type="button"
+                    role="tab"
+                    aria-controls="v-pills-profile"
+                    aria-selected="false"
+                    onClick={() => {
+                      setTab(3);
+                    }}
+                  >
+                    Become Seller
+                    {/* <span className="badge2">{orders ? orders.length : 0}</span> */}
+                  </button>
+                )}
+                {isShop && (
+                  <button
+                    className="nav-link d-flex justify-content-between"
+                    id="v-pills-profile-tab"
+                    data-bs-toggle="pill"
+                    data-bs-target="#v-pills-profile"
+                    type="button"
+                    role="tab"
+                    aria-controls="v-pills-profile"
+                    aria-selected="false"
+                    onClick={() => {
+                      setTab(4);
+                    }}
+                  >
+                    Create Product
+                    {/* <span className="badge2">{orders ? orders.length : 0}</span> */}
+                  </button>
+                )}
+                {isShop && (
+                  <button
+                    className="nav-link d-flex justify-content-between"
+                    id="v-pills-profile-tab"
+                    data-bs-toggle="pill"
+                    data-bs-target="#v-pills-profile"
+                    type="button"
+                    role="tab"
+                    aria-controls="v-pills-profile"
+                    aria-selected="false"
+                    onClick={() => {
+                      setTab(5);
+                    }}
+                  >
+                    Create Coupon
+                    {/* <span className="badge2">{orders ? orders.length : 0}</span> */}
+                  </button>
+                )}
               </div>
             </div>
           </div>
@@ -90,8 +151,9 @@ const ProfileScreen = () => {
             role="tabpanel"
             aria-labelledby="v-pills-home-tab"
           >
-            <ProfileTabs userInfo={userInfo} />
+            {tab === 1 && <ProfileTabs userInfo={userInfo} />}{" "}
           </div>
+
           <div
             className="tab-pane fade"
             id="v-pills-profile"
@@ -99,6 +161,23 @@ const ProfileScreen = () => {
             aria-labelledby="v-pills-profile-tab"
           >
             {tab === 2 && <Orders />}
+          </div>
+          <div
+            className="tab-pane fade show active"
+            id="v-pills-home"
+            role="tabpanel"
+            aria-labelledby="v-pills-home-tab"
+          >
+            {tab === 3 && (
+              <SellerTabs
+                userInfo={userInfo}
+                isShopTrue={() => {
+                  setisShop(true);
+                  setTab(1);
+                }}
+              />
+            )}{" "}
+            {tab === 4 && <AddProductMain userInfo={userInfo} />}{" "}
           </div>
         </div>
       </div>

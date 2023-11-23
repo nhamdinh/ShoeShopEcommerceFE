@@ -7,7 +7,7 @@ import Loading from "../LoadingError/Loading";
 import Message from "../LoadingError/Error";
 import Pagination from "./Pagination";
 import { PAGE_SIZE } from "../../utils/constants";
-import { formatMoneyCurrency } from "../../utils/commonFunction";
+import { formatCustomerPhoneNumber, formatMoneyCurrency } from "../../utils/commonFunction";
 import moment from "moment";
 
 const ShopDetailSection = ({
@@ -62,13 +62,16 @@ const ShopDetailSection = ({
       setCurrentPage(dataProducts?.page);
     }
   }, [dataProducts]);
-  console.log(productShop);
+  // console.log(productShop);
   return (
     <>
       <div className="container">
         <div className="section">
-          <h1>{productShop?.productShopName}</h1>
-          <h2>Join in: {moment(productShop?.createdAt).calendar()}</h2>
+          <div className="STORE">
+            STORE: <h1> {productShop?.productShopName}</h1>
+          </div>
+          <h3>Phone: {formatCustomerPhoneNumber(productShop?.phone)}</h3>
+          <h3>Join in: {moment(productShop?.createdAt).calendar()}</h3>
 
           <div className="row">
             <div className="col-lg-12 col-md-12 article">
