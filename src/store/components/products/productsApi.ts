@@ -20,13 +20,13 @@ export const productsApi = createApi({
       }
       //   headers.set("x-api-key", `${apiKey}`);
 
-      headers.set("Content-Type", `application/json`);
+      // headers.set("Content-Type", `application/json`);
 
       return headers;
     },
     // credentials: "include",
   }),
-  tagTypes: ["GetProducts", "GetProductsDetail"],
+  tagTypes: ["GetProducts", "GetProductsDetail", "GetCategorys"],
   endpoints: (builder) => ({
     getProducts: builder.query({
       query: (data) => ({
@@ -85,14 +85,46 @@ export const productsApi = createApi({
         // body: data,
       }),
     }),
+    createProduct: builder.mutation({
+      query: (data) => ({
+        url: `/products/create`,
+        method: "POST",
+        body: data,
+      }),
+    }),
+    getCategorys: builder.query({
+      query: (data) => ({
+        url: `/categorys/all-admin`,
+        method: "GET",
+      }),
+      providesTags: ["GetCategorys"],
+    }),
+    uploadImg: builder.mutation({
+      query: (data) => ({
+        url: `/upload?folder=${data?.folder}`,
+        method: "POST",
+        body: data?.formData,
+      }),
+    }),
+    getCodes: builder.query({
+      query: (data) => ({
+        url: `/codes/all`,
+        method: "GET",
+        params: data,
+      }),
+    }),
   }),
 });
 
 export const {
   useGetProductsQuery,
+  useGetCodesQuery,
   useGetPublishedProductsQuery,
   useGetProductsDetailQuery,
   useCreateReviewProductMutation,
+  useCreateProductMutation,
+  useGetCategorysQuery,
+  useUploadImgMutation,
   useCreateCoMutation,
   useCheckIsBuyerQuery,
   useGetBrandsQuery,

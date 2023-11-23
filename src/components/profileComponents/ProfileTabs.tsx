@@ -8,7 +8,6 @@ import { openToast } from "../../store/components/customDialog/toastSlice";
 const ProfileTabs = ({ userInfo }: any) => {
   const [name, setName] = useState<any>(userInfo.name);
   const [email, setEmail] = useState<any>(userInfo.email);
-
   const [password, setPassword] = useState<any>("");
   const [confirmPassword, setConfirmPassword] = useState<any>("");
 
