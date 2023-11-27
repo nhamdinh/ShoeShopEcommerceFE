@@ -1,14 +1,14 @@
-import "./styles.scss";
+import "./style.scss";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useGetPublishedProductsQuery } from "../../store/components/products/productsApi";
+import { useGetDraftProductsQuery } from "../../store/components/products/productsApi";
 import { PAGE_SIZE } from "../../utils/constants";
 import { useSelector } from "react-redux";
 import { getUserInfo } from "../../store/selector/RootSelector";
 import { useDispatch } from "react-redux";
-import ProductsRender from "./ProductsRender";
+import ProductsRender from "../homeComponents/ProductsRender";
 
-const ShopDetailSection = ({
+const DraftProducts = ({
   pagenumber,
   keyword,
   brand,
@@ -46,7 +46,7 @@ const ShopDetailSection = ({
     error,
     isSuccess,
     isLoading,
-  } = useGetPublishedProductsQuery(
+  } = useGetDraftProductsQuery(
     {
       product_shop: shopId,
     },
@@ -79,4 +79,4 @@ const ShopDetailSection = ({
   );
 };
 
-export default ShopDetailSection;
+export default DraftProducts;

@@ -67,10 +67,11 @@ export const authApi = createApi({
       query: (data) => ({
         url: `/users/update-is-shop`,
         method: "PUT",
-        // body: data,
+        body: data,
       }),
-/*       invalidatesTags: ["getProfile__TAG"],
- */    }),
+      /*       invalidatesTags: ["getProfile__TAG"],
+       */
+    }),
     getStory: builder.query({
       query: (data) => ({
         url: `/users/get-story`,

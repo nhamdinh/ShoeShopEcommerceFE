@@ -8,7 +8,6 @@ import { FOLDER_PRODUCS_STORAGE } from "../../utils/constants";
 import {
   useCreateProductMutation,
   useGetBrandsQuery,
-  useGetCategorysQuery,
   useUploadImgMutation,
   useGetCodesQuery,
 } from "../../store/components/products/productsApi";
@@ -82,7 +81,7 @@ const AddProductMain = ({ userInfo }: any) => {
   const {
     data: dataFetch,
     error: errdataProducts,
-    isSuccess: isSuccessdataProducts,
+    isSuccess: isSuccesscategorys,
     isLoading: isLoadingdataProducts,
   } = useGetCodesQuery(
     {
@@ -94,7 +93,7 @@ const AddProductMain = ({ userInfo }: any) => {
     }
   );
   useEffect(() => {
-    if (isSuccessdataProducts) {
+    if (isSuccesscategorys) {
       setcategorys(dataFetch?.metadata?.mainCodes);
       setcategory(dataFetch?.metadata?.mainCodes[0]?.mainCode_value);
     }
@@ -136,7 +135,6 @@ const AddProductMain = ({ userInfo }: any) => {
     const data = res?.data;
 
     if (data) {
-      console.log(data);
       dispatch(
         openToast({
           isOpen: Date.now(),
@@ -167,8 +165,8 @@ const AddProductMain = ({ userInfo }: any) => {
 
     onCreateProduct({
       product_name: name,
-      product_price: price,
       product_description: description,
+      product_price: price,
       product_thumb: image,
       product_quantity: countInStock,
       product_shop: userInfo._id,

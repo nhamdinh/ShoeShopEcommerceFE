@@ -26,7 +26,13 @@ export const productsApi = createApi({
     },
     // credentials: "include",
   }),
-  tagTypes: ["GetProducts", "GetProductsDetail", "GetCategorys"],
+  tagTypes: [
+    "GetProducts",
+    "GetProductsDetail",
+    "GetCategorys",
+    "tag_getPublishedProducts",
+    "tag_getDraftProducts",
+  ],
   endpoints: (builder) => ({
     getProducts: builder.query({
       query: (data) => ({
@@ -77,6 +83,15 @@ export const productsApi = createApi({
         method: "GET",
         params: data,
       }),
+      providesTags: ["tag_getPublishedProducts"],
+    }),
+    getDraftProducts: builder.query({
+      query: (data) => ({
+        url: `/products/draft/all`,
+        method: "GET",
+        params: data,
+      }),
+      providesTags: ["tag_getDraftProducts"],
     }),
     getCo: builder.query({
       query: (data) => ({
@@ -113,6 +128,30 @@ export const productsApi = createApi({
         params: data,
       }),
     }),
+    updateProduct: builder.mutation({
+      query: (data) => ({
+        url: `/products/update/${data.productId}`,
+        method: "PATCH",
+        body: data,
+      }),
+      // invalidatesTags: ["GetProductsDetail"],
+    }),
+    deleteProduct: builder.mutation({
+      query: (data) => ({
+        url: `/products/draft/${data.productId}`,
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: ["tag_getPublishedProducts"],
+    }),
+    publishProduct: builder.mutation({
+      query: (data) => ({
+        url: `/products/published/${data.productId}`,
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: ["tag_getDraftProducts"],
+    }),
   }),
 });
 
@@ -120,6 +159,7 @@ export const {
   useGetProductsQuery,
   useGetCodesQuery,
   useGetPublishedProductsQuery,
+  useGetDraftProductsQuery,
   useGetProductsDetailQuery,
   useCreateReviewProductMutation,
   useCreateProductMutation,
@@ -129,4 +169,7 @@ export const {
   useCheckIsBuyerQuery,
   useGetBrandsQuery,
   useGetCoQuery,
+  useUpdateProductMutation,
+  useDeleteProductMutation,
+  usePublishProductMutation,
 } = productsApi;

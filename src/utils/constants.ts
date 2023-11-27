@@ -15,5 +15,5 @@ export const Toastobjects = {
   pauseOnFocusLoss: false,
   draggable: false,
   pauseOnHover: false,
-  autoClose: 2000,
+  autoClose: 1000,
 };
