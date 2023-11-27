@@ -1,3 +1,4 @@
+import EditProductMain from "../components/Products/EditproductMain";
 import CartScreen from "../screens/CartScreen";
 import HomeScreen from "../screens/HomeScreen";
 import HomeShopScreen from "../screens/HomeShopScreen";
@@ -47,6 +48,10 @@ export const PrivateRoutes = [
   {
     path: "/order/:id",
     element: <OrderScreen />,
+  },
+  {
+    path: "/product/:id/edit",
+    element: <EditProductMain />,
   },
   {
     path: "/register",

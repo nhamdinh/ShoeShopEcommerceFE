@@ -1,4 +1,10 @@
 .section {
+  .update__product{
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+      text-transform: uppercase;
+  }
   .STORE {
     display: flex;
     align-items: center;

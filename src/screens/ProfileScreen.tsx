@@ -7,6 +7,8 @@ import Orders from "../components/profileComponents/Orders";
 import { formatCustomerPhoneNumber } from "../utils/commonFunction";
 import SellerTabs from "../components/profileComponents/SellerTabs";
 import AddProductMain from "../components/Products/AddProductMain";
+import mainLogo3 from "./../images/user.png";
+import DraftProducts from "../components/Products/DraftProducts";
 
 const ProfileScreen = () => {
   window.scrollTo(0, 0);
@@ -29,7 +31,7 @@ const ProfileScreen = () => {
             <div className="author-card-cover"></div>
             <div className="author-card-profile row">
               <div className="author-card-avatar col-md-5">
-                <img src="./images/user.png" alt="userprofileimage" />
+                <img src={mainLogo3} alt="userprofileimage" />
               </div>
               <div className="author-card-details col-md-7">
                 <h5 className="author-card-name mb-2">
@@ -131,6 +133,24 @@ const ProfileScreen = () => {
                       setTab(5);
                     }}
                   >
+                    Products Draft
+                    {/* <span className="badge2">{orders ? orders.length : 0}</span> */}
+                  </button>
+                )}
+                {isShop && (
+                  <button
+                    className="nav-link d-flex justify-content-between"
+                    id="v-pills-profile-tab"
+                    data-bs-toggle="pill"
+                    data-bs-target="#v-pills-profile"
+                    type="button"
+                    role="tab"
+                    aria-controls="v-pills-profile"
+                    aria-selected="false"
+                    onClick={() => {
+                      setTab(6);
+                    }}
+                  >
                     Create Coupon
                     {/* <span className="badge2">{orders ? orders.length : 0}</span> */}
                   </button>
@@ -178,6 +198,15 @@ const ProfileScreen = () => {
               />
             )}{" "}
             {tab === 4 && <AddProductMain userInfo={userInfo} />}{" "}
+            {tab === 5 && (
+              <DraftProducts
+                productShop={userInfo}
+                shopId={userInfo?._id}
+                brand=""
+                keyword=""
+                pagenumber=""
+              />
+            )}{" "}
           </div>
         </div>
       </div>

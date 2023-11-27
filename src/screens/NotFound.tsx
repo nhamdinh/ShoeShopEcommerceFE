@@ -1,4 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
+import mainLogo2 from "./../images/not-found.png";
 
 const NotFound = () => {
   const navigate = useNavigate();
@@ -8,7 +9,7 @@ const NotFound = () => {
         <h4 className="text-center mb-2 mb-sm-5">Page Not Found</h4>
         <img
           style={{ width: "100%", height: "300px", objectFit: "contain" }}
-          src="/images/not-found.png"
+          src={mainLogo2}
           alt="Not-found"
         />
         <button

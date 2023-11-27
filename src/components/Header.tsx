@@ -20,6 +20,7 @@ import {
   useGetProductsQuery,
 } from "../store/components/products/productsApi";
 import { getDataProducts, getUserInfo } from "../store/selector/RootSelector";
+import mainLogo from "./../images/AVA79.svg";
 
 import axios from "axios";
 
@@ -200,7 +201,7 @@ const Header = () => {
             <div className="row ">
               <div className="col-6 d-flex align-items-center">
                 <Link className="navbar-brand" to="/">
-                  <img src="./images/AVA79.svg" alt="userprofileimage" />
+                  <img src={mainLogo} alt="userprofileimage" />
                 </Link>
                 {/* <button onClick={loginUser}>zzzzz</button> */}
               </div>
@@ -353,7 +354,7 @@ const Header = () => {
           <div className="row">
             <div className="col-md-3 col-4 d-flex align-items-center">
               <Link className="navbar-brand" to="/">
-                <img src="./images/AVA79.svg" alt="userprofileimage" />
+                <img src={mainLogo} alt="userprofileimage" />
               </Link>
               {/* <button onClick={loginUser}>zzzzz</button> */}
             </div>

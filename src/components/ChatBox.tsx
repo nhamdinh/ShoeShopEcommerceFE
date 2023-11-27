@@ -9,6 +9,7 @@ import { SOCKET_HOST } from "../utils/constants";
 import { useGetStoryQuery } from "../store/components/auth/authApi";
 import Loading from "./LoadingError/Loading";
 import { rawMarkup } from "../utils/commonFunction";
+import mainLogo1 from "./../images/icons8-facebook-messenger.gif";
 
 export default function ChatBox() {
   const userInfo = useSelector(getUserInfo);
@@ -173,7 +174,7 @@ export default function ChatBox() {
           onClick={() => {
             setShowMessageBox(true);
           }}
-          src="./images/icons8-facebook-messenger.gif"
+          src={mainLogo1}
           alt="userprofileimage"
         />
       )}
