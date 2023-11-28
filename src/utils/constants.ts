@@ -17,3 +17,4 @@ export const Toastobjects = {
   pauseOnHover: false,
   autoClose: 1000,
 };
+export const regexOnlyNumber = /^[0-9\b]+$/;

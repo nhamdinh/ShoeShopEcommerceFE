@@ -9,12 +9,13 @@ import SellerTabs from "../components/profileComponents/SellerTabs";
 import AddProductMain from "../components/Products/AddProductMain";
 import mainLogo3 from "./../images/user.png";
 import DraftProducts from "../components/Products/DraftProducts";
+import CreateCoupon from "../components/Coupons/CreateCoupon";
 
 const ProfileScreen = () => {
   window.scrollTo(0, 0);
 
   const dispatch = useDispatch();
-  const [tab, setTab] = useState<any>(4);
+  const [tab, setTab] = useState<any>(6);
 
   const userInfo = useSelector(getUserInfo);
   const [isShop, setisShop] = useState<any>(userInfo.isShop);
@@ -207,6 +208,7 @@ const ProfileScreen = () => {
                 pagenumber=""
               />
             )}{" "}
+            {tab === 6 && <CreateCoupon userInfo={userInfo} />}{" "}
           </div>
         </div>
       </div>
