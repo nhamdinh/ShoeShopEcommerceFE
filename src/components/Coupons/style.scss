@@ -6,7 +6,7 @@
   border: 0px;
   border-radius: 5px;
 }
-.colorred{
+.colorred {
   color: blueviolet;
   font-size: 14px;
   font-weight: 600;
@@ -17,4 +17,8 @@
   align-items: center;
   justify-content: space-between;
   margin-bottom: 30px;
+}
+
+.form-label {
+  text-transform: capitalize;
 }

@@ -205,7 +205,8 @@ textarea:focus {
 .subscribe-section {
   width: 1200px;
   margin: 0 auto;
-  background: linear-gradient(0deg, rgba(0, 0, 0, 0.226), rgba(0, 0, 0, 0.226)),
+  background:
+    linear-gradient(0deg, rgba(0, 0, 0, 0.226), rgba(0, 0, 0, 0.226)),
     url("https://img.tgdd.vn/imgt/f_webp,fit_outside,quality_100/https://cdn.tgdd.vn/2023/08/banner/Banner-Big-TGDD-Desk-1920x450-4.jpg")
       no-repeat scroll center / cover;
   padding: 100px 0 100px;
@@ -729,5 +730,11 @@ textarea:focus {
 @for $i from 0 through 400 {
   .pb#{$i}px {
     padding-bottom: #{$i}px !important;
+  }
+}
+
+@for $i from 0 through 50 {
+  .gap#{$i}px {
+    gap: #{$i}px !important;
   }
 }

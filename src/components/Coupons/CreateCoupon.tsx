@@ -100,28 +100,22 @@ const CreateCoupon = ({ userInfo }: any) => {
     }
   }, [dataFetch]);
 
-  const [brand, setbrand] = useState<any>("");
-  const [brands, setbrands] = useState<any>([]);
+  const [discount_applyTo, setdiscount_applyTo] = useState<any>("all");
+  const [discount_applyTos, setdiscount_applyTos] = useState<any>([
+    "all",
+    "products_special",
+  ]);
+  const [discount_type, setdiscount_type] = useState<any>("percent");
+  const [discount_types, setbrands] = useState<any>([
+    "percent",
+    "fixed_amount",
+  ]);
 
-  const {
-    data: brandsdata,
-    error: brandsserror,
-    isSuccess: brandsisSuccess,
-    isLoading: isLoadingbrands,
-  } = useGetBrandsQuery(
-    {},
-    {
-      refetchOnMountOrArgChange: true,
-      skip: false,
-    }
-  );
   useEffect(() => {
-    if (brandsisSuccess) {
-      setbrands(brandsdata?.brands);
-      setbrand(brandsdata?.brands[0]?.brand);
-    }
-  }, [brandsdata]);
+    setdiscount_value(0);
+  }, [discount_type]);
 
+  const [discount_value, setdiscount_value] = useState<any>("");
   const [discount_code, setdiscount_code] = useState<any>("");
   const [discount_description, setdiscount_description] = useState<any>("");
   const [discount_quantity, setdiscount_quantity] = useState<any>("");
@@ -178,7 +172,7 @@ const CreateCoupon = ({ userInfo }: any) => {
       product_shop: userInfo._id,
       product_type: categor,
       product_attributes: {
-        brand: brand,
+        brand: discount_type,
         size: "10inch",
         material: "gold",
       },
@@ -217,33 +211,56 @@ const CreateCoupon = ({ userInfo }: any) => {
                   )}
                   {isLoading && <Loading />}
                   <div className="mb-4">
-                    <div className="flex-box d-flex justify-content-between align-items-center">
-                      <h6>Brand</h6>
+                    <div className="flex-box d-flex justify-content-between align-items-center gap10px">
+                      <h6 className="form-label">discount_type</h6>
                       <select
-                        value={brand}
-                        onChange={(e) => setbrand(e.target.value)}
+                        className="form-label"
+                        value={discount_type}
+                        onChange={(e) => setdiscount_type(e.target.value)}
                       >
-                        {brands.map((br: any, index: number) => (
-                          <option key={index} value={br?.brand}>
-                            {br?.brand}
+                        {discount_types.map((br: any, index: number) => (
+                          <option className="form-label" key={index} value={br}>
+                            {br}
                           </option>
                         ))}
                       </select>
-                      <h6>Category</h6>
+                      <h6 className="form-label">discount_value</h6>
 
+                      <input
+                        type="text"
+                        placeholder="Type here"
+                        className="form-control"
+                        id="product_title"
+                        required
+                        maxLength={discount_type === "percent" ? 2 : 6}
+                        value={formatMoney(discount_value)}
+                        onChange={(e) => {
+                          let val = e.target.value;
+                          val = val.replaceAll(",", "");
+                          if (!val || val.match(regexOnlyNumber)) {
+                            setdiscount_value(val);
+                          } else {
+                          }
+                        }}
+                      />
+                    </div>
+                  </div>
+                  <div className="mb-4">
+                    <div className="flex-box d-flex justify-content-between align-items-center gap10px">
+                      <h6 className="form-label">discount_applyTo</h6>
                       <select
-                        value={categor}
-                        onChange={(e) => setcategory(e.target.value)}
+                        className="form-label"
+                        value={discount_applyTo}
+                        onChange={(e) => setdiscount_applyTo(e.target.value)}
                       >
-                        {categorys.map((cate: any, index: number) => (
-                          <option key={index} value={cate?.mainCode_value}>
-                            {cate?.mainCode_value}
+                        {discount_applyTos.map((br: any, index: number) => (
+                          <option className="form-label" key={index} value={br}>
+                            {br}
                           </option>
                         ))}
                       </select>
                     </div>
                   </div>
-
                   <div className="mb-4">
                     <label htmlFor="product_title" className="form-label">
                       discount_code
