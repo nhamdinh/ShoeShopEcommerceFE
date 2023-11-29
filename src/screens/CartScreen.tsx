@@ -1,41 +1,55 @@
+import "./style.scss";
+
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { formatMoney } from "../utils/commonFunction";
 import {
+  useCheckCartQuery,
   useCreateCartMutation,
   useRemoveFromCartMutation,
 } from "../store/components/orders/ordersApi";
 import { openToast } from "../store/components/customDialog/toastSlice";
 import { openDialog } from "../store/components/customDialog/dialogSlice";
 import Loading from "../components/LoadingError/Loading";
-import { getCartInfo } from "../store/selector/RootSelector";
 
 const CartScreen = () => {
   window.scrollTo(0, 0);
-
-  const cartInfo = useSelector(getCartInfo);
 
   const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
 
-  const [cartItems, setcartItems] = useState<any>([]);
   const [idCart, setidCart] = useState<any>("");
 
   const [total, settotal] = useState<any>(0);
 
-  useEffect(() => {
-    let cartItems_temp: any = cartInfo?.cartItems || [];
-    let total_temp = 0;
-    cartItems_temp.map((cart: any) => {
-      total_temp += cart?.price * cart?.qty;
-    });
+  const [cartItems, setcartItems] = useState<any>([]);
+  const { data: dataCart, isSuccess: isSuccessCart } = useCheckCartQuery(
+    {},
+    {
+      refetchOnMountOrArgChange: true,
+      skip: false,
+    }
+  );
 
-    settotal(+total_temp);
-    setcartItems(cartItems_temp);
-    setidCart(cartInfo?._id);
-  }, [cartInfo]);
+  useEffect(() => {
+    if (isSuccessCart) {
+      const productsCart = dataCart?.metadata.flatMap(
+        (cart: any) => cart.cart_products
+      );
+
+      setcartItems(productsCart || []);
+
+      let cartItems_temp: any = productsCart || [];
+      let total_temp = 0;
+      cartItems_temp.map((cart: any) => {
+        total_temp += cart?.price * cart?.quantity;
+      });
+
+      settotal(+total_temp);
+    }
+  }, [dataCart]);
 
   const checkOutHandler = (e: any) => {
     e.preventDefault();
@@ -66,13 +80,13 @@ const CartScreen = () => {
           </div>
           {/* cartiterm */}
           {cartItems.map((item: any, index: any) => {
-            return <CompTableCart idCart={idCart} item={item} />;
+            return <CompTableCart idCart={idCart} item={item} key={index} />;
           })}
 
           {/* End of cart iterms */}
           <div className="total">
             <span className="sub">total:</span>
-            <span className="total-price">${total}</span>
+            <span className="total-price">${formatMoney(total)}</span>
           </div>
           <hr />
           <div className="cart-buttons d-flex align-items-center row">
@@ -93,7 +107,7 @@ const CartScreen = () => {
 
 function CompTableCart({ item, idCart }: any) {
   useEffect(() => {
-    setQty(item?.qty);
+    setQty(item?.quantity);
   }, [item]);
 
   const navigate = useNavigate();
@@ -146,7 +160,7 @@ function CompTableCart({ item, idCart }: any) {
       })
     );
   };
-  const [qty, setQty] = useState<any>(item?.qty);
+  const [qty, setQty] = useState<any>(item?.quantity);
 
   const [createCart, { isLoading: LoadingcreateCart }] =
     useCreateCartMutation();
@@ -182,28 +196,28 @@ function CompTableCart({ item, idCart }: any) {
           name: item?.name,
           image: item?.image,
           price: item?.price,
-          qty: item?.qty,
-          product: item?.product,
+          qty: item?.quantity,
+          product_id: item?.product_id,
         },
       ],
     });
   };
 
   return (
-    <div className="cart-iterm row" key={item?._id}>
+    <div className="cart-iterm row">
       <div
-        onClick={() => removeFromCartHandle(item?.product)}
+        onClick={() => removeFromCartHandle(item?.product_id)}
         className="remove-button d-flex justify-content-center align-items-center"
       >
         <i className="fas fa-times"></i>
       </div>
       <div className="cart-image col-md-3">
-        <img src={item?.image} alt={item?.name} />
+        <img src={item?.image} alt="image" />
       </div>
       <div className="cart-text col-md-5 d-flex align-items-center">
         <h4
           onClick={() => {
-            navigate(`/product-detail?id=${item?.product}`);
+            navigate(`/product-detail?id=${item?.product_id}`);
           }}
         >
           {item?.name}
@@ -232,8 +246,10 @@ function CompTableCart({ item, idCart }: any) {
         )}
       </div>
       <div className="cart-price mt-3 mt-md-0 col-md-2 align-items-sm-end align-items-start  d-flex flex-column justify-content-center col-sm-7">
-        <h6>PRICE</h6>
-        <h4>${formatMoney(item?.price * qty)}</h4>
+        <h6>PRICE TOTAL</h6>
+        <h4>
+          x {formatMoney(item?.price)}$ = {formatMoney(item?.price * qty)}$
+        </h4>
       </div>
     </div>
   );

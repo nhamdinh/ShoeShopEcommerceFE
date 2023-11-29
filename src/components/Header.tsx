@@ -10,7 +10,7 @@ import { NAME_STORAGE } from "../utils/constants";
 import { setUserInfo, userLogout } from "../store/components/auth/authSlice";
 import { useCheckCartQuery } from "../store/components/orders/ordersApi";
 import {
-  setStoCart,
+  setStProductsCart,
   setStoProducts,
 } from "../store/components/products/productsSlice";
 import {
@@ -118,10 +118,11 @@ const Header = () => {
       skip: false,
     }
   );
+
   useEffect(() => {
     if (isSuccessdataProducts) {
-      dispatch(setStoProducts(dataFetch?.products));
-      setdataProducts(dataFetch?.products);
+      dispatch(setStoProducts(dataFetch?.metadata?.products));
+      setdataProducts(dataFetch?.metadata?.products);
     }
   }, [dataFetch]);
 
@@ -136,8 +137,12 @@ const Header = () => {
 
   useEffect(() => {
     if (isSuccessCart) {
-      setcartItems(dataCart?.metadata?.cart_products || []);
-      dispatch(setStoCart({ ...dataCart?.metadata }));
+      const productsCart = dataCart?.metadata.flatMap(
+        (cart: any) => cart.cart_products
+      );
+
+      setcartItems(productsCart || []);
+      dispatch(setStProductsCart(productsCart));
     }
   }, [dataCart]);
 
@@ -313,7 +318,7 @@ const Header = () => {
                       {dataProducts1
                         .filter((item: any) => {
                           const searchTerm = keyword.toLowerCase();
-                          const fullName = item?.name.toLowerCase();
+                          const fullName = item?.product_name.toLowerCase();
 
                           return (
                             searchTerm &&
@@ -327,11 +332,11 @@ const Header = () => {
                             className="dropdown-row"
                             onClick={(e) => {
                               e.stopPropagation();
-                              submitHandler(item?.name, brand);
+                              // submitHandler(item?.name, brand);
                             }}
-                            key={item?.name}
+                            key={item?._id}
                           >
-                            {item?.name}
+                            {item?.product_name}
                           </div>
                         ))}
                     </div>
@@ -415,7 +420,7 @@ const Header = () => {
                     {dataProducts1
                       .filter((item: any) => {
                         const searchTerm = keyword.toLowerCase();
-                        const fullName = item?.name.toLowerCase();
+                        const fullName = item?.product_name.toLowerCase();
                         // console.log(searchTerm);
                         // console.log(fullName);
                         return (
@@ -430,12 +435,12 @@ const Header = () => {
                           className="dropdown-row"
                           onClick={(e) => {
                             e.stopPropagation();
-                            submitHandler(item?.name, brand);
+                            // submitHandler(item?.name, brand);
                           }}
-                          key={item?.name}
+                          key={item?._id}
                         >
-                          <div className="name">{item?.name}</div>
-                          <img src={item?.image} alt="" />
+                          <div className="name">{item?.product_name}</div>
+                          <img src={item?.product_thumb} alt="" />
                         </div>
                       ))}
                   </div>

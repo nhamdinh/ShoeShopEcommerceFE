@@ -13,12 +13,12 @@ import {
   useGetProductsDetailQuery,
 } from "../store/components/products/productsApi";
 import { useCreateCartMutation } from "../store/components/orders/ordersApi";
-import { getCartInfo, getUserInfo } from "../store/selector/RootSelector";
+import { getProductsCart, getUserInfo } from "../store/selector/RootSelector";
 import { openToast } from "../store/components/customDialog/toastSlice";
 
 const SingleProduct = () => {
   const dispatch = useDispatch();
-  const cartInfo = useSelector(getCartInfo);
+  const productsCart = useSelector(getProductsCart);
   const [rating, setRating] = useState<any>(0);
   const [comment, setComment] = useState<any>("");
   const navigate = useNavigate();
@@ -29,11 +29,11 @@ const SingleProduct = () => {
   const [qty, setQty] = useState<any>(1);
 
   useEffect(() => {
-    let cartItems_temp: any = cartInfo?.cart_products || [];
+    let cartItems_temp: any = productsCart || [];
     cartItems_temp?.map((item: any) => {
       if (productId === item?.product_id) setQty(item?.quantity);
     });
-  }, [cartInfo, productId]);
+  }, [productsCart, productId]);
 
   const [product, setdataFetched] = useState<any>({});
   const {
@@ -120,6 +120,8 @@ const SingleProduct = () => {
         product_id: product?._id,
         quantity: +qty,
         price: product?.product_price,
+        name: product?.product_name,
+        image: product?.product_thumb,
       },
     });
   };

@@ -6,6 +6,7 @@ import { DatePicker, DatePickerProps } from "antd";
 import Message from "../LoadingError/Error";
 import Loading from "../LoadingError/Loading";
 import { FORMAT_DATE, regexOnlyNumber } from "../../utils/constants";
+import { useNavigate } from "react-router-dom";
 
 import { useDispatch } from "react-redux";
 import { openToast } from "../../store/components/customDialog/toastSlice";
@@ -18,6 +19,8 @@ import {
 import moment from "moment";
 
 const ListCoupons = () => {
+  const navigate = useNavigate();
+
   const dispatch = useDispatch();
   const [dataFetched, setdataFetched] = useState<any>([]);
   const [totalCount, settotalCount] = useState<any>(0);
@@ -78,13 +81,13 @@ const ListCoupons = () => {
                       <h6 className="form-label">discount_code</h6>
                       {item?.discount_code}
                       <h6 className="form-label">discount_quantity</h6>
-                      {item?.discount_quantity}
+                      {formatMoney(item?.discount_quantity)}
                     </div>
                     <div className="flex-box d-flex justify-content-between align-items-center gap10px">
                       <h6 className="form-label">discount_useMax_user</h6>
                       {item?.discount_useMax_user}
                       <h6 className="form-label">discount_order_minValue</h6>
-                      {item?.discount_order_minValue}
+                      {formatMoney(item?.discount_order_minValue)}
                     </div>
                     <div className="flex-box d-flex justify-content-between align-items-center gap10px">
                       <h6 className="form-label">discount_applyTo</h6>
@@ -100,6 +103,8 @@ const ListCoupons = () => {
                                 className="dropdown-row"
                                 onClick={(e) => {
                                   e.stopPropagation();
+                                  navigate(`/product-detail?id=${it?._id}`);
+
                                   // submitHandler(item?.name, brand);
                                 }}
                                 key={it?._id}
