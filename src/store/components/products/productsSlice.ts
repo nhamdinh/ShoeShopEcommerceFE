@@ -15,10 +15,10 @@ const productsSlice = createSlice({
   initialState,
   reducers: {
     setStoProducts: (state: IfProducts, action: PayloadAction<IfProducts>) => {
-      state.dataProducts = action.payload;
+      state.dataProducts = action.payload ?? [];
     },
     setStoCart: (state: IfProducts, action: PayloadAction<IfProducts>) => {
-      state.cart = action.payload;
+      state.cart = action.payload ?? {};
     },
   },
 });

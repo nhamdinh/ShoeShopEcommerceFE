@@ -4,6 +4,8 @@ import {
   MiddlewareAPI,
   Middleware,
 } from "@reduxjs/toolkit";
+import { couponsApi } from "./components/coupons/couponsApi";
+// import couponsReducer from "./components/coupons/couponsSlice";
 import { productsApi } from "./components/products/productsApi";
 import productsReducer from "./components/products/productsSlice";
 import { ordersApi } from "./components/orders/ordersApi";
@@ -22,6 +24,7 @@ import { faqApi } from "../pages/FaqManagement/faqApi";
 import { advertisementApi } from "../pages/AdvertisementManagement/advertisementApi"; */
 const rootReducer = {
   [productsApi.reducerPath]: productsApi.reducer,
+  [couponsApi.reducerPath]: couponsApi.reducer,
   [ordersApi.reducerPath]: ordersApi.reducer,
   auth: authReducer,
   [authApi.reducerPath]: authApi.reducer,
@@ -58,6 +61,7 @@ const store = configureStore({
       rtkQueryErrorLogger,
       ordersApi.middleware,
       productsApi.middleware,
+      couponsApi.middleware,
       authApi.middleware,
       /*  memberApi.middleware,
       settlementApi.middleware,

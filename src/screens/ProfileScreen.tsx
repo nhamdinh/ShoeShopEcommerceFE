@@ -6,9 +6,9 @@ import { getUserInfo } from "../store/selector/RootSelector";
 import Orders from "../components/profileComponents/Orders";
 import { formatCustomerPhoneNumber } from "../utils/commonFunction";
 import SellerTabs from "../components/profileComponents/SellerTabs";
-import AddProductMain from "../components/Products/AddProductMain";
+import AddProductMain from "../components/ProductsShop/AddProductMain";
 import mainLogo3 from "./../images/user.png";
-import DraftProducts from "../components/Products/DraftProducts";
+import DraftProducts from "../components/ProductsShop/DraftProducts";
 import CreateCoupon from "../components/Coupons/CreateCoupon";
 
 const ProfileScreen = () => {
