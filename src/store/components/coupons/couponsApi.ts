@@ -28,9 +28,9 @@ export const couponsApi = createApi({
   }),
   tagTypes: [],
   endpoints: (builder) => ({
-    getProducts: builder.query({
+    getCouponsByShop: builder.query({
       query: (data) => ({
-        url: `/products/all`,
+        url: `/discounts/get-all-by-shop`,
         method: "GET",
         params: data,
       }),
@@ -45,4 +45,4 @@ export const couponsApi = createApi({
   }),
 });
 
-export const { useGetProductsQuery, useCreateCouponMutation } = couponsApi;
+export const { useGetCouponsByShopQuery, useCreateCouponMutation } = couponsApi;
