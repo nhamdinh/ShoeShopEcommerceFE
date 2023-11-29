@@ -6,16 +6,17 @@ import { getUserInfo } from "../store/selector/RootSelector";
 import Orders from "../components/profileComponents/Orders";
 import { formatCustomerPhoneNumber } from "../utils/commonFunction";
 import SellerTabs from "../components/profileComponents/SellerTabs";
-import AddProductMain from "../components/Products/AddProductMain";
+import AddProductMain from "../components/ProductsShop/AddProductMain";
 import mainLogo3 from "./../images/user.png";
-import DraftProducts from "../components/Products/DraftProducts";
+import DraftProducts from "../components/ProductsShop/DraftProducts";
 import CreateCoupon from "../components/Coupons/CreateCoupon";
+import ListCoupons from "../components/Coupons/ListCoupons";
 
 const ProfileScreen = () => {
   window.scrollTo(0, 0);
 
   const dispatch = useDispatch();
-  const [tab, setTab] = useState<any>(6);
+  const [tab, setTab] = useState<any>(1);
 
   const userInfo = useSelector(getUserInfo);
   const [isShop, setisShop] = useState<any>(userInfo.isShop);
@@ -156,6 +157,24 @@ const ProfileScreen = () => {
                     {/* <span className="badge2">{orders ? orders.length : 0}</span> */}
                   </button>
                 )}
+                {isShop && (
+                  <button
+                    className="nav-link d-flex justify-content-between"
+                    id="v-pills-profile-tab"
+                    data-bs-toggle="pill"
+                    data-bs-target="#v-pills-profile"
+                    type="button"
+                    role="tab"
+                    aria-controls="v-pills-profile"
+                    aria-selected="false"
+                    onClick={() => {
+                      setTab(7);
+                    }}
+                  >
+                    List Coupons
+                    {/* <span className="badge2">{orders ? orders.length : 0}</span> */}
+                  </button>
+                )}
               </div>
             </div>
           </div>
@@ -209,6 +228,7 @@ const ProfileScreen = () => {
               />
             )}{" "}
             {tab === 6 && <CreateCoupon userInfo={userInfo} />}{" "}
+            {tab === 7 && <ListCoupons />}{" "}
           </div>
         </div>
       </div>

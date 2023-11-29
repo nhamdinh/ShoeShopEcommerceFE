@@ -1,4 +1,4 @@
-import EditProductMain from "../components/Products/EditproductMain";
+import EditProductMain from "../components/ProductsShop/EditproductMain";
 import CartScreen from "../screens/CartScreen";
 import HomeScreen from "../screens/HomeScreen";
 import HomeShopScreen from "../screens/HomeShopScreen";

@@ -136,8 +136,8 @@ const Header = () => {
 
   useEffect(() => {
     if (isSuccessCart) {
-      setcartItems(dataCart?.cartItems || []);
-      dispatch(setStoCart({ ...dataCart }));
+      setcartItems(dataCart?.metadata?.cart_products || []);
+      dispatch(setStoCart({ ...dataCart?.metadata }));
     }
   }, [dataCart]);
 

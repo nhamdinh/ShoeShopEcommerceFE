@@ -6,7 +6,7 @@
   border: 0px;
   border-radius: 5px;
 }
-.colorred{
+.colorred {
   color: blueviolet;
   font-size: 14px;
   font-weight: 600;
@@ -17,4 +17,13 @@
   align-items: center;
   justify-content: space-between;
   margin-bottom: 30px;
+}
+.ProductsShopTable {
+  width: 100%;
+  .ProductsShopTable__row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+  }
 }
