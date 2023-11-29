@@ -16,7 +16,7 @@ const ProfileScreen = () => {
   window.scrollTo(0, 0);
 
   const dispatch = useDispatch();
-  const [tab, setTab] = useState<any>(6);
+  const [tab, setTab] = useState<any>(1);
 
   const userInfo = useSelector(getUserInfo);
   const [isShop, setisShop] = useState<any>(userInfo.isShop);

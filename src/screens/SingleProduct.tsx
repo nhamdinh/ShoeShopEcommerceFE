@@ -19,7 +19,6 @@ import { openToast } from "../store/components/customDialog/toastSlice";
 const SingleProduct = () => {
   const dispatch = useDispatch();
   const cartInfo = useSelector(getCartInfo);
-
   const [rating, setRating] = useState<any>(0);
   const [comment, setComment] = useState<any>("");
   const navigate = useNavigate();
@@ -30,14 +29,13 @@ const SingleProduct = () => {
   const [qty, setQty] = useState<any>(1);
 
   useEffect(() => {
-    let cartItems_temp: any = cartInfo?.cartItems || [];
+    let cartItems_temp: any = cartInfo?.cart_products || [];
     cartItems_temp?.map((item: any) => {
-      if (productId === item?.product) setQty(item?.qty);
+      if (productId === item?.product_id) setQty(item?.quantity);
     });
   }, [cartInfo, productId]);
 
   const [product, setdataFetched] = useState<any>({});
-
   const {
     data: dataFetch,
     error,
@@ -95,7 +93,14 @@ const SingleProduct = () => {
 
     if (data) {
       // navigate(`/cart/${productId}?qty=${qty}`);
-      navigate(`/cart`);
+      // navigate(`/cart`);
+      dispatch(
+        openToast({
+          isOpen: Date.now(),
+          content: "Added Cart Success",
+          step: 1,
+        })
+      );
     } else {
       dispatch(
         openToast({
@@ -110,18 +115,14 @@ const SingleProduct = () => {
   const AddToCartHandle = (e: any) => {
     e.preventDefault();
     onCreateCart({
-      cartItems: [
-        {
-          name: product?.product_name,
-          image: product?.product_thumb,
-          price: product?.product_price,
-          qty: qty,
-          product: productId,
-        },
-      ],
+      product: {
+        cart_shopId: product?.product_shop,
+        product_id: product?._id,
+        quantity: +qty,
+        price: product?.product_price,
+      },
     });
   };
-
   const [
     createReviewProduct,
     { isLoading: LoadingcreateReview, error: errorcreateReview },
@@ -171,7 +172,7 @@ const SingleProduct = () => {
           <div className="row">
             <div className="col-md-6">
               <div className="single-image">
-                <img src={product?.product_thumb} alt={product?.product_name} />
+                <img src={product?.product_thumb} alt="product_thumb" />
               </div>
             </div>
             <div className="col-md-6">
@@ -188,11 +189,7 @@ const SingleProduct = () => {
                   </div>
                   <div className="flex-box d-flex justify-content-between align-items-center">
                     <h6>Status</h6>
-                    {product?.countInStock > 0 ? (
-                      <span>In Stock</span>
-                    ) : (
-                      <span>unavailable</span>
-                    )}
+                    {1 ? <span>In Stock</span> : <span>unavailable</span>}
                   </div>
                   <div className="flex-box d-flex justify-content-between align-items-center">
                     <h6>Reviews</h6>
@@ -201,7 +198,7 @@ const SingleProduct = () => {
                       text={`${product?.numReviews} reviews`}
                     />
                   </div>
-                  {product?.countInStock > 0 ? (
+                  {1 ? (
                     <>
                       <div className="flex-box d-flex justify-content-between align-items-center">
                         <h6>Quantity</h6>

@@ -29,7 +29,7 @@ export const ordersApi = createApi({
   endpoints: (builder) => ({
     createCart: builder.mutation({
       query: (data) => ({
-        url: `carts/create-cart`,
+        url: `carts/add-to-cart`,
         method: "POST",
         body: data,
       }),
@@ -45,7 +45,7 @@ export const ordersApi = createApi({
     }),
     checkCart: builder.query({
       query: (data) => ({
-        url: `carts/check-cart`,
+        url: `carts/get-current-cart`,
         method: "GET",
       }),
       providesTags: ["checkCart__TAG"],
