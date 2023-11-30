@@ -11,6 +11,7 @@ export const SHIPPINGPRICE = 9.99;
 export const TAXPRICE = 0.1;
 export const PAGE_SIZE = 6;
 export const FORMAT_DATE = "YYYY-MM-DD HH:mm:ss";
+export const FORMAT_DATE8 = "YYYY-MM-DD";
 export const REGEX_CURRENCY = /(\d)(?=(\d{3})+(?!\d))/g;
 export const Toastobjects = {
   pauseOnFocusLoss: false,

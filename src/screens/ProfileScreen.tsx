@@ -228,7 +228,7 @@ const ProfileScreen = () => {
               />
             )}{" "}
             {tab === 6 && <CreateCoupon userInfo={userInfo} />}{" "}
-            {tab === 7 && <ListCoupons />}{" "}
+            {tab === 7 && <ListCoupons userInfo={userInfo} />}{" "}
           </div>
         </div>
       </div>

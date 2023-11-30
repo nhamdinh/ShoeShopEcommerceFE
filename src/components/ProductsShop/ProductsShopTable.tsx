@@ -5,7 +5,6 @@ import { useGetPublishedProductsQuery } from "../../store/components/products/pr
 import { PAGE_SIZE } from "../../utils/constants";
 import { useDispatch } from "react-redux";
 import { Checkbox } from "antd";
-import type { CheckboxChangeEvent } from "antd/es/checkbox";
 
 const ProductsShopTable = ({
   pagenumber,
@@ -75,9 +74,7 @@ const ProductsShopTable = ({
       setCurrentPage(dataProducts?.page);
     }
   }, [dataProducts]);
-  const onChange = (e: CheckboxChangeEvent) => {
-    console.log(`checked = ${e.target.checked}`);
-  };
+
   return (
     <div className="">
       <div className="mb-4">

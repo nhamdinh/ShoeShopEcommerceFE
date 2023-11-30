@@ -1,16 +1,9 @@
-.section {
-  .update__product{
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-      text-transform: uppercase;
-  }
-  .STORE {
-    display: flex;
-    align-items: center;
-    font-weight: 600;
-    gap: 20px;
-  }
+.STORE {
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  gap: 20px;
+
   h1 {
     font-weight: 600;
     -webkit-text-shadow: 0 0 10px orangered, 0 0 20px orangered,
@@ -19,6 +12,15 @@
       0 0 80px orangered, 0 0 120px orangered;
     color: #000;
   }
+}
+.section {
+  .update__product {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    text-transform: uppercase;
+  }
+
   .border-product {
     .shopBack {
       position: relative;
