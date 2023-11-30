@@ -98,6 +98,13 @@ export const ordersApi = createApi({
         body: data,
       }),
     }),
+    checkoutOrder: builder.mutation({
+      query: (data) => ({
+        url: `orders/checkout-order`,
+        method: "POST",
+        body: data,
+      }),
+    }),
   }),
 });
 
@@ -108,6 +115,7 @@ export const {
   useCreateAddressMutation,
   useCreateOrderMutation,
   useCheckoutCartMutation,
+  useCheckoutOrderMutation,
   useGetOrderDetailQuery,
   usePayOrderMutation,
   useGetOrderUserQuery,

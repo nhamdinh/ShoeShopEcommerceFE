@@ -26,7 +26,9 @@ const CartScreen = () => {
   const navigate = useNavigate();
 
   const [total, settotal] = useState<any>(0);
-
+  const [totalArr, settotalArr] = useState<any>([]);
+  const [checkoutCartParams, setcheckoutCartParams] = useState<any>([]);
+  console.log(checkoutCartParams);
   const [cartCurrents, setcartCurrents] = useState<any>([]);
   const [cartItems, setcartItems] = useState<any>([]);
   const { data: dataCart, isSuccess: isSuccessCart } = useCheckCartQuery(
@@ -46,15 +48,17 @@ const CartScreen = () => {
         );
 
         setcartItems(productsCart || []);
-
-        const total_temp = productsCart.reduce((acc: number, cart: any) => {
-          return acc + +cart?.price * +cart?.quantity;
-        }, 0);
-
-        settotal(+total_temp);
       }
     }
   }, [dataCart]);
+
+  useEffect(() => {
+    settotal(
+      [...totalArr].reduce((acc, total) => {
+        return +acc + +total?.totalAmountPay;
+      }, 0)
+    );
+  }, [totalArr]);
 
   const checkOutHandler = (e: any) => {
     e.preventDefault();
@@ -85,7 +89,56 @@ const CartScreen = () => {
           </div>
           {/* cartiterm */}
           {cartCurrents.map((cartCurrent: any, index: any) => {
-            return <CompTableCartLv1 cartCurrent={cartCurrent} key={index} />;
+            return (
+              cartCurrent?.cart_products.length > 0 && (
+                <CompTableCartLv1
+                  cartCurrent={cartCurrent}
+                  settotalArrHandle={(val: any) => {
+                    const totalArr_temp: any = [...totalArr];
+                    let resultArr = totalArr_temp.map((discount: any) => {
+                      if (discount.cartId === val?.cartId) {
+                        discount.totalAmountPay = val?.totalAmountPay;
+                      }
+                      return discount;
+                    });
+
+                    if (
+                      !resultArr.find(
+                        (discount: any) => discount.cartId === val?.cartId
+                      )
+                    ) {
+                      resultArr.push(val);
+                    }
+
+                    settotalArr(resultArr);
+                  }}
+                  setcheckoutCartParamsHandle={(val: any) => {
+                    const checkoutCartParams_temp: any = [
+                      ...checkoutCartParams,
+                    ];
+                    let resultArr = checkoutCartParams_temp.map(
+                      (discount: any) => {
+                        if (discount.cartId === val?.cartId) {
+                          discount.shopDiscount = val?.shopDiscount;
+                        }
+                        return discount;
+                      }
+                    );
+
+                    if (
+                      !resultArr.find(
+                        (discount: any) => discount.cartId === val?.cartId
+                      )
+                    ) {
+                      resultArr.push(val);
+                    }
+
+                    setcheckoutCartParams(resultArr);
+                  }}
+                  key={index}
+                />
+              )
+            );
           })}
 
           {/* End of cart iterms */}
@@ -109,7 +162,11 @@ const CartScreen = () => {
     </div>
   );
 };
-const CompTableCartLv1 = ({ cartCurrent }: any) => {
+const CompTableCartLv1 = ({
+  cartCurrent,
+  settotalArrHandle,
+  setcheckoutCartParamsHandle,
+}: any) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -120,6 +177,7 @@ const CompTableCartLv1 = ({ cartCurrent }: any) => {
     cartCurrent?.cart_shopId?._id
   );
   const [dataFetched, setdataFetched] = useState<any>([]);
+  const [checkoutCartParam, setcheckoutCartParam] = useState<any>({});
   const [totalCount, settotalCount] = useState<any>(0);
   /*  */
   const [cartId, setcartId] = useState<any>("");
@@ -129,7 +187,7 @@ const CompTableCartLv1 = ({ cartCurrent }: any) => {
   useEffect(() => {
     const total_temp = cartCurrent?.cart_products.reduce(
       (acc: number, cart: any) => {
-        return acc + +cart?.price * +cart?.quantity;
+        return +acc + +cart?.price * +cart?.quantity;
       },
       0
     );
@@ -154,9 +212,9 @@ const CompTableCartLv1 = ({ cartCurrent }: any) => {
         },
       ],
     };
+    setcheckoutCartParam(checkout_cart_temp);
     onCheckoutCart(checkout_cart_temp);
     /*  */
-    console.log(dataFetched);
     if (dataFetched.length > 0) {
       const dataFetched_temp: any = [...dataFetched];
       dataFetched_temp.map((item: any) => {
@@ -190,6 +248,17 @@ const CompTableCartLv1 = ({ cartCurrent }: any) => {
       settotalCount(dataCoupons?.metadata?.totalCount);
     }
   }, [dataCoupons]);
+
+  useEffect(() => {
+    settotalArrHandle({
+      totalAmountPay: checkCart?.totalAmountPay,
+      cartId: cartCurrent?._id,
+    });
+  }, [checkCart]);
+
+  useEffect(() => {
+    setcheckoutCartParamsHandle(checkoutCartParam);
+  }, [checkoutCartParam]);
 
   const [checkoutCart, { isLoading: is, error: er }] =
     useCheckoutCartMutation();
@@ -285,6 +354,7 @@ const CompTableCartLv1 = ({ cartCurrent }: any) => {
                             },
                           ],
                         };
+                        setcheckoutCartParam(checkout_cart_temp);
                         onCheckoutCart(checkout_cart_temp);
                       }
 

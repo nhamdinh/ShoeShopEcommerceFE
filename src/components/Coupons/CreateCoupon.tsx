@@ -108,12 +108,7 @@ const CreateCoupon = ({ userInfo }: any) => {
       <section className="content-main" style={{ maxWidth: "1200px" }}>
         <form onSubmit={submitHandler}>
           <div className="content-header">
-            <Link
-              to={`/shop/${userInfo._id}`}
-              className="btn btn-danger text-white"
-            >
-              Go to coupons
-            </Link>
+            <div className=" opa0">Go to coupons</div>
             <h2 className="content-title">CreateCoupon</h2>
             <div>
               <button type="submit" className="btn btn-primary">
