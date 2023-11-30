@@ -1,24 +1,17 @@
 import "./style.scss";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { DatePicker, DatePickerProps } from "antd";
 
 import Message from "../LoadingError/Error";
 import Loading from "../LoadingError/Loading";
-import { FORMAT_DATE, regexOnlyNumber } from "../../utils/constants";
+import { FORMAT_DATE } from "../../utils/constants";
 import { useNavigate } from "react-router-dom";
 
 import { useDispatch } from "react-redux";
-import { openToast } from "../../store/components/customDialog/toastSlice";
 import { formatMoney } from "../../utils/commonFunction";
-import ProductsShopTable from "../ProductsShop/ProductsShopTable";
-import {
-  useCreateCouponMutation,
-  useGetCouponsByShopQuery,
-} from "../../store/components/coupons/couponsApi";
+import { useGetCouponsByShopQuery } from "../../store/components/coupons/couponsApi";
 import moment from "moment";
 
-const ListCoupons = () => {
+const ListCoupons = ({ userInfo }: any) => {
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
@@ -31,7 +24,7 @@ const ListCoupons = () => {
     isSuccess,
     isLoading,
   } = useGetCouponsByShopQuery(
-    {},
+    { discount_shopId: userInfo?._id },
     {
       refetchOnMountOrArgChange: true,
       skip: false,

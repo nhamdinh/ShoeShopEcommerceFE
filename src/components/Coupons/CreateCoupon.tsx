@@ -45,7 +45,7 @@ const CreateCoupon = ({ userInfo }: any) => {
   const [createCoupon, { isLoading, error }] = useCreateCouponMutation();
 
   const onCreateCoupon = async (values: any) => {
-    console.log(values);
+    // console.log(values);
     const res = await createCoupon(values);
     //@ts-ignore
     const data = res?.data;
