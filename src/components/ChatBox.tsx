@@ -33,8 +33,8 @@ export default function ChatBox() {
 
   useEffect(() => {
     if (isSuccess) {
-      if (dataStory?.chatStories?.story) {
-        setStories(dataStory?.chatStories?.story);
+      if (dataStory.metadata?.chatStories?.story) {
+        setStories(dataStory.metadata?.chatStories?.story);
       } else {
         setStories([]);
       }

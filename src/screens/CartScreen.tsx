@@ -7,15 +7,13 @@ import { formatMoney } from "../utils/commonFunction";
 import {
   useCheckCartQuery,
   useCheckoutCartMutation,
+  useCheckoutOrderMutation,
   useCreateCartMutation,
 } from "../store/components/orders/ordersApi";
 import { openToast } from "../store/components/customDialog/toastSlice";
 import { openDialog } from "../store/components/customDialog/dialogSlice";
 import Loading from "../components/LoadingError/Loading";
-import {
-  useGetCouponsByShopQuery,
-  useGetCouponsByShopsMutation,
-} from "../store/components/coupons/couponsApi";
+import { useGetCouponsByShopsMutation } from "../store/components/coupons/couponsApi";
 import { Checkbox } from "antd";
 import moment from "moment";
 
@@ -30,9 +28,43 @@ const CartScreen = () => {
 
   const [total, settotal] = useState<any>(1);
   const [cartCurrents, setcartCurrents] = useState<any>([]);
-  const [discountsCurrents, setdiscountsCurrents] = useState<any>([]);
+  const [cartReviews, setcartReviews] = useState<any>([]);
   const [discount_shopIds, setdiscount_shopIds] = useState<any>([]);
-  // console.log(cartCurrents);
+
+  const [checkoutOrder, { isLoading: is, error: er }] =
+    useCheckoutOrderMutation();
+  const onCheckoutOrder = async (checkout_cart: any) => {
+    // console.log(checkout_cart);
+    const res = await checkoutOrder(checkout_cart);
+    //@ts-ignore
+    const data = res?.data;
+
+    if (data) {
+      if (data?.metadata?.length > 0) {
+        console.log(data.metadata);
+      }
+
+      // navigate(`/cart/${productId}?qty=${qty}`);
+      // navigate(`/cart`);
+      // dispatch(
+      //   openToast({
+      //     isOpen: Date.now(),
+      //     content: "Apply coupon Success",
+      //     step: 1,
+      //   })
+      // );
+    } else {
+      dispatch(
+        openToast({
+          isOpen: Date.now(),
+          content: "Checkout Cart Failed !",
+          step: 2,
+        })
+      );
+    }
+  };
+
+  // console.log(cartReviews);
   const [getCouponsByShops, { isLoading, error }] =
     useGetCouponsByShopsMutation();
 
@@ -44,24 +76,38 @@ const CartScreen = () => {
 
     if (data) {
       const discountsCurrents_temp: any = data?.metadata;
-      setdiscountsCurrents(discountsCurrents_temp);
 
       const cartCurrents_temp: any = cartCurrents;
       const cartCurrents_emp: any = [];
+      const cartReviews_emp: any = [];
       cartCurrents_temp.map((cart: any) => {
         const cart_shopId = cart?.cart_shopId?._id;
         let cartObj;
+        let cartReviewObj;
         for (let i = 0; i < discountsCurrents_temp.length; i++) {
           const discount_shopId = discountsCurrents_temp[i]?.discount_shopId;
+          const discounts = discountsCurrents_temp[i]?.discounts;
           if (cart_shopId === discount_shopId) {
             cartObj = {
               ...cart,
               ...discountsCurrents_temp[i],
             };
+            cartReviewObj = {
+              cartId: cart?._id,
+              orderItems: [
+                {
+                  shopId: cart_shopId,
+                  itemProducts: cart?.cart_products,
+                  shopDiscount: discounts,
+                },
+              ],
+            };
           }
         }
         cartCurrents_emp.push(cartObj);
+        cartReviews_emp.push(cartReviewObj);
       });
+      setcartReviews(cartReviews_emp);
       setcartCurrents(cartCurrents_emp);
     } else {
     }
@@ -110,10 +156,10 @@ const CartScreen = () => {
   //   );
   // }, [checkedCarts]);
 
-  const checkOutHandler = (e: any) => {
-    e.preventDefault();
-    navigate("/shipping");
-  };
+  // const checkOutHandler = (e: any) => {
+  //   e.preventDefault();
+  //   navigate("/shipping");
+  // };
 
   return (
     <div className="container">
@@ -158,7 +204,13 @@ const CartScreen = () => {
             </Link>
             {total > 0 && (
               <div className="col-md-6 d-flex justify-content-md-end mt-3 mt-md-0">
-                <button onClick={checkOutHandler}>Checkout</button>
+                <button
+                  onClick={() => {
+                    onCheckoutOrder(cartReviews);
+                  }}
+                >
+                  {is ? <Loading /> : "Checkout"}
+                </button>
               </div>
             )}
           </div>
@@ -217,7 +269,7 @@ const CompTableCartLv1 = ({ cartCurrent }: any) => {
       ],
     };
     setcheckoutCartParam(checkout_cart_temp);
-    onCheckoutCart(checkout_cart_temp);
+    onCheckoutCart([checkout_cart_temp]);
 
     /*  */
 
@@ -239,7 +291,9 @@ const CompTableCartLv1 = ({ cartCurrent }: any) => {
     const data = res?.data;
 
     if (data) {
-      setcheckedCart(data?.metadata?.checkCart);
+      if (data?.metadata?.length > 0) {
+        setcheckedCart(data?.metadata[0]?.checkCart);
+      }
 
       // navigate(`/cart/${productId}?qty=${qty}`);
       // navigate(`/cart`);
@@ -326,7 +380,7 @@ const CompTableCartLv1 = ({ cartCurrent }: any) => {
                           ],
                         };
                         setcheckoutCartParam(checkout_cart_temp);
-                        onCheckoutCart(checkout_cart_temp);
+                        onCheckoutCart([checkout_cart_temp]);
                       }
 
                       setdataFetched(dataFetched_temp);
