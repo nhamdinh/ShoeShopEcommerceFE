@@ -24,7 +24,8 @@ const Orders = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      setorders(dataFetch);
+      console.log(dataFetch?.metadata);
+      setorders(dataFetch?.metadata);
     }
   }, [dataFetch]);
 
@@ -93,7 +94,7 @@ const Orders = () => {
                             ? moment(order?.paidAt).calendar()
                             : moment(order?.createdAt).calendar()}
                         </td>
-                        <td>${order?.totalPrice}</td>
+                        <td>${order?.totalAmountPay}</td>
                       </tr>
                     );
                   })}

@@ -64,7 +64,14 @@ const CartScreen = () => {
 
     if (data) {
       if (data?.metadata?.length > 0) {
-        console.log(data.metadata);
+        navigate(`/profile`);
+        dispatch(
+          openToast({
+            isOpen: Date.now(),
+            content: "Checkout order Success",
+            step: 1,
+          })
+        );
       }
 
       // navigate(`/cart/${productId}?qty=${qty}`);
@@ -420,7 +427,9 @@ const CompTableCartLv1 = ({ cartCurrent }: any) => {
                         });
                         console.log(checkoutCartsParam_emp);
 
-                        dispatch(setStcheckoutCartsParam(checkoutCartsParam_emp));
+                        dispatch(
+                          setStcheckoutCartsParam(checkoutCartsParam_emp)
+                        );
 
                         onCheckoutCart([checkout_cart_temp]);
                       }
