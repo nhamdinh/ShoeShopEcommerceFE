@@ -179,7 +179,7 @@ const Header = () => {
   }, [dataProfile]);
 
   useEffect(() => {
-    console.log(error);
+    // console.log(error);
   }, [error]);
 
   const [logout] = useLogoutMutation();

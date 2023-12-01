@@ -3,6 +3,13 @@ export const getCartInfo = (state: any) => state.cart.cart;
 export const getProductsCart = (state: any) => state.cart.productsCart;
 export const getDataProducts = (state: any) => state.cart.dataProducts;
 
+/* order */
+
+export const getCheckedCarts = (state: any) => state.order.checkedCarts;
+export const getCheckoutCartsParam = (state: any) =>
+  state.order.checkoutCartsParam;
+
+/* order */
 // custom dialog for confirm
 // custom dialog for confirm
 export const getDialogContent = (state: any) => state.dialog.content;
