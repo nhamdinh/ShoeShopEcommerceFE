@@ -11,7 +11,10 @@ import {
   useGetOrderDetailQuery,
   usePayOrderMutation,
 } from "../store/components/orders/ordersApi";
-import { formatCustomerPhoneNumber } from "../utils/commonFunction";
+import {
+  formatCustomerPhoneNumber,
+  formatMoney,
+} from "../utils/commonFunction";
 import { openToast } from "../store/components/customDialog/toastSlice";
 
 const OrderScreen = () => {
@@ -241,13 +244,19 @@ const OrderScreen = () => {
                     <td>
                       <strong>Products</strong>
                     </td>
-                    <td>${order?.totalAmount}</td>
+                    <td>${formatMoney(order?.totalAmount)}</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <strong>Discount total</strong>
+                    </td>
+                    <td>${formatMoney(order?.totalDiscount)}</td>
                   </tr>
                   <tr>
                     <td>
                       <strong>Shipping</strong>
                     </td>
-                    <td>${order?.feeShip}</td>
+                    <td>${formatMoney(order?.feeShip)}</td>
                   </tr>
                   <tr>
                     <td>
@@ -259,7 +268,7 @@ const OrderScreen = () => {
                     <td>
                       <strong>Total</strong>
                     </td>
-                    <td>${order?.totalAmountPay}</td>
+                    <td>${formatMoney(order?.totalAmountPay)}</td>
                   </tr>
                 </tbody>
               </table>

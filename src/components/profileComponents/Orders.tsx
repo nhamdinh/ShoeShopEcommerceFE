@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Message from "../LoadingError/Error";
 import Loading from "../LoadingError/Loading";
 import { useGetOrderUserQuery } from "../../store/components/orders/ordersApi";
+import { formatMoney } from "../../utils/commonFunction";
 const Orders = () => {
   const navigate = useNavigate();
 
@@ -94,7 +95,7 @@ const Orders = () => {
                             ? moment(order?.paidAt).calendar()
                             : moment(order?.createdAt).calendar()}
                         </td>
-                        <td>${order?.totalAmountPay}</td>
+                        <td>${formatMoney(order?.totalAmountPay)}</td>
                       </tr>
                     );
                   })}
