@@ -11,9 +11,11 @@ import mainLogo3 from "./../images/user.png";
 import DraftProducts from "../components/ProductsShop/DraftProducts";
 import CreateCoupon from "../components/Coupons/CreateCoupon";
 import ListCoupons from "../components/Coupons/ListCoupons";
+import { useNavigate } from "react-router-dom";
 
 const ProfileScreen = () => {
   window.scrollTo(0, 0);
+  const navigate = useNavigate();
 
   const dispatch = useDispatch();
   const [tab, setTab] = useState<any>(1);
@@ -68,6 +70,22 @@ const ProfileScreen = () => {
                   }}
                 >
                   Profile Settings
+                </button>
+                <button
+                  className="nav-link d-flex justify-content-between"
+                  id="v-pills-profile-tab"
+                  data-bs-toggle="pill"
+                  data-bs-target="#v-pills-profile"
+                  type="button"
+                  role="tab"
+                  aria-controls="v-pills-profile"
+                  aria-selected="false"
+                  onClick={() => {
+                    navigate("/shipping")
+                  }}
+                >
+                  shipping address
+                  {/* <span className="badge2">{orders ? orders.length : 0}</span> */}
                 </button>
                 <button
                   className="nav-link d-flex justify-content-between"

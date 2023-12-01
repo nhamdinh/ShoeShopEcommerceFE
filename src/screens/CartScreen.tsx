@@ -5,31 +5,150 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { formatMoney } from "../utils/commonFunction";
 import {
+  useCheckAddressQuery,
   useCheckCartQuery,
   useCheckoutCartMutation,
+  useCheckoutOrderMutation,
   useCreateCartMutation,
-  useRemoveFromCartMutation,
 } from "../store/components/orders/ordersApi";
 import { openToast } from "../store/components/customDialog/toastSlice";
 import { openDialog } from "../store/components/customDialog/dialogSlice";
 import Loading from "../components/LoadingError/Loading";
-import { useGetCouponsByShopQuery } from "../store/components/coupons/couponsApi";
+import { useGetCouponsByShopsMutation } from "../store/components/coupons/couponsApi";
 import { Checkbox } from "antd";
 import moment from "moment";
 
 import { FORMAT_DATE8 } from "../utils/constants";
+import { setStcheckoutCartsParam } from "../store/components/orders/ordersSlice";
+import { getCheckoutCartsParam } from "../store/selector/RootSelector";
+
 const CartScreen = () => {
   // window.scrollTo(0, 0);
-
+  // const checkedCarts = useSelector(getCheckedCarts);
   const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
-
-  const [total, settotal] = useState<any>(0);
-  const [totalArr, settotalArr] = useState<any>([]);
-  const [checkoutCartParams, setcheckoutCartParams] = useState<any>([]);
-  console.log(checkoutCartParams);
+  const checkoutCartsParam = useSelector(getCheckoutCartsParam);
+  const [total, settotal] = useState<any>(1);
   const [cartCurrents, setcartCurrents] = useState<any>([]);
+  // const [cartReviews, setcartReviews] = useState<any>([]);
+  const [discount_shopIds, setdiscount_shopIds] = useState<any>([]);
+  const [addressId, setaddressId] = useState<any>("");
+  // console.log(addressId)
+  const {
+    data: dataCheckAddress,
+    error: errorCheckAddress,
+    isSuccess: isSuccessCheckAddress,
+    isLoading: isLoadingCheckAddress,
+  } = useCheckAddressQuery(
+    {},
+    {
+      refetchOnMountOrArgChange: true,
+      skip: false,
+    }
+  );
+
+  useEffect(() => {
+    if (isSuccessCheckAddress) {
+      setaddressId(dataCheckAddress?._id);
+    }
+  }, [dataCheckAddress]);
+
+  const [checkoutOrder, { isLoading: is, error: er }] =
+    useCheckoutOrderMutation();
+  const onCheckoutOrder = async (checkout_cart: any) => {
+    // console.log(checkout_cart);
+    const res = await checkoutOrder(checkout_cart);
+    //@ts-ignore
+    const data = res?.data;
+
+    if (data) {
+      if (data?.metadata?.length > 0) {
+        navigate(`/profile`);
+        dispatch(
+          openToast({
+            isOpen: Date.now(),
+            content: "Checkout order Success",
+            step: 1,
+          })
+        );
+      }
+
+      // navigate(`/cart/${productId}?qty=${qty}`);
+      // navigate(`/cart`);
+      // dispatch(
+      //   openToast({
+      //     isOpen: Date.now(),
+      //     content: "Apply coupon Success",
+      //     step: 1,
+      //   })
+      // );
+    } else {
+      dispatch(
+        openToast({
+          isOpen: Date.now(),
+          content: "Checkout Cart Failed !",
+          step: 2,
+        })
+      );
+    }
+  };
+
+  // console.log(cartReviews);
+  const [getCouponsByShops, { isLoading, error }] =
+    useGetCouponsByShopsMutation();
+
+  const onGetCouponsByShops = async (values: any) => {
+    // console.log(values);
+    const res = await getCouponsByShops(values);
+    //@ts-ignore
+    const data = res?.data;
+
+    if (data) {
+      const discountsCurrents_temp: any = data?.metadata;
+
+      const cartCurrents_temp: any = cartCurrents;
+      const cartCurrents_emp: any = [];
+      const cartReviews_emp: any = [];
+      cartCurrents_temp.map((cart: any) => {
+        const cart_shopId = cart?.cart_shopId?._id;
+        let cartObj;
+        let cartReviewObj;
+        for (let i = 0; i < discountsCurrents_temp.length; i++) {
+          const discount_shopId = discountsCurrents_temp[i]?.discount_shopId;
+          if (cart_shopId === discount_shopId) {
+            cartObj = {
+              ...cart,
+              ...discountsCurrents_temp[i],
+            };
+            cartReviewObj = {
+              cartId: cart?._id,
+              orderItems: [
+                {
+                  shopId: cart_shopId,
+                  itemProducts: cart?.cart_products,
+                  shopDiscount: [],
+                },
+              ],
+            };
+          }
+        }
+        cartCurrents_emp.push(cartObj);
+        cartReviews_emp.push(cartReviewObj);
+      });
+      // setcartReviews(cartReviews_emp);
+      dispatch(setStcheckoutCartsParam(cartReviews_emp));
+
+      setcartCurrents(cartCurrents_emp);
+    } else {
+    }
+  };
+  useEffect(() => {
+    if (discount_shopIds.length > 0) {
+      onGetCouponsByShops({ discount_shopIds });
+    }
+  }, [discount_shopIds]);
+
   const [cartItems, setcartItems] = useState<any>([]);
   const { data: dataCart, isSuccess: isSuccessCart } = useCheckCartQuery(
     {},
@@ -41,29 +160,37 @@ const CartScreen = () => {
   // console.log(cartCurrents);
   useEffect(() => {
     if (isSuccessCart) {
-      setcartCurrents(dataCart?.metadata);
-      if (dataCart?.metadata.length > 0) {
-        const productsCart = dataCart?.metadata.flatMap(
+      const cartsFetched: any = dataCart?.metadata;
+      setcartCurrents(cartsFetched);
+      if (cartsFetched.length > 0) {
+        const productsCart = cartsFetched.flatMap(
           (cart: any) => cart.cart_products
         );
 
         setcartItems(productsCart || []);
+        const shopIds: any = [];
+        cartsFetched.map((cart: any) => {
+          shopIds.push(cart?.cart_shopId?._id);
+        });
+        setdiscount_shopIds(shopIds);
       }
     }
   }, [dataCart]);
 
-  useEffect(() => {
-    settotal(
-      [...totalArr].reduce((acc, total) => {
-        return +acc + +total?.totalAmountPay;
-      }, 0)
-    );
-  }, [totalArr]);
+  // useEffect(() => {
+  //   // console.log(checkedCarts);
 
-  const checkOutHandler = (e: any) => {
-    e.preventDefault();
-    navigate("/shipping");
-  };
+  //   settotal(
+  //     [...checkedCarts].reduce((acc, total) => {
+  //       return +acc + +total?.totalAmountPay;
+  //     }, 0)
+  //   );
+  // }, [checkedCarts]);
+
+  // const checkOutHandler = (e: any) => {
+  //   e.preventDefault();
+  //   navigate("/shipping");
+  // };
 
   return (
     <div className="container">
@@ -91,69 +218,30 @@ const CartScreen = () => {
           {cartCurrents.map((cartCurrent: any, index: any) => {
             return (
               cartCurrent?.cart_products.length > 0 && (
-                <CompTableCartLv1
-                  cartCurrent={cartCurrent}
-                  settotalArrHandle={(val: any) => {
-                    const totalArr_temp: any = [...totalArr];
-                    let resultArr = totalArr_temp.map((discount: any) => {
-                      if (discount.cartId === val?.cartId) {
-                        discount.totalAmountPay = val?.totalAmountPay;
-                      }
-                      return discount;
-                    });
-
-                    if (
-                      !resultArr.find(
-                        (discount: any) => discount.cartId === val?.cartId
-                      )
-                    ) {
-                      resultArr.push(val);
-                    }
-
-                    settotalArr(resultArr);
-                  }}
-                  setcheckoutCartParamsHandle={(val: any) => {
-                    const checkoutCartParams_temp: any = [
-                      ...checkoutCartParams,
-                    ];
-                    let resultArr = checkoutCartParams_temp.map(
-                      (discount: any) => {
-                        if (discount.cartId === val?.cartId) {
-                          discount.shopDiscount = val?.shopDiscount;
-                        }
-                        return discount;
-                      }
-                    );
-
-                    if (
-                      !resultArr.find(
-                        (discount: any) => discount.cartId === val?.cartId
-                      )
-                    ) {
-                      resultArr.push(val);
-                    }
-
-                    setcheckoutCartParams(resultArr);
-                  }}
-                  key={index}
-                />
+                <CompTableCartLv1 cartCurrent={cartCurrent} key={index} />
               )
             );
           })}
 
           {/* End of cart iterms */}
-          <div className="total">
+          {/*           <div className="total">
             <span className="sub">total:</span>
             <span className="total-price">${formatMoney(total)}</span>
           </div>
-          <hr />
+          <hr /> */}
           <div className="cart-buttons d-flex align-items-center row">
             <Link to="/" className="col-md-6 ">
               <button>Continue To Shopping</button>
             </Link>
             {total > 0 && (
               <div className="col-md-6 d-flex justify-content-md-end mt-3 mt-md-0">
-                <button onClick={checkOutHandler}>Checkout</button>
+                <button
+                  onClick={() => {
+                    onCheckoutOrder(checkoutCartsParam);
+                  }}
+                >
+                  {is ? <Loading /> : "Checkout"}
+                </button>
               </div>
             )}
           </div>
@@ -162,22 +250,21 @@ const CartScreen = () => {
     </div>
   );
 };
-const CompTableCartLv1 = ({
-  cartCurrent,
-  settotalArrHandle,
-  setcheckoutCartParamsHandle,
-}: any) => {
+const CompTableCartLv1 = ({ cartCurrent }: any) => {
+  const checkoutCartsParam = useSelector(getCheckoutCartsParam);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
   const [shopTotal, setshopTotal] = useState<any>(0);
-  const [checkCart, setcheckCart] = useState<any>({});
+  const [checkedCart, setcheckedCart] = useState<any>({});
+
+  // console.log(checkedCart)
 
   const [discount_shopId, setdiscount_shopId] = useState<any>(
     cartCurrent?.cart_shopId?._id
   );
   const [dataFetched, setdataFetched] = useState<any>([]);
-  const [checkoutCartParam, setcheckoutCartParam] = useState<any>({});
+
   const [totalCount, settotalCount] = useState<any>(0);
   /*  */
   const [cartId, setcartId] = useState<any>("");
@@ -212,53 +299,18 @@ const CompTableCartLv1 = ({
         },
       ],
     };
-    setcheckoutCartParam(checkout_cart_temp);
-    onCheckoutCart(checkout_cart_temp);
-    /*  */
-    if (dataFetched.length > 0) {
-      const dataFetched_temp: any = [...dataFetched];
-      dataFetched_temp.map((item: any) => {
-        item.checked = false;
-      });
+    onCheckoutCart([checkout_cart_temp]);
 
+    /*  */
+
+    if (cartCurrent?.discounts?.length > 0) {
+      let dataFetched_temp: any = [];
+      cartCurrent?.discounts.map((data: any, index: number) => {
+        dataFetched_temp.push({ ...data, checked: false, index: index + 1 });
+      });
       setdataFetched(dataFetched_temp);
     }
   }, [cartCurrent]);
-
-  const {
-    data: dataCoupons,
-    error,
-    isSuccess,
-    isLoading,
-  } = useGetCouponsByShopQuery(
-    { discount_shopId },
-    {
-      refetchOnMountOrArgChange: true,
-      skip: false,
-    }
-  );
-  useEffect(() => {
-    if (isSuccess) {
-      let dataFetched_temp: any = [];
-      dataCoupons?.metadata?.discounts.map((data: any, index: number) => {
-        dataFetched_temp.push({ ...data, checked: false, index: index + 1 });
-      });
-
-      setdataFetched(dataFetched_temp);
-      settotalCount(dataCoupons?.metadata?.totalCount);
-    }
-  }, [dataCoupons]);
-
-  useEffect(() => {
-    settotalArrHandle({
-      totalAmountPay: checkCart?.totalAmountPay,
-      cartId: cartCurrent?._id,
-    });
-  }, [checkCart]);
-
-  useEffect(() => {
-    setcheckoutCartParamsHandle(checkoutCartParam);
-  }, [checkoutCartParam]);
 
   const [checkoutCart, { isLoading: is, error: er }] =
     useCheckoutCartMutation();
@@ -269,7 +321,9 @@ const CompTableCartLv1 = ({
     const data = res?.data;
 
     if (data) {
-      setcheckCart(data?.metadata?.checkCart);
+      if (data?.metadata?.length > 0) {
+        setcheckedCart(data?.metadata[0]?.checkCart);
+      }
 
       // navigate(`/cart/${productId}?qty=${qty}`);
       // navigate(`/cart`);
@@ -321,6 +375,7 @@ const CompTableCartLv1 = ({
                   className={`ProductsShopTable__row ${
                     isNotValid ? "zzP" : ""
                   }`}
+                  key={index}
                 >
                   <Checkbox
                     checked={checked}
@@ -354,8 +409,29 @@ const CompTableCartLv1 = ({
                             },
                           ],
                         };
-                        setcheckoutCartParam(checkout_cart_temp);
-                        onCheckoutCart(checkout_cart_temp);
+                        const checkoutCartsParam_temp: any = [
+                          ...checkoutCartsParam,
+                        ];
+                        const checkoutCartsParam_emp: any = [];
+                        checkoutCartsParam_temp.map((cartReview: any) => {
+                          if (
+                            cartReview?.cartId === checkout_cart_temp.cartId
+                          ) {
+                            checkoutCartsParam_emp.push({
+                              ...cartReview,
+                              orderItems: checkout_cart_temp.orderItems,
+                            });
+                          } else {
+                            checkoutCartsParam_emp.push(cartReview);
+                          }
+                        });
+                        console.log(checkoutCartsParam_emp);
+
+                        dispatch(
+                          setStcheckoutCartsParam(checkoutCartsParam_emp)
+                        );
+
+                        onCheckoutCart([checkout_cart_temp]);
                       }
 
                       setdataFetched(dataFetched_temp);
@@ -403,19 +479,19 @@ const CompTableCartLv1 = ({
       <div className="total mt0px">
         <span className="sub">feeShip :</span>
         <span className="total-price">
-          ${formatMoney(checkCart?.feeShip ?? 0)}
+          ${formatMoney(checkedCart?.feeShip ?? 0)}
         </span>
       </div>
       <div className="total mt0px">
         <span className="sub">Discount total :</span>
         <span className="total-price">
-          ${formatMoney(checkCart?.totalDiscount ?? 0)}
+          ${formatMoney(checkedCart?.totalDiscount ?? 0)}
         </span>
       </div>
       <div className="total mt0px">
         <span className="sub">AmountPay total :</span>
         <span className="total-price">
-          ${formatMoney(checkCart?.totalAmountPay ?? 0)}
+          ${formatMoney(checkedCart?.totalAmountPay ?? 0)}
         </span>
       </div>
     </>
@@ -434,34 +510,6 @@ const CompTableCartLv2 = ({ itemProduct, cart_shopId }: any) => {
 
   //@ts-ignore
   const [iterator, setiterator] = useState<any>([...Array(10).keys()]);
-
-  const [removeFromCart, { isLoading: LoadingpayOrder }] =
-    useRemoveFromCartMutation();
-
-  const onRemoveFromCart = async (values: any) => {
-    const res = await removeFromCart(values);
-    //@ts-ignore
-    const data = res?.data;
-
-    if (data) {
-      console.log(data);
-      dispatch(
-        openToast({
-          isOpen: Date.now(),
-          content: "Deleted Product From Cart Success",
-          step: 1,
-        })
-      );
-    } else {
-      dispatch(
-        openToast({
-          isOpen: Date.now(),
-          content: "Delete Product From Cart Failed",
-          step: 2,
-        })
-      );
-    }
-  };
 
   const [createCart, { isLoading: LoadingcreateCart }] =
     useCreateCartMutation();

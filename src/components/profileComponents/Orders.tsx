@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Message from "../LoadingError/Error";
 import Loading from "../LoadingError/Loading";
 import { useGetOrderUserQuery } from "../../store/components/orders/ordersApi";
+import { formatMoney } from "../../utils/commonFunction";
 const Orders = () => {
   const navigate = useNavigate();
 
@@ -24,7 +25,8 @@ const Orders = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      setorders(dataFetch);
+      console.log(dataFetch?.metadata);
+      setorders(dataFetch?.metadata);
     }
   }, [dataFetch]);
 
@@ -93,7 +95,7 @@ const Orders = () => {
                             ? moment(order?.paidAt).calendar()
                             : moment(order?.createdAt).calendar()}
                         </td>
-                        <td>${order?.totalPrice}</td>
+                        <td>${formatMoney(order?.totalAmountPay)}</td>
                       </tr>
                     );
                   })}

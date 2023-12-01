@@ -11,18 +11,24 @@ import {
   useGetOrderDetailQuery,
   usePayOrderMutation,
 } from "../store/components/orders/ordersApi";
-import { formatCustomerPhoneNumber } from "../utils/commonFunction";
+import {
+  formatCustomerPhoneNumber,
+  formatMoney,
+} from "../utils/commonFunction";
 import { openToast } from "../store/components/customDialog/toastSlice";
 
 const OrderScreen = () => {
   window.scrollTo(0, 0);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const location = useLocation();
   const [sdkReady, setSdkReady] = useState<any>(false);
   const [order, setorderDetails] = useState<any>({});
   const [orderId, setorderId] = useState<any>(location.pathname.split("/")[2]);
-  const dispatch = useDispatch();
+  const [orderItems, setorderItems] = useState<any>([]);
+
+  console.log(order);
   const {
     data: dataFetch,
     error,
@@ -37,7 +43,8 @@ const OrderScreen = () => {
   );
   useEffect(() => {
     if (isSuccess) {
-      setorderDetails(dataFetch);
+      setorderDetails(dataFetch?.metadata);
+      setorderItems(dataFetch?.metadata?.orderItems[0]?.itemProducts);
 
       const addPayPalScript = async () => {
         const { data: clientId } = await axios.get(
@@ -118,11 +125,11 @@ const OrderScreen = () => {
                   <h5>
                     <strong>Customer</strong>
                   </h5>
-                  <p>{order?.user?.name}</p>
-                  <p>{formatCustomerPhoneNumber(order?.user?.phone)}</p>
+                  <p>{order?.userId?.name}</p>
+                  <p>{formatCustomerPhoneNumber(order?.userId?.phone)}</p>
                   <p>
-                    <a href={`mailto:${order?.user?.email}`}>
-                      {order?.user?.email}
+                    <a href={`mailto:${order?.userId?.email}`}>
+                      {order?.userId?.email}
                     </a>
                   </p>
                 </div>
@@ -195,14 +202,14 @@ const OrderScreen = () => {
 
           <div className="row order-products justify-content-between">
             <div className="col-lg-8">
-              {order?.orderItems?.length === 0 ? (
+              {orderItems?.length === 0 ? (
                 <Message
                   variant="alert-info mt-5"
                   messText="Your order is empty"
                 ></Message>
               ) : (
                 <>
-                  {order?.orderItems?.map((item: any, index: any) => (
+                  {orderItems?.map((item: any, index: any) => (
                     <div className="order-product row" key={index}>
                       <div className="col-md-3 col-6">
                         <img src={item?.image} alt={item?.name} />
@@ -210,7 +217,7 @@ const OrderScreen = () => {
                       <div className="col-md-5 col-6 d-flex align-items-center">
                         <h6
                           onClick={() => {
-                            navigate(`/product-detail?id=${item?.product}`);
+                            navigate(`/product-detail?id=${item?.product_id}`);
                           }}
                         >
                           {item?.name}
@@ -218,11 +225,11 @@ const OrderScreen = () => {
                       </div>
                       <div className="mt-3 mt-md-0 col-md-2 col-6  d-flex align-items-center flex-column justify-content-center ">
                         <h4>QUANTITY</h4>
-                        <h6>{item?.qty}</h6>
+                        <h6>{item?.quantity}</h6>
                       </div>
                       <div className="mt-3 mt-md-0 col-md-2 col-6 align-items-end  d-flex flex-column justify-content-center ">
                         <h4>SUBTOTAL</h4>
-                        <h6>${item?.qty * item?.price}</h6>
+                        <h6>${item?.quantity * item?.price}</h6>
                       </div>
                     </div>
                   ))}
@@ -237,13 +244,19 @@ const OrderScreen = () => {
                     <td>
                       <strong>Products</strong>
                     </td>
-                    <td>${order?.totalPriceItems}</td>
+                    <td>${formatMoney(order?.totalAmount)}</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <strong>Discount total</strong>
+                    </td>
+                    <td>${formatMoney(order?.totalDiscount)}</td>
                   </tr>
                   <tr>
                     <td>
                       <strong>Shipping</strong>
                     </td>
-                    <td>${order?.shippingPrice}</td>
+                    <td>${formatMoney(order?.feeShip)}</td>
                   </tr>
                   <tr>
                     <td>
@@ -255,7 +268,7 @@ const OrderScreen = () => {
                     <td>
                       <strong>Total</strong>
                     </td>
-                    <td>${order?.totalPrice}</td>
+                    <td>${formatMoney(order?.totalAmountPay)}</td>
                   </tr>
                 </tbody>
               </table>
@@ -265,7 +278,7 @@ const OrderScreen = () => {
                     <Loading />
                   ) : (
                     <PayPalButton
-                      amount={order.totalPrice}
+                      amount={order.totalAmountPay}
                       onSuccess={successPaymentHandler}
                     />
                   )}

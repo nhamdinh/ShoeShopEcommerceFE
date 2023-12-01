@@ -42,7 +42,18 @@ export const couponsApi = createApi({
         body: data,
       }),
     }),
+    getCouponsByShops: builder.mutation({
+      query: (data) => ({
+        url: `/discounts/get-all-by-shop`,
+        method: "POST",
+        body: data,
+      }),
+    }),
   }),
 });
 
-export const { useGetCouponsByShopQuery, useCreateCouponMutation } = couponsApi;
+export const {
+  useGetCouponsByShopQuery,
+  useCreateCouponMutation,
+  useGetCouponsByShopsMutation,
+} = couponsApi;

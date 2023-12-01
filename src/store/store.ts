@@ -9,6 +9,8 @@ import { couponsApi } from "./components/coupons/couponsApi";
 import { productsApi } from "./components/products/productsApi";
 import productsReducer from "./components/products/productsSlice";
 import { ordersApi } from "./components/orders/ordersApi";
+import ordersReducer from "./components/orders/ordersSlice";
+
 import { authApi } from "./components/auth/authApi";
 import authReducer, { userLogout } from "./components/auth/authSlice";
 import toastReducer from "./components/customDialog/toastSlice";
@@ -37,6 +39,7 @@ const rootReducer = {
   modal: modalReducer,*/
   dialog: dialogReducer,
   cart: productsReducer,
+  order: ordersReducer,
   toastR: toastReducer,
 };
 const rtkQueryErrorLogger: Middleware =

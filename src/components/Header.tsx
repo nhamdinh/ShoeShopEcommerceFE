@@ -179,7 +179,7 @@ const Header = () => {
   }, [dataProfile]);
 
   useEffect(() => {
-    console.log(error);
+    // console.log(error);
   }, [error]);
 
   const [logout] = useLogoutMutation();
@@ -333,6 +333,9 @@ const Header = () => {
                             onClick={(e) => {
                               e.stopPropagation();
                               // submitHandler(item?.name, brand);
+
+                              navigate(`product-detail?id=${item?._id}`);
+                              setKeyword("");
                             }}
                             key={item?._id}
                           >
@@ -436,6 +439,8 @@ const Header = () => {
                           onClick={(e) => {
                             e.stopPropagation();
                             // submitHandler(item?.name, brand);
+                            navigate(`product-detail?id=${item?._id}`);
+                            setKeyword("");
                           }}
                           key={item?._id}
                         >
