@@ -49,7 +49,7 @@ const ShippingScreen = () => {
 
     if (data) {
       console.log(data);
-      navigate("/payment");
+      navigate("/profile");
     } else {
     }
   };
