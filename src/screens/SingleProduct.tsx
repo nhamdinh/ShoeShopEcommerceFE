@@ -76,7 +76,7 @@ const SingleProduct = () => {
 
   useEffect(() => {
     if (isSuccessCheck) {
-      sethasBuyer(dataCheck?.hasBuyer);
+      sethasBuyer(dataCheck?.metadata);
     }
   }, [dataCheck]);
 
@@ -157,9 +157,10 @@ const SingleProduct = () => {
   const submitHandler = (e: any) => {
     e.preventDefault();
     onCreateReviewProduct({
-      rating: rating,
+      rating: +rating,
       comment: comment,
       productId: productId,
+      shopId: product?.product_shop,
     });
   };
 
@@ -196,7 +197,7 @@ const SingleProduct = () => {
                   <div className="flex-box d-flex justify-content-between align-items-center">
                     <h6>Reviews</h6>
                     <Rating
-                      value={product?.rating}
+                      value={Math.ceil(product?.product_ratings ?? 0)}
                       text={`${product?.numReviews} reviews`}
                     />
                   </div>
