@@ -76,7 +76,7 @@ const SingleProduct = () => {
 
   useEffect(() => {
     if (isSuccessCheck) {
-      sethasBuyer(dataCheck?.hasBuyer);
+      sethasBuyer(dataCheck?.metadata);
     }
   }, [dataCheck]);
 

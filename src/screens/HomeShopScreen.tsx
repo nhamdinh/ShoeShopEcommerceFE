@@ -46,6 +46,7 @@ const HomeShopScreen = () => {
         shopId={shopId}
         productShop={dataProfileShop?.metadata}
       />
+      <CalltoActionSection />
     </>
   );
 };

@@ -21,7 +21,6 @@ const HomeScreen = () => {
   return (
     <>
       <ShopSection keyword={keyword} pagenumber={pagenumber} brand={brand} />
-      <CalltoActionSection />
       <ContactInfo />
     </>
   );

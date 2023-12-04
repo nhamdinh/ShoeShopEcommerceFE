@@ -3,8 +3,11 @@ import { useSendEmailMutation } from "../../store/components/auth/authApi";
 import { useDispatch } from "react-redux";
 import { openToast } from "../../store/components/customDialog/toastSlice";
 import Loading from "../LoadingError/Loading";
+import { useSelector } from "react-redux";
+import { getUserInfo } from "../../store/selector/RootSelector";
 
 const CalltoActionSection = () => {
+  const userInfo = useSelector(getUserInfo);
   const [email, setemail] = useState<any>("");
   const [sendEmail, { isLoading, error }] = useSendEmailMutation();
   const dispatch = useDispatch();
@@ -54,7 +57,7 @@ const CalltoActionSection = () => {
         <div className="row">
           <div className="col-xs-12">
             <div className="subscribe-head">
-              <h2>DO you need more tips?</h2>
+              <h2>FOLLOW SHOP</h2>
               <p>Sign up free and get the latest tips.</p>
               <div className="form-section">
                 <input
@@ -72,7 +75,10 @@ const CalltoActionSection = () => {
                 ) : (
                   <input
                     onClick={() => {
-                      onSendEmail({ email: email });
+                      onSendEmail({
+                        email: email,
+                        productShopName: userInfo?.productShopName,
+                      });
                     }}
                     value="Yes. I want!"
                     name="subscribe"

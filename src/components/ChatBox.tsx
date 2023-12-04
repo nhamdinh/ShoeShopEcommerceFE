@@ -47,6 +47,7 @@ export default function ChatBox() {
 
   /*Server socketIo  */
   const [socketUsernameTo, setSocketUsernameTo] = useState<any>("");
+  const [productShopName, setproductShopName] = useState<any>("");
   const [phone, setphone] = useState<any>("");
   const [message, setMessage] = useState<any>("");
   // const [socketId, setIdSocketId] = useState<any>();
@@ -56,8 +57,12 @@ export default function ChatBox() {
   useEffect(() => {
     if (userInfo?.admins) {
       setParams({ user1: userInfo?.email, user2: userInfo?.admins[0]?.email });
-      setSocketUsernameTo(userInfo?.admins[0]?.email);
-      setphone(userInfo?.admins[0]?.phone);
+      const zzz: any = userInfo?.admins.find((ad: any) => {
+        if (ad?.email === "admin@example.com") return ad;
+      });
+      setSocketUsernameTo(zzz?.email);
+      setproductShopName(zzz?.productShopName);
+      setphone(zzz?.phone);
     }
     //@ts-ignore
     socketRef.current = socketIOClient.connect(SOCKET_HOST);
@@ -139,7 +144,7 @@ export default function ChatBox() {
             }}
             className="box__chat__name"
           >
-            {socketUsernameTo} - {phone}
+            {productShopName} - {phone}
           </p>
           {isLoading ? (
             <Loading />
