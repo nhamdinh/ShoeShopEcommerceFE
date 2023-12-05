@@ -32,6 +32,7 @@ export const productsApi = createApi({
     "GetCategorys",
     "tag_getPublishedProducts",
     "tag_getDraftProducts",
+    "getByProduct_tag",
   ],
   endpoints: (builder) => ({
     getProducts: builder.query({
@@ -49,13 +50,20 @@ export const productsApi = createApi({
       }),
       providesTags: ["GetProductsDetail"],
     }),
+    getByProduct: builder.query({
+      query: (data) => ({
+        url: `/reviews/get-by-product/${data.productId}`,
+        method: "GET",
+      }),
+      providesTags: ["getByProduct_tag"],
+    }),
     createReviewProduct: builder.mutation({
       query: (data) => ({
         url: `/products/${data.productId}/review`,
         method: "POST",
         body: data,
       }),
-      invalidatesTags: ["GetProductsDetail"],
+      invalidatesTags: ["getByProduct_tag", "GetProductsDetail"],
     }),
     checkIsBuyer: builder.query({
       query: (data) => ({
@@ -161,6 +169,7 @@ export const {
   useGetPublishedProductsQuery,
   useGetDraftProductsQuery,
   useGetProductsDetailQuery,
+  useGetByProductQuery,
   useCreateReviewProductMutation,
   useCreateProductMutation,
   useGetCategorysQuery,

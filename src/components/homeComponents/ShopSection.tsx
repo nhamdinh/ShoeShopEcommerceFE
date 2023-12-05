@@ -111,8 +111,8 @@ const ShopSection = ({ pagenumber, keyword, brand }: any) => {
                             </p>
 
                             <Rating
-                              value={product?.rating}
-                              text={`${product?.numReviews} reviews`}
+                              value={product?.product_ratings ?? 5}
+                              text={`${product?.numReviews ?? 0} reviews`}
                             />
                             <h3>
                               ${formatMoneyCurrency(product?.product_price)}
