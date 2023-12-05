@@ -10,6 +10,7 @@ import { getUrlParams, rawMarkup } from "../utils/commonFunction";
 import {
   useCheckIsBuyerQuery,
   useCreateReviewProductMutation,
+  useGetByProductQuery,
   useGetProductsDetailQuery,
 } from "../store/components/products/productsApi";
 import { useCreateCartMutation } from "../store/components/orders/ordersApi";
@@ -56,6 +57,29 @@ const SingleProduct = () => {
       setdataFetched(dataFetch?.metadata);
     }
   }, [dataFetch]);
+
+  const [dataReview1, setdataReview1] = useState<any>([]);
+  
+  const {
+    data: dataReview,
+    error: err,
+    isSuccess: iss,
+    isLoading: isl,
+  } = useGetByProductQuery(
+    {
+      productId,
+    },
+    {
+      refetchOnMountOrArgChange: true,
+      skip: false,
+    }
+  );
+
+  useEffect(() => {
+    if (iss) {
+      setdataReview1(dataReview?.metadata);
+    }
+  }, [dataReview]);
 
   const [hasBuyer, sethasBuyer] = useState<any>(false);
 
@@ -164,6 +188,10 @@ const SingleProduct = () => {
     });
   };
 
+  const sliceString = (string: any) => {
+    return string.slice(0, 2) + "***";
+  };
+
   return (
     <div className="container single-product">
       {isLoading ? (
@@ -197,8 +225,8 @@ const SingleProduct = () => {
                   <div className="flex-box d-flex justify-content-between align-items-center">
                     <h6>Reviews</h6>
                     <Rating
-                      value={Math.ceil(product?.product_ratings ?? 0)}
-                      text={`${product?.numReviews} reviews`}
+                      value={product?.product_ratings ?? 5}
+                      text={`${product?.numReviews ?? 0} reviews`}
                     />
                   </div>
                   {1 ? (
@@ -234,19 +262,20 @@ const SingleProduct = () => {
           <div className="row my-5">
             <div className="col-md-6">
               <h6 className="mb-3">REVIEWS</h6>
-              {product?.reviews?.length === 0 ? (
+              {dataReview1?.length === 0 ? (
                 <Message
                   variant="alert-info mt-3"
                   messText="No Reviews"
                 ></Message>
               ) : (
-                product?.reviews?.map((review: any) => (
+                dataReview1?.map((review: any) => (
                   <div
                     key={review?._id}
                     className="mb-5 mb-md-3 bg-light p-3 shadow-sm rounded"
                   >
                     <strong>{review?.name}</strong>
-                    <Rating value={review?.rating} />
+                    <Rating value={review?.rating ?? 5} />
+                    <p>Created by: {sliceString(review?.userId?.name)}</p>
                     <span>{moment(review?.createdAt).calendar()}</span>
                     <div className="alert alert-info mt-3 pre-wrap">
                       {/* {review?.comment} */}

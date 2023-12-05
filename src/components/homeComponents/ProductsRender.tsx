@@ -118,82 +118,86 @@ const ProductsRender = ({
                 <Message variant="alert-danger" mess={error} />
               ) : dataFetched?.length > 0 ? (
                 <>
-                  {dataFetched?.map((product: any) => (
-                    <div
-                      className="shop col-lg-4 col-md-6 col-sm-6"
-                      key={product?._id}
-                    >
-                      <div className="border-product">
-                        <div
-                          onClick={() => {
-                            navigate(`/product-detail?id=${product?._id}`);
-                          }}
-                        >
-                          <div className="shopBack">
-                            <img
-                              className="shopBack__img"
-                              src={product?.product_thumb}
-                              alt={product?.product_name}
-                            />
-                            <div className="shopBack__shopName">
-                              {product?.product_shop?.productShopName}
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="shoptext">
-                          <p>
-                            <div
-                              onClick={() => {
-                                navigate(`/product-detail?id=${product?._id}`);
-                              }}
-                            >
-                              {product?.product_name}
-                            </div>
-                          </p>
-
-                          <Rating
-                            value={product?.rating}
-                            text={`${product?.numReviews} reviews`}
-                          />
-                          <h3>
-                            ${formatMoneyCurrency(product?.product_price)}
-                          </h3>
-                        </div>
-                      </div>
-                      {product?.product_shop?.email === userInfo?.email && (
-                        <div className="update__product mt20px">
+                  {dataFetched?.map((product: any) => {
+                    return (
+                      <div
+                        className="shop col-lg-4 col-md-6 col-sm-6"
+                        key={product?._id}
+                      >
+                        <div className="border-product">
                           <div
-                            className="btn btn-warning"
                             onClick={() => {
-                              navigate(`/product/${product?._id}/edit`);
+                              navigate(`/product-detail?id=${product?._id}`);
                             }}
                           >
-                            edit
+                            <div className="shopBack">
+                              <img
+                                className="shopBack__img"
+                                src={product?.product_thumb}
+                                alt={product?.product_name}
+                              />
+                              <div className="shopBack__shopName">
+                                {product?.product_shop?.productShopName}
+                              </div>
+                            </div>
                           </div>
-                          {product?.isPublished ? (
-                            <div
-                              className="btn btn-danger"
-                              onClick={() => deleteHandler(product?._id)}
-                            >
-                              to draft
-                            </div>
-                          ) : (
-                            <div
-                              className="btn btn-info"
-                              onClick={() =>
-                                onPublishProduct({
-                                  productId: product?._id,
-                                })
-                              }
-                            >
-                              to Published
-                            </div>
-                          )}
+
+                          <div className="shoptext">
+                            <p>
+                              <div
+                                onClick={() => {
+                                  navigate(
+                                    `/product-detail?id=${product?._id}`
+                                  );
+                                }}
+                              >
+                                {product?.product_name}
+                              </div>
+                            </p>
+
+                            <Rating
+                              value={product?.product_ratings ?? 5}
+                              text={`${product?.numReviews ?? 0} reviews`}
+                            />
+                            <h3>
+                              ${formatMoneyCurrency(product?.product_price)}
+                            </h3>
+                          </div>
                         </div>
-                      )}
-                    </div>
-                  ))}
+                        {product?.product_shop?.email === userInfo?.email && (
+                          <div className="update__product mt20px">
+                            <div
+                              className="btn btn-warning"
+                              onClick={() => {
+                                navigate(`/product/${product?._id}/edit`);
+                              }}
+                            >
+                              edit
+                            </div>
+                            {product?.isPublished ? (
+                              <div
+                                className="btn btn-danger"
+                                onClick={() => deleteHandler(product?._id)}
+                              >
+                                to draft
+                              </div>
+                            ) : (
+                              <div
+                                className="btn btn-info"
+                                onClick={() =>
+                                  onPublishProduct({
+                                    productId: product?._id,
+                                  })
+                                }
+                              >
+                                to Published
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
                 </>
               ) : (
                 <Message variant="alert-danger" messText="No Products" />
