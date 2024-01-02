@@ -6,8 +6,8 @@ import { useUpdateProfileMutation } from "../../store/components/auth/authApi";
 import { openToast } from "../../store/components/customDialog/toastSlice";
 
 const ProfileTabs = ({ userInfo }: any) => {
-  const [name, setName] = useState<any>(userInfo.name);
-  const [email, setEmail] = useState<any>(userInfo.email);
+  const [name, setName] = useState<any>(userInfo?.name ?? "");
+  const [email, setEmail] = useState<any>(userInfo?.email ?? "");
   const [password, setPassword] = useState<any>("");
   const [confirmPassword, setConfirmPassword] = useState<any>("");
 
@@ -46,8 +46,8 @@ const ProfileTabs = ({ userInfo }: any) => {
   };
 
   useEffect(() => {
-    setName(userInfo.name);
-    setEmail(userInfo.email);
+    setName(userInfo?.name ?? "");
+    setEmail(userInfo?.email ?? "");
   }, [userInfo]);
 
   const submitHandler = (e: any) => {
@@ -66,6 +66,7 @@ const ProfileTabs = ({ userInfo }: any) => {
 
     // Password match
   };
+
   return (
     <>
       {error && <Message variant="alert-danger" mess={error}></Message>}
@@ -95,6 +96,7 @@ const ProfileTabs = ({ userInfo }: any) => {
             />
           </div>
         </div>
+
         <div className="col-md-6">
           <div className="form">
             <label htmlFor="account-pass">New Password</label>
