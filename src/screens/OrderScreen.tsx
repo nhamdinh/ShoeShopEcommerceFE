@@ -16,6 +16,7 @@ import {
   formatMoney,
 } from "../utils/commonFunction";
 import { openToast } from "../store/components/customDialog/toastSlice";
+import { API_LINK } from "../utils/constants";
 
 const OrderScreen = () => {
   window.scrollTo(0, 0);
@@ -48,7 +49,7 @@ const OrderScreen = () => {
 
       const addPayPalScript = async () => {
         const { data: clientId } = await axios.get(
-          "http://localhost:5000/api/config/paypal"
+          `${API_LINK}/config/paypal`
         );
         const script = document.createElement("script");
         script.type = "text/javascript";
