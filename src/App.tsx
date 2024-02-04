@@ -8,12 +8,13 @@ import { PrivateRoutes } from "./routers";
 import TopHeader from "./components/TopHeader";
 import Toast from "./components/LoadingError/Toast";
 import CustomDialog from "./components/customDialog";
-import { REACT_ENV } from "./utils/constants";
+import { API_LINK, REACT_ENV } from "./utils/constants";
 import ChatBox from "./components/ChatBox";
 
 const App = () => {
   console.log("env ::: ", REACT_ENV);
   const location = useLocation();
+  console.log(`API_LINK :::[${API_LINK}]`);
 
   return (
     <div className="app-wrapper">
