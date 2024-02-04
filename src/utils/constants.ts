@@ -1,5 +1,5 @@
-export const API_LINK = process.env.REACT_APP_BASE_API_URL;
-export const REACT_ENV = process.env.REACT_PUBLIC_ENVV;
+export const API_LINK = process.env.REACT_APP_API_URL;
+export const REACT_ENV = process.env.REACT_PUBLIC_ENV;
 export const SOCKET_HOST = process.env.REACT_APP_SOCKET_HOST;
 /* env */
 export const NAME_STORAGE = "name";
