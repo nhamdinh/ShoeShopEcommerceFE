@@ -1,6 +1,6 @@
-export const API_LINK = process.env.REACT_APP_API_URL;
+export const API_LINK = 'http://104.154.49.183:5000/api';
 export const REACT_ENV = process.env.REACT_PUBLIC_ENV;
-export const SOCKET_HOST = process.env.REACT_APP_SOCKET_HOST;
+export const SOCKET_HOST = 'http://104.154.49.183:6000';
 /* env */
 export const NAME_STORAGE = "name";
 export const ACCESSTOKEN_STORAGE = "accessToken";
