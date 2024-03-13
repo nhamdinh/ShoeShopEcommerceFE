@@ -54,7 +54,7 @@
     "workbox-strategies": "^6.5.3"
   },
   "scripts": {
-    "dev": "set PORT=3000&& set REACT_APP_API_URL=http://localhost:5000/api&& set REACT_APP_SOCKET_HOST=http://localhost:6000&& react-scripts start",
+    "dev": "set PORT=3000&& set REACT_APP_API_URL=http://localhost:5000/api&& set REACT_APP_SOCKET_HOST=http://localhost:6000&& react-scripts --openssl-legacy-provider start",
     "start": "set PORT=3000&& set REACT_APP_API_URL=http://104.154.49.183:5000/api&& set REACT_APP_SOCKET_HOST=http://104.154.49.183:6000&& react-scripts  --openssl-legacy-provider start",
     "build": "set PORT=3000&& set REACT_APP_API_URL=http://104.154.49.183:5000/api&& set REACT_APP_SOCKET_HOST=http://104.154.49.183:6000&& react-scripts --openssl-legacy-provider build",
     "test": "react-scripts test",
