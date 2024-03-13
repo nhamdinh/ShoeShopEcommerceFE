@@ -46,8 +46,8 @@ const ShopSection = ({ pagenumber, keyword, brand }: any) => {
   useEffect(() => {
     if (isSuccess) {
       setdataFetched(dataProducts?.metadata?.products);
-      setTotal(dataProducts?.totalPages);
-      setCurrentPage(dataProducts?.page);
+      setTotal(dataProducts?.metadata?.totalPages);
+      setCurrentPage(dataProducts?.metadata?.page);
     }
   }, [dataProducts]);
 
