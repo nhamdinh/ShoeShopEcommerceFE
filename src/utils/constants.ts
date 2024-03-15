@@ -1,4 +1,5 @@
-export const API_LINK = 'http://104.154.49.183:5000/api';
+// export const API_LINK = 'http://104.154.49.183:5000/api';
+export const API_LINK = 'http://localhost:5001/api';
 export const REACT_ENV = process.env.REACT_PUBLIC_ENV;
 export const SOCKET_HOST = 'http://104.154.49.183:6000';
 /* env */

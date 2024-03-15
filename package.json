@@ -2,7 +2,7 @@
   "name": "shop-ecommerce",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://104.154.49.183:5000/api/",
+  "proxy": "http://localhost:5001/api/",
   "dependencies": {
     "@ant-design/icons": "^5.0.1",
     "@emotion/react": "^11.9.3",
@@ -54,9 +54,9 @@
     "workbox-strategies": "^6.5.3"
   },
   "scripts": {
-    "dev": "set PORT=3000&& set REACT_APP_API_URL=http://localhost:5000/api&& set REACT_APP_SOCKET_HOST=http://localhost:6000&& react-scripts --openssl-legacy-provider start",
-    "start": "set PORT=3000&& set REACT_APP_API_URL=http://104.154.49.183:5000/api&& set REACT_APP_SOCKET_HOST=http://104.154.49.183:6000&& react-scripts  --openssl-legacy-provider start",
-    "build": "set PORT=3000&& set REACT_APP_API_URL=http://104.154.49.183:5000/api&& set REACT_APP_SOCKET_HOST=http://104.154.49.183:6000&& react-scripts --openssl-legacy-provider build",
+    "dev": "set PORT=3000&& set REACT_APP_API_URL=http://localhost:5001/api&& set REACT_APP_SOCKET_HOST=http://localhost:6000&& react-scripts --openssl-legacy-provider start",
+    "start": "set PORT=3000&& set REACT_APP_API_URL=http://104.154.49.183:5001/api&& set REACT_APP_SOCKET_HOST=http://104.154.49.183:6000&& react-scripts  --openssl-legacy-provider start",
+    "build": "set PORT=3000&& set REACT_APP_API_URL=http://104.154.49.183:5001/api&& set REACT_APP_SOCKET_HOST=http://104.154.49.183:6000&& react-scripts --openssl-legacy-provider build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
