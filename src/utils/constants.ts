@@ -1,5 +1,6 @@
-export const API_LINK = process.env.REACT_APP_API_URL ?? "http://ec2-18-142-253-169.ap-southeast-1.compute.amazonaws.com:5000/api";
-export const SOCKET_HOST = process.env.REACT_APP_SOCKET_HOST ?? 'http://ec2-18-142-253-169.ap-southeast-1.compute.amazonaws.com:6000';
+export const API_LINK = process.env.REACT_APP_API_URL ?? "http://ec2-18-139-1-145.ap-southeast-1.compute.amazonaws.com:5000/api";
+export const SOCKET_HOST = process.env.REACT_APP_SOCKET_HOST ?? 'http://ec2-18-139-1-145.ap-southeast-1.compute.amazonaws.com:6000';
+
 // export const API_LINK = 'http://localhost:5000/api';
 // export const SOCKET_HOST = 'http://localhost:6000';
 /* env */
