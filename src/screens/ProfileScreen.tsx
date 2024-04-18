@@ -100,11 +100,11 @@ const ProfileScreen = () => {
                 <span className="author-card-position">
                   <>Joined {moment(userInfo?.createdAt).format("LL")}</>
                 </span>
-{/*                 <div>
+                <div>
                   <Child name={"kame"} />
                   <div>{tab1}</div>
                   <button onClick={handleClick}>+</button>
-                </div> */}
+                </div>
               </div>
             </div>
           </div>

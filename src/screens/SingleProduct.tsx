@@ -203,7 +203,7 @@ const SingleProduct = () => {
           <div className="row">
             <div className="col-md-6">
               <div className="single-image">
-                <img src={product?.product_thumb} alt="product_thumb" />
+                <img loading="lazy" src={product?.product_thumb} alt="product_thumb" />
               </div>
             </div>
             <div className="col-md-6">
