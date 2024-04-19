@@ -28,6 +28,7 @@ export const productsApi = createApi({
   }),
   tagTypes: [
     "GetProducts",
+    "GetProductsMax",
     "GetProductsDetail",
     "GetCategorys",
     "tag_getPublishedProducts",
@@ -35,6 +36,7 @@ export const productsApi = createApi({
     "getByProduct_tag",
   ],
   endpoints: (builder) => ({
+
     getProducts: builder.query({
       query: (data) => ({
         url: `/products/all`,
@@ -43,6 +45,17 @@ export const productsApi = createApi({
       }),
       providesTags: ["GetProducts"],
     }),
+
+    getProductsMax: builder.query({
+      query: (data) => ({
+        url: `/products/all-max`,
+        method: "GET",
+        params: data,
+      }),
+      providesTags: ["GetProductsMax"],
+    }),
+
+
     getProductsDetail: builder.query({
       query: (data) => ({
         url: `/products/detail/${data.id}`,
@@ -172,6 +185,7 @@ export const productsApi = createApi({
 
 export const {
   useGetProductsQuery,
+  useGetProductsMaxQuery,
   useGetCodesQuery,
   useGetPublishedProductsQuery,
   useGetDraftProductsQuery,

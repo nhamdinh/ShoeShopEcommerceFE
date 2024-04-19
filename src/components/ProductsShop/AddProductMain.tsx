@@ -245,6 +245,7 @@ const AddProductMain = ({ userInfo }: any) => {
                       <select
                         value={brand}
                         onChange={(e) => setbrand(e.target.value)}
+                        className="capitalize"
                       >
                         {brands.map((br: any, index: number) => (
                           <option key={index} value={br?.brand}>
@@ -257,9 +258,10 @@ const AddProductMain = ({ userInfo }: any) => {
                       <select
                         value={categor}
                         onChange={(e) => setcategory(e.target.value)}
+                        className="capitalize"
                       >
                         {categorys.map((cate: any, index: number) => (
-                          <option key={index} value={cate?.mainCode_value}>
+                          <option  key={index} value={cate?.mainCode_value}>
                             {cate?.mainCode_value}
                           </option>
                         ))}
@@ -342,7 +344,6 @@ const AddProductMain = ({ userInfo }: any) => {
                       placeholder="Type here"
                       className="form-control"
                       id="urlImage"
-                      required
                       value={urlImage}
                       onChange={(e) => setUrlImage(e.target.value)}
                     />

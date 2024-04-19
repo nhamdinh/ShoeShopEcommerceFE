@@ -17,7 +17,7 @@ import {
   useCreateCoMutation,
   useGetBrandsQuery,
   useGetCoQuery,
-  useGetProductsQuery,
+  useGetProductsMaxQuery,
 } from "../store/components/products/productsApi";
 import { getDataProducts, getUserInfo } from "../store/selector/RootSelector";
 import mainLogo from "./../images/AVA79.svg";
@@ -109,7 +109,7 @@ const Header = () => {
     error: errdataProducts,
     isSuccess: isSuccessdataProducts,
     isLoading: isLoadingdataProducts,
-  } = useGetProductsQuery(
+  } = useGetProductsMaxQuery(
     {
       page: 1,
       limit: 1000,
@@ -291,7 +291,7 @@ const Header = () => {
                   </button>
 
                   <select
-                    className="search-button"
+                    className="search-button capitalize"
                     value={brand}
                     onChange={(e) => {
                       setbrand(e.target.value);
@@ -396,7 +396,7 @@ const Header = () => {
                   search
                 </button>
                 <select
-                  className="search-button"
+                  className="search-button capitalize"
                   value={brand}
                   onChange={(e) => {
                     setbrand(e.target.value);

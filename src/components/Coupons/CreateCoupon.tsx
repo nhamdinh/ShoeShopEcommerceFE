@@ -129,7 +129,7 @@ const CreateCoupon = ({ userInfo }: any) => {
                     <div className="flex-box d-flex justify-content-between align-items-center gap10px">
                       <h6 className="form-label">discount_type</h6>
                       <select
-                        className="form-label"
+                        className="form-label capitalize"
                         value={discount_type}
                         onChange={(e) => setdiscount_type(e.target.value)}
                       >
@@ -280,7 +280,7 @@ const CreateCoupon = ({ userInfo }: any) => {
                     <div className="flex-box d-flex justify-content-between align-items-center gap10px">
                       <h6 className="form-label">discount_applyTo</h6>
                       <select
-                        className="form-label"
+                        className="form-label capitalize"
                         value={discount_applyTo}
                         onChange={(e) => setdiscount_applyTo(e.target.value)}
                       >

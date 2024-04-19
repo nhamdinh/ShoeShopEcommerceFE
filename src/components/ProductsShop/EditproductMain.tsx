@@ -242,7 +242,7 @@ const EditProductMain = () => {
     setImage(product?.product_thumb);
     setProduct_thumb_small(product?.product_thumb_small);
     setFileList([{ url: product?.product_thumb }]);
-    
+
     setCountInStock(product?.product_quantity);
     setcategory(product?.product_type);
     setbrand(product?.product_attributes?.brand);
@@ -295,6 +295,7 @@ const EditProductMain = () => {
                             <div className="flex-box d-flex justify-content-between align-items-center">
                               <h6>Brand</h6>
                               <select
+                              className="capitalize"
                                 value={brand}
                                 onChange={(e) => setbrand(e.target.value)}
                               >
@@ -307,6 +308,7 @@ const EditProductMain = () => {
                               <h6>Category</h6>
 
                               <select
+                              className="capitalize"
                                 value={categor}
                                 disabled
                                 onChange={(e) => setcategory(e.target.value)}
@@ -406,7 +408,6 @@ const EditProductMain = () => {
                               placeholder="Type here"
                               className="form-control"
                               id="urlImage"
-                              required
                               value={urlImage}
                               onChange={(e) => setUrlImage(e.target.value)}
                             />

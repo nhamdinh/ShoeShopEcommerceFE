@@ -132,7 +132,7 @@ const ProductsRender = ({
                           >
                             <div className="shopBack">
                               <img
-                                className="shopBack__img"
+                                className="shopBack__img cursor__pointer"
                                 loading="lazy"
                                 src={product?.product_thumb_small ?? product?.product_thumb}
                                 alt={product?.product_name}
