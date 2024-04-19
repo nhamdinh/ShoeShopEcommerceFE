@@ -81,7 +81,7 @@ const ShopSection = ({ pagenumber, keyword, brand }: any) => {
                               <img
                                 className="shopBack__img"
                                 loading="lazy"
-                                src={product?.product_thumb}
+                                src={product?.product_thumb_small ?? product?.product_thumb}
                                 alt={product?.product_name}
                               />
                               <div
@@ -106,6 +106,7 @@ const ShopSection = ({ pagenumber, keyword, brand }: any) => {
                                     `/product-detail?id=${product?._id}`
                                   );
                                 }}
+                                className="line__clamp__2 h54px"
                               >
                                 {product?.product_name}
                               </div>

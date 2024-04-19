@@ -101,9 +101,9 @@ const ProfileScreen = () => {
                   <>Joined {moment(userInfo?.createdAt).format("LL")}</>
                 </span>
                 <div>
-                  <Child name={"kame"} />
+                  {/* <Child name={"kame"} />
                   <div>{tab1}</div>
-                  <button onClick={handleClick}>+</button>
+                  <button onClick={handleClick}>+</button> */}
                 </div>
               </div>
             </div>

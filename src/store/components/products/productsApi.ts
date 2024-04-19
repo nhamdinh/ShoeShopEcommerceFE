@@ -111,7 +111,7 @@ export const productsApi = createApi({
     createProduct: builder.mutation({
       query: (data) => ({
         url: `/products/create`,
-        method: "POST",
+        method: "PUT",
         body: data,
       }),
     }),
@@ -124,9 +124,16 @@ export const productsApi = createApi({
     }),
     uploadImg: builder.mutation({
       query: (data) => ({
-        url: `/upload?folder=${data?.folder}`,
+        url: `/uploads/file?folder=${data?.folder}`,
         method: "POST",
         body: data?.formData,
+      }),
+    }),
+    uploadImgUrl: builder.mutation({
+      query: (data) => ({
+        url: `/uploads/url`,
+        method: "POST",
+        body: data,
       }),
     }),
     getCodes: builder.query({
@@ -174,6 +181,7 @@ export const {
   useCreateProductMutation,
   useGetCategorysQuery,
   useUploadImgMutation,
+  useUploadImgUrlMutation,
   useCreateCoMutation,
   useCheckIsBuyerQuery,
   useGetBrandsQuery,

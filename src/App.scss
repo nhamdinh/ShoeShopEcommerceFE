@@ -739,6 +739,15 @@ textarea:focus {
   }
 }
 
-.cursor__pointer{
+.cursor__pointer {
   cursor: pointer;
+}
+.line__clamp__2 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  // width: 150px;
+  // height: 50px;
 }

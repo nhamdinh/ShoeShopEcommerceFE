@@ -10,11 +10,13 @@ import {
   useGetBrandsQuery,
   useUploadImgMutation,
   useGetCodesQuery,
+  useUploadImgUrlMutation,
 } from "../../store/components/products/productsApi";
 import { Upload } from "antd";
 import type { RcFile, UploadFile, UploadProps } from "antd/es/upload/interface";
 import { useDispatch } from "react-redux";
 import { openToast } from "../../store/components/customDialog/toastSlice";
+import LoadingButton from "../LoadingError/LoadingButton";
 
 const SIZE = 5;
 const sizeMax = SIZE * 1000 * 1000;
@@ -22,8 +24,10 @@ const sizeMax = SIZE * 1000 * 1000;
 const AddProductMain = ({ userInfo }: any) => {
   const dispatch = useDispatch();
 
-  const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const [fileList, setFileList] = useState<any>([]);
   const [uploadImg, { isLoading: isLoadingUpload }] = useUploadImgMutation();
+  const [uploadImgUrl, { isLoading: isLoadingUploadUrl }] =
+    useUploadImgUrlMutation();
 
   const uploadImage = async (options: any) => {
     const { onSuccess, onError, file, onProgress } = options;
@@ -40,14 +44,9 @@ const AddProductMain = ({ userInfo }: any) => {
           formData,
           folder: FOLDER_PRODUCS_STORAGE,
         });
-        let data = res?.data;
+        const data = res?.data?.metadata;
         if (data) {
-          let fileList_temp: any = [];
-          fileList_temp.push({
-            url: data?.url,
-          });
-          setFileList(fileList_temp);
-          setImage(data?.url);
+          handleImageAttribute(data);
         }
       } catch (err) {
         console.log(err);
@@ -124,6 +123,8 @@ const AddProductMain = ({ userInfo }: any) => {
   const [name, setName] = useState<any>("");
   const [price, setPrice] = useState<any>(0);
   const [image, setImage] = useState<any>("");
+  const [urlImage, setUrlImage] = useState<any>("");
+  const [product_thumb_small, setProduct_thumb_small] = useState<any>("");
   const [countInStock, setCountInStock] = useState<any>(0);
   const [description, setDescription] = useState<any>("");
 
@@ -146,9 +147,12 @@ const AddProductMain = ({ userInfo }: any) => {
       setName("");
       setDescription("");
       setCountInStock(0);
+
       setImage("");
-      setPrice(0);
+      setProduct_thumb_small("");
       setFileList([]);
+
+      setPrice(0);
     } else {
       dispatch(
         openToast({
@@ -168,6 +172,7 @@ const AddProductMain = ({ userInfo }: any) => {
       product_description: description,
       product_price: price,
       product_thumb: image,
+      product_thumb_small,
       product_quantity: countInStock,
       product_shop: userInfo._id,
       product_type: categor,
@@ -182,6 +187,31 @@ const AddProductMain = ({ userInfo }: any) => {
       // },
     });
   };
+
+  const onUploadImgUrl = async () => {
+    try {
+      const res: any = await uploadImgUrl({
+        urlImage,
+      });
+      const data = res?.data?.metadata;
+      if (data) {
+        handleImageAttribute(data);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleImageAttribute = (data: any) => {
+    setFileList([
+      {
+        url: data?.url,
+      },
+    ]);
+    setImage(data?.url);
+    setProduct_thumb_small(data?.thumb_url);
+  };
+
   return (
     <>
       <section className="content-main" style={{ maxWidth: "1200px" }}>
@@ -301,6 +331,40 @@ const AddProductMain = ({ userInfo }: any) => {
                     >
                       {fileList.length < 1 && "Choose file"}
                     </Upload>
+                  </div>
+
+                  <div className="mb-4">
+                    <label htmlFor="urlImage" className="form-label">
+                      url Image
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Type here"
+                      className="form-control"
+                      id="urlImage"
+                      required
+                      value={urlImage}
+                      onChange={(e) => setUrlImage(e.target.value)}
+                    />
+                  </div>
+
+                  <div className="mb-4">
+                    {isLoadingUploadUrl ? (
+                      <LoadingButton />
+                    ) : (
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          onUploadImgUrl();
+                        }}
+                        disabled={!urlImage}
+                        type="submit"
+                        className="btn btn-primary"
+                      >
+                        Upload Url Image
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>

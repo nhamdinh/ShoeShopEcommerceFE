@@ -5,6 +5,7 @@ import { useGetPublishedProductsQuery } from "../../store/components/products/pr
 import { PAGE_SIZE } from "../../utils/constants";
 import { useDispatch } from "react-redux";
 import { Checkbox } from "antd";
+import { toNonAccentVietnamese } from "../../utils/commonFunction";
 
 const ProductsShopTable = ({
   pagenumber,
@@ -65,7 +66,7 @@ const ProductsShopTable = ({
   );
   useEffect(() => {
     if (isSuccess) {
-      let dataFetched_temp: any = [];
+      const dataFetched_temp: any = [];
       dataProducts?.metadata?.products.map((data: any, index: number) => {
         dataFetched_temp.push({ ...data, checked: false, index: index + 1 });
       });
@@ -105,8 +106,8 @@ const ProductsShopTable = ({
           <div className="ProductsShopTable">
             {dataFetched
               .filter((item: any) => {
-                const searchTerm = keyword.toLowerCase();
-                const fullName = item?.product_name.toLowerCase();
+                const searchTerm = toNonAccentVietnamese(keyword.toLowerCase());
+                const fullName = toNonAccentVietnamese(item?.product_name.toLowerCase());
                 // console.log(searchTerm);
                 // console.log(fullName);
                 return fullName.includes(searchTerm) && fullName !== searchTerm;

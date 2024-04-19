@@ -23,6 +23,7 @@ import { getDataProducts, getUserInfo } from "../store/selector/RootSelector";
 import mainLogo from "./../images/AVA79.svg";
 
 import axios from "axios";
+import { toNonAccentVietnamese } from "../utils/commonFunction";
 
 const Header = () => {
   const [keyword, setKeyword] = useState<any>("");
@@ -317,8 +318,8 @@ const Header = () => {
                     <div className="dropdown">
                       {dataProducts1
                         .filter((item: any) => {
-                          const searchTerm = keyword.toLowerCase();
-                          const fullName = item?.product_name.toLowerCase();
+                          const searchTerm = toNonAccentVietnamese(keyword.toLowerCase());
+                          const fullName = toNonAccentVietnamese(item?.product_name.toLowerCase());
 
                           return (
                             searchTerm &&
@@ -422,8 +423,8 @@ const Header = () => {
                   <div className="dropdown">
                     {dataProducts1
                       .filter((item: any) => {
-                        const searchTerm = keyword.toLowerCase();
-                        const fullName = item?.product_name.toLowerCase();
+                        const searchTerm = toNonAccentVietnamese(keyword.toLowerCase());
+                        const fullName = toNonAccentVietnamese(item?.product_name.toLowerCase());
                         // console.log(searchTerm);
                         // console.log(fullName);
                         return (

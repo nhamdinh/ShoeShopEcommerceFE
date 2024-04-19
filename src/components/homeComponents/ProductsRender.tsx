@@ -134,7 +134,7 @@ const ProductsRender = ({
                               <img
                                 className="shopBack__img"
                                 loading="lazy"
-                                src={product?.product_thumb}
+                                src={product?.product_thumb_small ?? product?.product_thumb}
                                 alt={product?.product_name}
                               />
                               <div className="shopBack__shopName">
@@ -151,6 +151,7 @@ const ProductsRender = ({
                                     `/product-detail?id=${product?._id}`
                                   );
                                 }}
+                                className="line__clamp__2 h54px"
                               >
                                 {product?.product_name}
                               </div>
@@ -177,7 +178,7 @@ const ProductsRender = ({
                             </div>
                             {product?.isPublished ? (
                               <div
-                                className="btn btn-danger"
+                                className="btn btn-dark"
                                 onClick={() => deleteHandler(product?._id)}
                               >
                                 to draft

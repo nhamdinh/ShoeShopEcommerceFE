@@ -10,12 +10,14 @@ import {
   useGetProductsDetailQuery,
   useUpdateProductMutation,
   useUploadImgMutation,
+  useUploadImgUrlMutation,
 } from "../../store/components/products/productsApi";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Upload } from "antd";
 import type { RcFile, UploadFile, UploadProps } from "antd/es/upload/interface";
 import { openToast } from "../../store/components/customDialog/toastSlice";
 import { getUserInfo } from "../../store/selector/RootSelector";
+import LoadingButton from "../LoadingError/LoadingButton";
 
 const SIZE = 5;
 const sizeMax = SIZE * 1000 * 1000;
@@ -25,6 +27,8 @@ const EditProductMain = () => {
 
   const [fileList, setFileList] = useState<any>([]);
   const [uploadImg, { isLoading: isLoadingUpload }] = useUploadImgMutation();
+  const [uploadImgUrl, { isLoading: isLoadingUploadUrl }] =
+    useUploadImgUrlMutation();
 
   const uploadImage = async (options: any) => {
     const { onSuccess, onError, file, onProgress } = options;
@@ -41,19 +45,42 @@ const EditProductMain = () => {
           formData,
           folder: FOLDER_PRODUCS_STORAGE,
         });
-        let data = res?.data;
+
+        const data = res?.data?.metadata;
         if (data) {
-          let fileList_temp: any = [];
-          fileList_temp.push({
-            url: data?.url,
-          });
-          setFileList(fileList_temp);
-          setImage(data?.url);
+
+          handleImageAttribute(data);
+
+
         }
       } catch (err) {
         console.log(err);
       }
     } else {
+    }
+  };
+
+  const handleImageAttribute = (data: any) => {
+    setFileList([
+      {
+        url: data?.url,
+      },
+    ]);
+    setImage(data?.url);
+    setProduct_thumb_small(data?.thumb_url);
+  };
+
+  const onUploadImgUrl = async () => {
+    try {
+      const res: any = await uploadImgUrl({
+        urlImage,
+      });
+      const data = res?.data?.metadata;
+      if (data) {
+        handleImageAttribute(data);
+      }
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -154,6 +181,8 @@ const EditProductMain = () => {
   const [name, setName] = useState<any>("");
   const [price, setPrice] = useState<any>("0");
   const [image, setImage] = useState<any>("");
+  const [urlImage, setUrlImage] = useState<any>("");
+  const [product_thumb_small, setProduct_thumb_small] = useState<any>("");
   const [countInStock, setCountInStock] = useState<any>(0);
   const [description, setDescription] = useState<any>("");
 
@@ -194,6 +223,7 @@ const EditProductMain = () => {
       product_description: description,
       product_price: price,
       product_thumb: image,
+      product_thumb_small,
       product_quantity: countInStock,
       product_type: categor,
       product_attributes: {
@@ -208,9 +238,12 @@ const EditProductMain = () => {
     setName(product?.product_name);
     setDescription(product?.product_description);
     setPrice(product?.product_price);
+
     setImage(product?.product_thumb);
-    setCountInStock(product?.product_quantity);
+    setProduct_thumb_small(product?.product_thumb_small);
     setFileList([{ url: product?.product_thumb }]);
+    
+    setCountInStock(product?.product_quantity);
     setcategory(product?.product_type);
     setbrand(product?.product_attributes?.brand);
   }, [product]);
@@ -363,6 +396,39 @@ const EditProductMain = () => {
                             >
                               {fileList.length < 1 && "Choose file"}
                             </Upload>
+                          </div>
+                          <div className="mb-4">
+                            <label htmlFor="urlImage" className="form-label">
+                              url Image
+                            </label>
+                            <input
+                              type="text"
+                              placeholder="Type here"
+                              className="form-control"
+                              id="urlImage"
+                              required
+                              value={urlImage}
+                              onChange={(e) => setUrlImage(e.target.value)}
+                            />
+                          </div>
+
+                          <div className="mb-4">
+                            {isLoadingUploadUrl ? (
+                              <LoadingButton />
+                            ) : (
+                              <button
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                  onUploadImgUrl();
+                                }}
+                                disabled={!urlImage}
+                                type="submit"
+                                className="btn btn-primary"
+                              >
+                                Upload Url Image
+                              </button>
+                            )}
                           </div>
                         </>
                       )}
