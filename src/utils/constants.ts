@@ -4,9 +4,9 @@ export const SOCKET_HOST = process.env.REACT_APP_SOCKET_HOST ?? 'http://ec2-18-1
 // export const API_LINK = 'http://localhost:5000/api';
 // export const SOCKET_HOST = 'http://localhost:6000';
 /* env */
-export const NAME_STORAGE = "name";
-export const ACCESSTOKEN_STORAGE = "accessToken";
-export const REFRESHTOKEN_STORAGE = "refreshToken";
+export const NAME_STORAGE = "nameUser";
+export const ACCESSTOKEN_STORAGE = "accessTokenUser";
+export const REFRESHTOKEN_STORAGE = "refreshTokenUser";
 export const FOLDER_PRODUCS_STORAGE = "products";
 export const SHIPPINGPRICE = 9.99;
 export const TAXPRICE = 0.1;

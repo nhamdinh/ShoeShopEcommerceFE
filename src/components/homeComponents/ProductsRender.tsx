@@ -16,6 +16,7 @@ import moment from "moment";
 import { useDispatch } from "react-redux";
 import { openDialog } from "../../store/components/customDialog/dialogSlice";
 import { openToast } from "../../store/components/customDialog/toastSlice";
+import ChatBox from "../ChatBox";
 
 const ProductsRender = ({
   isLoading,
@@ -102,7 +103,7 @@ const ProductsRender = ({
     <div className="container">
       <div className="section">
         <div className="STORE">
-          STORE: <h1> {productShop?.productShopName}</h1>
+        STORE: <h1 className="capitalize mr50px"> {productShop?.productShopName}</h1> {productShop?.email !== userInfo?.email && <ChatBox productShop={productShop}></ChatBox>}
         </div>
         <h3>Phone: {formatCustomerPhoneNumber(productShop?.phone)}</h3>
         <h3>Join in: {moment(productShop?.createdAt).calendar()}</h3>
@@ -132,12 +133,12 @@ const ProductsRender = ({
                           >
                             <div className="shopBack">
                               <img
-                                className="shopBack__img cursor__pointer"
+                                className="scale shopBack__img cursor__pointer"
                                 loading="lazy"
                                 src={product?.product_thumb_small ?? product?.product_thumb}
                                 alt={product?.product_name}
                               />
-                              <div className="shopBack__shopName">
+                              <div className="shopBack__shopName capitalize">
                                 {product?.product_shop?.productShopName}
                               </div>
                             </div>

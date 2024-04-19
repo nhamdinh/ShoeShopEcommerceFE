@@ -79,13 +79,13 @@ const ShopSection = ({ pagenumber, keyword, brand }: any) => {
                           >
                             <div className="shopBack">
                               <img
-                                className="shopBack__img cursor__pointer"
+                                className="scale shopBack__img cursor__pointer"
                                 loading="lazy"
                                 src={product?.product_thumb_small ?? product?.product_thumb}
                                 alt={product?.product_name}
                               />
                               <div
-                                className="shopBack__shopName"
+                                className="shopBack__shopName capitalize"
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   navigate(

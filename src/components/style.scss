@@ -58,11 +58,12 @@
   }
 }
 .ChatBox {
+  font-weight: 400;
   #section-1 {
     margin-top: 20px;
   }
-  .ppp {
-    position: fixed;
+  .icon__position {
+    // position: fixed;
     right: 5%;
     bottom: 5%;
     box-shadow: 0 0 8px 0 blueviolet;
@@ -78,7 +79,7 @@
     bottom: 0;
     box-shadow: 0 0 8px 0 blueviolet;
     border-radius: 4px;
-    z-index: 999;
+    z-index: 9999;
     cursor: pointer;
   }
   @keyframes showMessage {

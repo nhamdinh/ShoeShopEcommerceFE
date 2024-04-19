@@ -264,7 +264,6 @@ const CompTableCartLv1 = ({ cartCurrent }: any) => {
     cartCurrent?.cart_shopId?._id
   );
   const [dataFetched, setdataFetched] = useState<any>([]);
-
   const [totalCount, settotalCount] = useState<any>(0);
   /*  */
   const [cartId, setcartId] = useState<any>("");
@@ -304,7 +303,7 @@ const CompTableCartLv1 = ({ cartCurrent }: any) => {
     /*  */
 
     if (cartCurrent?.discounts?.length > 0) {
-      let dataFetched_temp: any = [];
+      const dataFetched_temp: any = [];
       cartCurrent?.discounts.map((data: any, index: number) => {
         dataFetched_temp.push({ ...data, checked: false, index: index + 1 });
       });
@@ -353,7 +352,7 @@ const CompTableCartLv1 = ({ cartCurrent }: any) => {
           navigate(`/shop/${cartCurrent?.cart_shopId?._id}`);
         }}
       >
-        STORE: <h1> {cartCurrent?.cart_shopId?.productShopName}</h1>
+        STORE: <h1 className="capitalize"> {cartCurrent?.cart_shopId?.productShopName}</h1>
       </div>
       {cartCurrent?.cart_products.map((item: any, ind: any) => (
         <CompTableCartLv2

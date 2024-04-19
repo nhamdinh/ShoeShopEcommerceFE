@@ -10,8 +10,15 @@ import { useGetStoryQuery } from "../store/components/auth/authApi";
 import Loading from "./LoadingError/Loading";
 import { rawMarkup } from "../utils/commonFunction";
 import mainLogo1 from "./../images/icons8-facebook-messenger.gif";
+import { openDialog } from "../store/components/customDialog/dialogSlice";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
-export default function ChatBox() {
+export default function ChatBox({ productShop }: any) {
+  console.log(productShop)
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const userInfo = useSelector(getUserInfo);
   const [stories, setStories] = useState<any>([]);
   const [showMessageBox, setShowMessageBox] = useState<any>(false);
@@ -20,7 +27,6 @@ export default function ChatBox() {
     user1: "",
     user2: "",
   });
-
   const {
     data: dataStory,
     error,
@@ -55,15 +61,13 @@ export default function ChatBox() {
   const messageRef = useRef<any>(null);
 
   useEffect(() => {
-    if (userInfo?.admins) {
-      setParams({ user1: userInfo?.email, user2: userInfo?.admins[0]?.email });
-      const zzz: any = userInfo?.admins.find((ad: any) => {
-        if (ad?.email === "admin@example.com") return ad;
-      });
-      setSocketUsernameTo(zzz?.email);
-      setproductShopName(zzz?.productShopName);
-      setphone(zzz?.phone);
-    }
+    setParams({ user1: userInfo?.email, user2: productShop?.email });
+    setSocketUsernameTo(productShop?.email);
+    setproductShopName(productShop?.productShopName);
+    setphone(productShop?.phone);
+  }, [productShop,showMessageBox]);
+
+  useEffect(() => {
     //@ts-ignore
     socketRef.current = socketIOClient.connect(SOCKET_HOST);
 
@@ -175,9 +179,22 @@ export default function ChatBox() {
         </div>
       ) : (
         <img
-          className={"ppp"}
+          className="icon__position"
           onClick={() => {
-            setShowMessageBox(true);
+            if (userInfo?._id) {
+              setShowMessageBox(true);
+            } else {
+              dispatch(
+                openDialog({
+                  type: "confirm",
+                  title: "Need to Login First\nGo to Login page??",
+                  actionConfirm: () => {
+                    navigate(`/login`);
+                  },
+                  actionAfterClose: () => {},
+                })
+              );
+            }
           }}
           src={mainLogo1}
           alt="userprofileimage"
