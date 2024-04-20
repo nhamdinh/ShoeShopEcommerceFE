@@ -7,7 +7,7 @@ import Loading from "../LoadingError/Loading";
 import Message from "../LoadingError/Error";
 import Pagination from "./Pagination";
 import { PAGE_SIZE } from "../../utils/constants";
-import { formatMoneyCurrency } from "../../utils/commonFunction";
+import { calPerDiscount, formatMoneyCurrency } from "../../utils/commonFunction";
 
 const ShopSection = ({ pagenumber, keyword, brand }: any) => {
   const navigate = useNavigate();
@@ -116,9 +116,20 @@ const ShopSection = ({ pagenumber, keyword, brand }: any) => {
                               value={product?.product_ratings ?? 5}
                               text={`${product?.numReviews ?? 0} reviews`}
                             />
+
+                            <div className="df content__between">
+                              <h3 className="line__through">
+                                ${formatMoneyCurrency(product?.product_original_price)}
+                              </h3>
+                              <h3 className="ed1c24">
+                                - {calPerDiscount(product)} %
+                              </h3>
+                            </div>
                             <h3>
                               ${formatMoneyCurrency(product?.product_price)}
                             </h3>
+
+
                           </div>
                         </div>
                       </div>

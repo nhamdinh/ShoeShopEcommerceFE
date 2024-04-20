@@ -9,6 +9,7 @@ import Loading from "../LoadingError/Loading";
 import Message from "../LoadingError/Error";
 import Pagination from "./Pagination";
 import {
+  calPerDiscount,
   formatCustomerPhoneNumber,
   formatMoneyCurrency,
 } from "../../utils/commonFunction";
@@ -103,7 +104,11 @@ const ProductsRender = ({
     <div className="container">
       <div className="section">
         <div className="STORE">
-        STORE: <h1 className="capitalize mr50px"> {productShop?.productShopName}</h1> {productShop?.email !== userInfo?.email && <ChatBox productShop={productShop}></ChatBox>}
+          STORE:{" "}
+          <h1 className="capitalize mr50px"> {productShop?.productShopName}</h1>{" "}
+          {productShop?.email !== userInfo?.email && (
+            <ChatBox productShop={productShop}></ChatBox>
+          )}
         </div>
         <h3>Phone: {formatCustomerPhoneNumber(productShop?.phone)}</h3>
         <h3>Join in: {moment(productShop?.createdAt).calendar()}</h3>
@@ -135,7 +140,10 @@ const ProductsRender = ({
                               <img
                                 className="scale shopBack__img cursor__pointer"
                                 loading="lazy"
-                                src={product?.product_thumb_small ?? product?.product_thumb}
+                                src={
+                                  product?.product_thumb_small ??
+                                  product?.product_thumb
+                                }
                                 alt={product?.product_name}
                               />
                               <div className="shopBack__shopName capitalize">
@@ -162,6 +170,15 @@ const ProductsRender = ({
                               value={product?.product_ratings ?? 5}
                               text={`${product?.numReviews ?? 0} reviews`}
                             />
+
+                            <div className="df content__between">
+                              <h3 className="line__through">
+                                ${formatMoneyCurrency(product?.product_original_price)}
+                              </h3>
+                              <h3 className="ed1c24">
+                                - {calPerDiscount(product)} %
+                              </h3>
+                            </div>
                             <h3>
                               ${formatMoneyCurrency(product?.product_price)}
                             </h3>

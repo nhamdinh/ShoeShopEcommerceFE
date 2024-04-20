@@ -1,3 +1,4 @@
+import "./styles/_fonts.scss";
 import "./App.scss";
 import "./responsive.css";
 import "react-toastify/dist/ReactToastify.css";

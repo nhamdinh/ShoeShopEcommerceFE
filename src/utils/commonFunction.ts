@@ -110,3 +110,9 @@ export const toNonAccentVietnamese = (str:any) => {
   // str = str.replace(/\u02C6|\u0306|\u031B/g, ""); // Â, Ê, Ă, Ơ, Ư
   return str;
 };
+
+
+export const calPerDiscount = (product:any) => {
+  const perDiscount = ((1 - product?.product_price/ product?.product_original_price) * 100).toFixed(0)
+  return perDiscount;
+};

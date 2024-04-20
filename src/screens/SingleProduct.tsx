@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import Loading from "../components/LoadingError/Loading";
 import moment from "moment";
-import { getUrlParams, rawMarkup } from "../utils/commonFunction";
+import { calPerDiscount, getUrlParams, rawMarkup } from "../utils/commonFunction";
 import {
   useCheckIsBuyerQuery,
   useCreateReviewProductMutation,
@@ -216,6 +216,11 @@ const SingleProduct = () => {
                 <div className="product-count col-lg-7 ">
                   <div className="flex-box d-flex justify-content-between align-items-center">
                     <h6>Price</h6>
+                    <span className="line__through">${product?.product_original_price}</span>
+                  </div>
+                  <div className="flex-box d-flex justify-content-between align-items-center">
+                    <h6>Sale Price</h6>
+                    <span className="ed1c24">- {calPerDiscount(product)} %</span>
                     <span>${product?.product_price}</span>
                   </div>
                   <div className="flex-box d-flex justify-content-between align-items-center">

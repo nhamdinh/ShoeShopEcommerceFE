@@ -1,6 +1,6 @@
 body {
   margin: 0;
-  font-family: "Josefin Sans", sans-serif;
+  font-family: "Archivo", sans-serif;
   /* font-family: 'Open Sans', sans-serif; */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -758,4 +758,20 @@ textarea:focus {
   &:hover {
     transform: scale(1.05);
   }
+}
+.line__through {
+  text-decoration: line-through;
+}
+.df {
+  display: flex;
+}
+.content__between {
+  justify-content: space-between;
+}
+
+.content__end {
+  justify-content: flex-end;
+}
+.ed1c24 {
+  color: #ed1c24 !important;
 }

@@ -171,6 +171,7 @@ const AddProductMain = ({ userInfo }: any) => {
       product_name: name,
       product_description: description,
       product_price: price,
+      product_original_price: +((+price * ( (Math.random() * (50 - 10) + 10) +100    )/100).toFixed(2)),
       product_thumb: image,
       product_thumb_small,
       product_quantity: countInStock,
