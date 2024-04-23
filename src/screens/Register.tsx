@@ -13,6 +13,7 @@ import {
 } from "../store/components/auth/authApi";
 import { formatPhone } from "../utils/commonFunction";
 import { openToast } from "../store/components/customDialog/toastSlice";
+import DocumentTitle from "../components/DocumentTitle";
 
 const Register = () => {
   window.scrollTo(0, 0);
@@ -90,105 +91,111 @@ const Register = () => {
   };
 
   return (
-    <div className="container d-flex flex-column justify-content-center align-items-center login-center">
-      {isError && <Message variant="alert-danger" mess={error} />}
-      {isError && <Message variant="alert-danger" mess={error2} />}
+    <>
+      <DocumentTitle title={"Register"}></DocumentTitle>
 
-      <form
-        className="Login col-md-8 col-lg-4 col-11"
-        onSubmit={(e) => {
-          e.preventDefault();
-          // console.log(isValid());
-          if (isValid())
-            onRegisterSendEmail({
-              name: name,
-              email: email,
-              password: password,
-              phone: phone,
-              isAdmin: false,
-            });
-        }}
-      >
-        <input
-          type="text"
-          placeholder="Username"
-          value={name}
-          onChange={(e) => {
-            setName(e.target.value);
-            setisError(false);
-          }}
-        />
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => {
-            setEmail(e.target.value);
-            setisError(false);
-          }}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => {
-            setPassword(e.target.value);
-            setisError(false);
-          }}
-        />
-        <input
-          type="text"
-          placeholder="Phone(10)"
-          maxLength={10}
-          value={phone}
-          onChange={(e) => {
-            setphone(formatPhone(e.target.value));
-            setisError(false);
-          }}
-        />
-        <button type="submit">{isLoading ? <Loading /> : "Send Email"}</button>
-        {showOtp && (
-          <>
-            <div className="zzz33 mt20px"></div>
-            <input
-              type="text"
-              placeholder="OTP (6)"
-              maxLength={6}
-              value={otp}
-              onChange={(e) => {
-                setOtp(e.target.value);
-                setisError(false);
-              }}
-            />
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                e.preventDefault();
+      <div className="container d-flex flex-column justify-content-center align-items-center login-center">
+        {isError && <Message variant="alert-danger" mess={error} />}
+        {isError && <Message variant="alert-danger" mess={error2} />}
 
-                if (isValid() && otp)
-                  onRegister({
-                    name: name,
-                    email: email,
-                    password: password,
-                    phone: phone,
-                    otp,
-                    isAdmin: false,
-                  });
-              }}
-              type="submit"
-              style={{ background: "#1ea08a" }}
-            >
-              {isLoading2 ? <Loading /> : "Register"}
-            </button>
-          </>
-        )}
-        <p>
-          <Link to="/login">
-            I Have Account <strong>Login</strong>
-          </Link>
-        </p>
-      </form>
-    </div>
+        <form
+          className="Login col-md-8 col-lg-4 col-11"
+          onSubmit={(e) => {
+            e.preventDefault();
+            // console.log(isValid());
+            if (isValid())
+              onRegisterSendEmail({
+                name: name,
+                email: email,
+                password: password,
+                phone: phone,
+                isAdmin: false,
+              });
+          }}
+        >
+          <input
+            type="text"
+            placeholder="Username"
+            value={name}
+            onChange={(e) => {
+              setName(e.target.value);
+              setisError(false);
+            }}
+          />
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              setisError(false);
+            }}
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => {
+              setPassword(e.target.value);
+              setisError(false);
+            }}
+          />
+          <input
+            type="text"
+            placeholder="Phone(10)"
+            maxLength={10}
+            value={phone}
+            onChange={(e) => {
+              setphone(formatPhone(e.target.value));
+              setisError(false);
+            }}
+          />
+          <button type="submit">
+            {isLoading ? <Loading /> : "Send Email"}
+          </button>
+          {showOtp && (
+            <>
+              <div className="zzz33 mt20px"></div>
+              <input
+                type="text"
+                placeholder="OTP (6)"
+                maxLength={6}
+                value={otp}
+                onChange={(e) => {
+                  setOtp(e.target.value);
+                  setisError(false);
+                }}
+              />
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  e.preventDefault();
+
+                  if (isValid() && otp)
+                    onRegister({
+                      name: name,
+                      email: email,
+                      password: password,
+                      phone: phone,
+                      otp,
+                      isAdmin: false,
+                    });
+                }}
+                type="submit"
+                style={{ background: "#1ea08a" }}
+              >
+                {isLoading2 ? <Loading /> : "Register"}
+              </button>
+            </>
+          )}
+          <p>
+            <Link to="/login">
+              I Have Account <strong>Login</strong>
+            </Link>
+          </p>
+        </form>
+      </div>
+    </>
   );
 };
 

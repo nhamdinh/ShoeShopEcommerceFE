@@ -10,6 +10,7 @@ import {
   REFRESHTOKEN_STORAGE,
 } from "../utils/constants";
 import { openToast } from "../store/components/customDialog/toastSlice";
+import DocumentTitle from "../components/DocumentTitle";
 
 const Login = () => {
   window.scrollTo(0, 0);
@@ -61,50 +62,54 @@ const Login = () => {
   };
 
   return (
-    <div className="container d-flex flex-column justify-content-center align-items-center login-center">
-      {isError && <Message variant="alert-danger" mess={error} />}
-      <form
-        className="Login col-md-8 col-lg-4 col-11"
-        onSubmit={(e) => {
-          e.preventDefault();
-          // onLogin({ email: "admin@example.com", password: "123456" });
-          onLogin({ email: email, password: password });
-        }}
-      >
-        <h1>Welcome back!</h1>
-        <p className="ed1c24 fw600">
-          Đăng nhập bằng USER ở trên <br />Hoặc Đăng ký bằng Email mới
-        </p>
-
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => {
-            setEmail(e.target.value);
-            setisError(false);
+    <>
+      <DocumentTitle title={"Login"}></DocumentTitle>
+      <div className="container d-flex flex-column justify-content-center align-items-center login-center">
+        {isError && <Message variant="alert-danger" mess={error} />}
+        <form
+          className="Login col-md-8 col-lg-4 col-11"
+          onSubmit={(e) => {
+            e.preventDefault();
+            // onLogin({ email: "admin@example.com", password: "123456" });
+            onLogin({ email: email, password: password });
           }}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => {
-            setPassword(e.target.value);
-            setisError(false);
-          }}
-        />
-        <button type="submit">{isLoading ? <Loading /> : "Login"}</button>
-        <p
-          onClick={() => {
-            navigate("/register");
-          }}
-          className="cursor__pointer"
         >
-          Create Account
-        </p>
-      </form>
-    </div>
+          <h1>Welcome back!</h1>
+          <p className="ed1c24 fw600">
+            Đăng nhập bằng USER ở trên <br />
+            Hoặc Đăng ký bằng Email mới
+          </p>
+
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              setisError(false);
+            }}
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => {
+              setPassword(e.target.value);
+              setisError(false);
+            }}
+          />
+          <button type="submit">{isLoading ? <Loading /> : "Login"}</button>
+          <p
+            onClick={() => {
+              navigate("/register");
+            }}
+            className="cursor__pointer"
+          >
+            Create Account
+          </p>
+        </form>
+      </div>
+    </>
   );
 };
 

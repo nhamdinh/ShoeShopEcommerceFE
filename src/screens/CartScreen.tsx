@@ -21,6 +21,7 @@ import moment from "moment";
 import { FORMAT_DATE8 } from "../utils/constants";
 import { stSetCheckoutCartsParams } from "../store/components/orders/ordersSlice";
 import { getCheckoutCartsParam } from "../store/selector/RootSelector";
+import DocumentTitle from "../components/DocumentTitle";
 
 const CartScreen = () => {
   window.scrollTo(0, 0);
@@ -198,62 +199,65 @@ const CartScreen = () => {
   // };
 
   return (
-    <div className="container">
-      {/* Cart */}
-      {cartItems.length === 0 ? (
-        <div className=" alert alert-info text-center mt-3">
-          Your cart is empty
-          <Link
-            className="btn btn-success mx-5 px-5 py-3"
-            to="/"
-            style={{
-              fontSize: "12px",
-            }}
-          >
-            SHOPPING NOW
-          </Link>
-        </div>
-      ) : (
-        <>
+    <>
+      <DocumentTitle title={"Cart"}></DocumentTitle>
+      <div className="container">
+        {/* Cart */}
+        {cartItems.length === 0 ? (
           <div className=" alert alert-info text-center mt-3">
-            Total Cart Products
-            <span className="text-success mx-2">({cartItems.length})</span>
-          </div>
-          {/* cartiterm */}
-          {cartsCurrent.map((cartCurrent: any, index: any) => {
-            return (
-              cartCurrent?.cart_products.length > 0 && (
-                <CompTableCartLv1 cartCurrent={cartCurrent} key={index} />
-              )
-            );
-          })}
-
-          {/* End of cart iterms */}
-          {/*           <div className="total">
-            <span className="sub">total:</span>
-            <span className="total-price">${formatMoney(total)}</span>
-          </div>
-          <hr /> */}
-          <div className="cart-buttons d-flex align-items-center row">
-            <Link to="/" className="col-md-6 ">
-              <button>Continue To Shopping</button>
+            Your cart is empty
+            <Link
+              className="btn btn-success mx-5 px-5 py-3"
+              to="/"
+              style={{
+                fontSize: "12px",
+              }}
+            >
+              SHOPPING NOW
             </Link>
-            {total > 0 && (
-              <div className="col-md-6 d-flex justify-content-md-end mt-3 mt-md-0">
-                <button
-                  onClick={() => {
-                    console.log(checkoutCartsParam);
-                    onCheckoutOrder(checkoutCartsParam);
-                  }}
-                >
-                  {is ? <Loading /> : "Checkout"}
-                </button>
-              </div>
-            )}
           </div>
-        </>
-      )}
-    </div>
+        ) : (
+          <>
+            <div className=" alert alert-info text-center mt-3">
+              Total Cart Products
+              <span className="text-success mx-2">({cartItems.length})</span>
+            </div>
+            {/* cartiterm */}
+            {cartsCurrent.map((cartCurrent: any, index: any) => {
+              return (
+                cartCurrent?.cart_products.length > 0 && (
+                  <CompTableCartLv1 cartCurrent={cartCurrent} key={index} />
+                )
+              );
+            })}
+
+            {/* End of cart iterms */}
+            {/*           <div className="total">
+              <span className="sub">total:</span>
+              <span className="total-price">${formatMoney(total)}</span>
+            </div>
+            <hr /> */}
+            <div className="cart-buttons d-flex align-items-center row">
+              <Link to="/" className="col-md-6 ">
+                <button>Continue To Shopping</button>
+              </Link>
+              {total > 0 && (
+                <div className="col-md-6 d-flex justify-content-md-end mt-3 mt-md-0">
+                  <button
+                    onClick={() => {
+                      console.log(checkoutCartsParam);
+                      onCheckoutOrder(checkoutCartsParam);
+                    }}
+                  >
+                    {is ? <Loading /> : "Checkout"}
+                  </button>
+                </div>
+              )}
+            </div>
+          </>
+        )}
+      </div>
+    </>
   );
 };
 const CompTableCartLv1 = ({ cartCurrent }: any) => {

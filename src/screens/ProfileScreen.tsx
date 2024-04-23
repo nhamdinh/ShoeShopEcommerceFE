@@ -13,6 +13,7 @@ import CreateCoupon from "../components/Coupons/CreateCoupon";
 import ListCoupons from "../components/Coupons/ListCoupons";
 import { useNavigate } from "react-router-dom";
 import PublishedProducts from "../components/ProductsShop/PublishedProducts";
+import DocumentTitle from "../components/DocumentTitle";
 
 const ProfileScreen = () => {
   window.scrollTo(0, 0);
@@ -82,261 +83,270 @@ const ProfileScreen = () => {
   };
 
   return (
-    <div className="container mt-lg-5 mt-3">
-      <div className="row align-items-start">
-        <div className="col-lg-4 p-0 shadow ">
-          <div className="author-card pb-0 pb-md-3">
-            <div className="author-card-cover"></div>
-            <div className="author-card-profile row">
-              <div className="author-card-avatar col-md-5">
-                <img src={userInfo.avatar ?? mainLogo3} alt="userprofileimage" />
-              </div>
-              <div className="author-card-details col-md-7">
-                <h5 className="author-card-name mb-2">
-                  <strong>{userInfo?.name}</strong> <br />
-                  <strong>{formatCustomerPhoneNumber(userInfo?.phone)}</strong>
-                </h5>
-                <span className="author-card-position">
-                  <>Joined {moment(userInfo?.createdAt).format("LL")}</>
-                </span>
-                <div>
-                  {/* <Child name={"kame"} />
+    <>
+      <DocumentTitle title={"Profile"}></DocumentTitle>
+
+      <div className="container mt-lg-5 mt-3">
+        <div className="row align-items-start">
+          <div className="col-lg-4 p-0 shadow ">
+            <div className="author-card pb-0 pb-md-3">
+              <div className="author-card-cover"></div>
+              <div className="author-card-profile row">
+                <div className="author-card-avatar col-md-5">
+                  <img
+                    src={userInfo.avatar ?? mainLogo3}
+                    alt="userprofileimage"
+                  />
+                </div>
+                <div className="author-card-details col-md-7">
+                  <h5 className="author-card-name mb-2">
+                    <strong>{userInfo?.name}</strong> <br />
+                    <strong>
+                      {formatCustomerPhoneNumber(userInfo?.phone)}
+                    </strong>
+                  </h5>
+                  <span className="author-card-position">
+                    <>Joined {moment(userInfo?.createdAt).format("LL")}</>
+                  </span>
+                  <div>
+                    {/* <Child name={"kame"} />
                   <div>{tab1}</div>
                   <button onClick={handleClick}>+</button> */}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="wizard pt-3 ">
+              <div className="d-flex align-items-start">
+                <div
+                  className="nav align-items-start flex-column col-12 nav-pills me-3 "
+                  id="v-pills-tab"
+                  role="tablist"
+                  aria-orientation="vertical"
+                >
+                  <button
+                    className="nav-link active"
+                    id="v-pills-home-tab"
+                    data-bs-toggle="pill"
+                    data-bs-target="#v-pills-home"
+                    type="button"
+                    role="tab"
+                    aria-controls="v-pills-home"
+                    aria-selected="true"
+                    onClick={() => {
+                      setTab(1);
+                    }}
+                  >
+                    Profile Settings
+                  </button>
+                  <button
+                    className="nav-link d-flex justify-content-between"
+                    id="v-pills-profile-tab"
+                    data-bs-toggle="pill"
+                    data-bs-target="#v-pills-profile"
+                    type="button"
+                    role="tab"
+                    aria-controls="v-pills-profile"
+                    aria-selected="false"
+                    onClick={() => {
+                      navigate("/shipping");
+                    }}
+                  >
+                    shipping address
+                    {/* <span className="badge2">{orders ? orders.length : 0}</span> */}
+                  </button>
+                  <button
+                    className="nav-link d-flex justify-content-between"
+                    id="v-pills-profile-tab"
+                    data-bs-toggle="pill"
+                    data-bs-target="#v-pills-profile"
+                    type="button"
+                    role="tab"
+                    aria-controls="v-pills-profile"
+                    aria-selected="false"
+                    onClick={() => {
+                      setTab(2);
+                    }}
+                  >
+                    Orders List
+                    {/* <span className="badge2">{orders ? orders.length : 0}</span> */}
+                  </button>
+                  {!isShop && (
+                    <button
+                      className="nav-link d-flex justify-content-between"
+                      id="v-pills-profile-tab"
+                      data-bs-toggle="pill"
+                      data-bs-target="#v-pills-profile"
+                      type="button"
+                      role="tab"
+                      aria-controls="v-pills-profile"
+                      aria-selected="false"
+                      onClick={() => {
+                        setTab(3);
+                      }}
+                    >
+                      Become Seller
+                      {/* <span className="badge2">{orders ? orders.length : 0}</span> */}
+                    </button>
+                  )}
+                  {isShop && (
+                    <button
+                      className="nav-link d-flex justify-content-between"
+                      id="v-pills-profile-tab"
+                      data-bs-toggle="pill"
+                      data-bs-target="#v-pills-profile"
+                      type="button"
+                      role="tab"
+                      aria-controls="v-pills-profile"
+                      aria-selected="false"
+                      onClick={() => {
+                        setTab(4);
+                      }}
+                    >
+                      Create Product
+                      {/* <span className="badge2">{orders ? orders.length : 0}</span> */}
+                    </button>
+                  )}
+                  {isShop && (
+                    <button
+                      className="nav-link d-flex justify-content-between"
+                      id="v-pills-profile-tab"
+                      data-bs-toggle="pill"
+                      data-bs-target="#v-pills-profile"
+                      type="button"
+                      role="tab"
+                      aria-controls="v-pills-profile"
+                      aria-selected="false"
+                      onClick={() => {
+                        setTab(5);
+                      }}
+                    >
+                      Products Draft
+                      {/* <span className="badge2">{orders ? orders.length : 0}</span> */}
+                    </button>
+                  )}
+                  {isShop && (
+                    <button
+                      className="nav-link d-flex justify-content-between"
+                      id="v-pills-profile-tab"
+                      data-bs-toggle="pill"
+                      data-bs-target="#v-pills-profile"
+                      type="button"
+                      role="tab"
+                      aria-controls="v-pills-profile"
+                      aria-selected="false"
+                      onClick={() => {
+                        setTab(8);
+                      }}
+                    >
+                      Products Published
+                      {/* <span className="badge2">{orders ? orders.length : 0}</span> */}
+                    </button>
+                  )}
+                  {isShop && (
+                    <button
+                      className="nav-link d-flex justify-content-between"
+                      id="v-pills-profile-tab"
+                      data-bs-toggle="pill"
+                      data-bs-target="#v-pills-profile"
+                      type="button"
+                      role="tab"
+                      aria-controls="v-pills-profile"
+                      aria-selected="false"
+                      onClick={() => {
+                        setTab(6);
+                      }}
+                    >
+                      Create Coupon
+                      {/* <span className="badge2">{orders ? orders.length : 0}</span> */}
+                    </button>
+                  )}
+                  {isShop && (
+                    <button
+                      className="nav-link d-flex justify-content-between"
+                      id="v-pills-profile-tab"
+                      data-bs-toggle="pill"
+                      data-bs-target="#v-pills-profile"
+                      type="button"
+                      role="tab"
+                      aria-controls="v-pills-profile"
+                      aria-selected="false"
+                      onClick={() => {
+                        setTab(7);
+                      }}
+                    >
+                      List Coupons
+                      {/* <span className="badge2">{orders ? orders.length : 0}</span> */}
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
           </div>
-          <div className="wizard pt-3 ">
-            <div className="d-flex align-items-start">
-              <div
-                className="nav align-items-start flex-column col-12 nav-pills me-3 "
-                id="v-pills-tab"
-                role="tablist"
-                aria-orientation="vertical"
-              >
-                <button
-                  className="nav-link active"
-                  id="v-pills-home-tab"
-                  data-bs-toggle="pill"
-                  data-bs-target="#v-pills-home"
-                  type="button"
-                  role="tab"
-                  aria-controls="v-pills-home"
-                  aria-selected="true"
-                  onClick={() => {
+
+          {/* panels */}
+          <div
+            className="tab-content col-lg-8 pb-5 pt-lg-0 pt-3"
+            id="v-pills-tabContent"
+          >
+            <div
+              className="tab-pane fade show active"
+              id="v-pills-home"
+              role="tabpanel"
+              aria-labelledby="v-pills-home-tab"
+            >
+              {tab === 1 && <ProfileTabs userInfo={userInfo} />}{" "}
+            </div>
+
+            <div
+              className="tab-pane fade"
+              id="v-pills-profile"
+              role="tabpanel"
+              aria-labelledby="v-pills-profile-tab"
+            >
+              {tab === 2 && <Orders />}
+            </div>
+            <div
+              className="tab-pane fade show active"
+              id="v-pills-home"
+              role="tabpanel"
+              aria-labelledby="v-pills-home-tab"
+            >
+              {tab === 3 && (
+                <SellerTabs
+                  userInfo={userInfo}
+                  isShopTrue={() => {
+                    setisShop(true);
                     setTab(1);
                   }}
-                >
-                  Profile Settings
-                </button>
-                <button
-                  className="nav-link d-flex justify-content-between"
-                  id="v-pills-profile-tab"
-                  data-bs-toggle="pill"
-                  data-bs-target="#v-pills-profile"
-                  type="button"
-                  role="tab"
-                  aria-controls="v-pills-profile"
-                  aria-selected="false"
-                  onClick={() => {
-                    navigate("/shipping");
-                  }}
-                >
-                  shipping address
-                  {/* <span className="badge2">{orders ? orders.length : 0}</span> */}
-                </button>
-                <button
-                  className="nav-link d-flex justify-content-between"
-                  id="v-pills-profile-tab"
-                  data-bs-toggle="pill"
-                  data-bs-target="#v-pills-profile"
-                  type="button"
-                  role="tab"
-                  aria-controls="v-pills-profile"
-                  aria-selected="false"
-                  onClick={() => {
-                    setTab(2);
-                  }}
-                >
-                  Orders List
-                  {/* <span className="badge2">{orders ? orders.length : 0}</span> */}
-                </button>
-                {!isShop && (
-                  <button
-                    className="nav-link d-flex justify-content-between"
-                    id="v-pills-profile-tab"
-                    data-bs-toggle="pill"
-                    data-bs-target="#v-pills-profile"
-                    type="button"
-                    role="tab"
-                    aria-controls="v-pills-profile"
-                    aria-selected="false"
-                    onClick={() => {
-                      setTab(3);
-                    }}
-                  >
-                    Become Seller
-                    {/* <span className="badge2">{orders ? orders.length : 0}</span> */}
-                  </button>
-                )}
-                {isShop && (
-                  <button
-                    className="nav-link d-flex justify-content-between"
-                    id="v-pills-profile-tab"
-                    data-bs-toggle="pill"
-                    data-bs-target="#v-pills-profile"
-                    type="button"
-                    role="tab"
-                    aria-controls="v-pills-profile"
-                    aria-selected="false"
-                    onClick={() => {
-                      setTab(4);
-                    }}
-                  >
-                    Create Product
-                    {/* <span className="badge2">{orders ? orders.length : 0}</span> */}
-                  </button>
-                )}
-                {isShop && (
-                  <button
-                    className="nav-link d-flex justify-content-between"
-                    id="v-pills-profile-tab"
-                    data-bs-toggle="pill"
-                    data-bs-target="#v-pills-profile"
-                    type="button"
-                    role="tab"
-                    aria-controls="v-pills-profile"
-                    aria-selected="false"
-                    onClick={() => {
-                      setTab(5);
-                    }}
-                  >
-                    Products Draft
-                    {/* <span className="badge2">{orders ? orders.length : 0}</span> */}
-                  </button>
-                )}
-                {isShop && (
-                  <button
-                    className="nav-link d-flex justify-content-between"
-                    id="v-pills-profile-tab"
-                    data-bs-toggle="pill"
-                    data-bs-target="#v-pills-profile"
-                    type="button"
-                    role="tab"
-                    aria-controls="v-pills-profile"
-                    aria-selected="false"
-                    onClick={() => {
-                      setTab(8);
-                    }}
-                  >
-                    Products Published
-                    {/* <span className="badge2">{orders ? orders.length : 0}</span> */}
-                  </button>
-                )}
-                {isShop && (
-                  <button
-                    className="nav-link d-flex justify-content-between"
-                    id="v-pills-profile-tab"
-                    data-bs-toggle="pill"
-                    data-bs-target="#v-pills-profile"
-                    type="button"
-                    role="tab"
-                    aria-controls="v-pills-profile"
-                    aria-selected="false"
-                    onClick={() => {
-                      setTab(6);
-                    }}
-                  >
-                    Create Coupon
-                    {/* <span className="badge2">{orders ? orders.length : 0}</span> */}
-                  </button>
-                )}
-                {isShop && (
-                  <button
-                    className="nav-link d-flex justify-content-between"
-                    id="v-pills-profile-tab"
-                    data-bs-toggle="pill"
-                    data-bs-target="#v-pills-profile"
-                    type="button"
-                    role="tab"
-                    aria-controls="v-pills-profile"
-                    aria-selected="false"
-                    onClick={() => {
-                      setTab(7);
-                    }}
-                  >
-                    List Coupons
-                    {/* <span className="badge2">{orders ? orders.length : 0}</span> */}
-                  </button>
-                )}
-              </div>
+                />
+              )}{" "}
+              {tab === 4 && <AddProductMain userInfo={userInfo} />}{" "}
+              {tab === 5 && (
+                <DraftProducts
+                  productShop={userInfo}
+                  shopId={userInfo?._id}
+                  brand=""
+                  keyword=""
+                  pagenumber=""
+                />
+              )}{" "}
+              {tab === 8 && (
+                <PublishedProducts
+                  productShop={userInfo}
+                  shopId={userInfo?._id}
+                  brand=""
+                  keyword=""
+                  pagenumber=""
+                />
+              )}{" "}
+              {tab === 6 && <CreateCoupon userInfo={userInfo} />}{" "}
+              {tab === 7 && <ListCoupons userInfo={userInfo} />}{" "}
             </div>
           </div>
         </div>
-
-        {/* panels */}
-        <div
-          className="tab-content col-lg-8 pb-5 pt-lg-0 pt-3"
-          id="v-pills-tabContent"
-        >
-          <div
-            className="tab-pane fade show active"
-            id="v-pills-home"
-            role="tabpanel"
-            aria-labelledby="v-pills-home-tab"
-          >
-            {tab === 1 && <ProfileTabs userInfo={userInfo} />}{" "}
-          </div>
-
-          <div
-            className="tab-pane fade"
-            id="v-pills-profile"
-            role="tabpanel"
-            aria-labelledby="v-pills-profile-tab"
-          >
-            {tab === 2 && <Orders />}
-          </div>
-          <div
-            className="tab-pane fade show active"
-            id="v-pills-home"
-            role="tabpanel"
-            aria-labelledby="v-pills-home-tab"
-          >
-            {tab === 3 && (
-              <SellerTabs
-                userInfo={userInfo}
-                isShopTrue={() => {
-                  setisShop(true);
-                  setTab(1);
-                }}
-              />
-            )}{" "}
-            {tab === 4 && <AddProductMain userInfo={userInfo} />}{" "}
-            {tab === 5 && (
-              <DraftProducts
-                productShop={userInfo}
-                shopId={userInfo?._id}
-                brand=""
-                keyword=""
-                pagenumber=""
-              />
-            )}{" "}
-            {tab === 8 && (
-              <PublishedProducts
-                productShop={userInfo}
-                shopId={userInfo?._id}
-                brand=""
-                keyword=""
-                pagenumber=""
-              />
-            )}{" "}
-            {tab === 6 && <CreateCoupon userInfo={userInfo} />}{" "}
-            {tab === 7 && <ListCoupons userInfo={userInfo} />}{" "}
-          </div>
-        </div>
       </div>
-    </div>
+    </>
   );
 };
 const Child = React.memo((props: any) => {

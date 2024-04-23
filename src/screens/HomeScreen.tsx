@@ -4,6 +4,7 @@ import CalltoActionSection from "../components/homeComponents/CalltoActionSectio
 import ContactInfo from "../components/homeComponents/ContactInfo";
 import ShopSection from "../components/homeComponents/ShopSection";
 import { useLocation } from "react-router-dom";
+import DocumentTitle from "../components/DocumentTitle";
 
 const HomeScreen = () => {
   window.scrollTo(0, 0);
@@ -20,6 +21,7 @@ const HomeScreen = () => {
   }, [location.search]);
   return (
     <>
+      <DocumentTitle title={"Home"}></DocumentTitle>
       <ShopSection keyword={keyword} pagenumber={pagenumber} brand={brand} />
       <ContactInfo />
     </>

@@ -5,6 +5,7 @@ import ContactInfo from "../components/homeComponents/ContactInfo";
 import ShopDetailSection from "../components/homeComponents/ShopDetailSection";
 import { useLocation } from "react-router-dom";
 import { useGetProfileShopQuery } from "../store/components/auth/authApi";
+import DocumentTitle from "../components/DocumentTitle";
 
 const HomeShopScreen = () => {
   window.scrollTo(0, 0);
@@ -39,6 +40,8 @@ const HomeShopScreen = () => {
 
   return (
     <>
+      <DocumentTitle title={"Shop Home"}></DocumentTitle>
+
       <ShopDetailSection
         keyword={keyword}
         pagenumber={pagenumber}
