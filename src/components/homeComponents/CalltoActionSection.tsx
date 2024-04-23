@@ -7,10 +7,11 @@ import { useSelector } from "react-redux";
 import { getUserInfo } from "../../store/selector/RootSelector";
 
 const CalltoActionSection = () => {
+  const dispatch = useDispatch();
   const userInfo = useSelector(getUserInfo);
+  
   const [email, setemail] = useState<any>("");
   const [sendEmail, { isLoading, error }] = useSendEmailMutation();
-  const dispatch = useDispatch();
 
   const onSendEmail = async (values: any) => {
     const res = await sendEmail(values);

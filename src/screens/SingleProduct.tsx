@@ -6,7 +6,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import Loading from "../components/LoadingError/Loading";
 import moment from "moment";
-import { calPerDiscount, getUrlParams, rawMarkup } from "../utils/commonFunction";
+import {
+  calPerDiscount,
+  formatMoney,
+  getUrlParams,
+  rawMarkup,
+} from "../utils/commonFunction";
 import {
   useCheckIsBuyerQuery,
   useCreateReviewProductMutation,
@@ -59,7 +64,7 @@ const SingleProduct = () => {
   }, [dataFetch]);
 
   const [dataReview1, setdataReview1] = useState<any>([]);
-  
+
   const {
     data: dataReview,
     error: err,
@@ -203,7 +208,11 @@ const SingleProduct = () => {
           <div className="row">
             <div className="col-md-6">
               <div className="single-image">
-                <img loading="lazy" src={product?.product_thumb} alt="product_thumb" />
+                <img
+                  loading="lazy"
+                  src={product?.product_thumb}
+                  alt="product_thumb"
+                />
               </div>
             </div>
             <div className="col-md-6">
@@ -216,17 +225,27 @@ const SingleProduct = () => {
                 <div className="product-count col-lg-7 ">
                   <div className="flex-box d-flex justify-content-between align-items-center">
                     <h6>Price</h6>
-                    <span className="line__through">${product?.product_original_price}</span>
+                    <span className="line__through">
+                      ${product?.product_original_price}
+                    </span>
                   </div>
                   <div className="flex-box d-flex justify-content-between align-items-center">
                     <h6>Sale Price</h6>
-                    <span className="ed1c24">- {calPerDiscount(product)} %</span>
+                    <span className="ed1c24">
+                      - {calPerDiscount(product)} %
+                    </span>
                     <span>${product?.product_price}</span>
                   </div>
                   <div className="flex-box d-flex justify-content-between align-items-center">
-                    <h6>Status</h6>
-                    {1 ? <span>In Stock</span> : <span>unavailable</span>}
+                    <h6 className="color__00ba9d">Available</h6>
+                    <span className="color__00ba9d">{formatMoney(product.product_quantity) || 0}</span>
                   </div>
+
+                  <div className="flex-box d-flex justify-content-between align-items-center">
+                    <h6 className="color__035ecf">Already sold</h6>
+                    <span className="color__035ecf">{formatMoney(product.product_sold) || 0}</span>
+                  </div>
+
                   <div className="flex-box d-flex justify-content-between align-items-center">
                     <h6>Reviews</h6>
                     <Rating

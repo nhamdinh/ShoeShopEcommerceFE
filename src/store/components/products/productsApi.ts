@@ -36,7 +36,6 @@ export const productsApi = createApi({
     "getByProduct_tag",
   ],
   endpoints: (builder) => ({
-
     getProducts: builder.query({
       query: (data) => ({
         url: `/products/all`,
@@ -54,7 +53,6 @@ export const productsApi = createApi({
       }),
       providesTags: ["GetProductsMax"],
     }),
-
 
     getProductsDetail: builder.query({
       query: (data) => ({
@@ -127,6 +125,7 @@ export const productsApi = createApi({
         method: "PUT",
         body: data,
       }),
+      invalidatesTags: ["GetProductsMax"],
     }),
     getCategorys: builder.query({
       query: (data) => ({
@@ -162,6 +161,7 @@ export const productsApi = createApi({
         method: "PATCH",
         body: data,
       }),
+      invalidatesTags: ["GetProductsMax"],
       // invalidatesTags: ["GetProductsDetail"],
     }),
     deleteProduct: builder.mutation({

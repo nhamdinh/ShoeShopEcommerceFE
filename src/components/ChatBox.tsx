@@ -15,7 +15,6 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 export default function ChatBox({ productShop }: any) {
-  console.log(productShop)
   const dispatch = useDispatch();
   const navigate = useNavigate();
 

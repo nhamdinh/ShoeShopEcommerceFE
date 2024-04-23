@@ -93,6 +93,14 @@ export const authApi = createApi({
         params: data,
       }),
     }),
+
+    registerSendEmail: builder.mutation({
+      query: (data) => ({
+        url: `otps/register-send-email`,
+        method: "PUT",
+        body: data,
+      }),
+    }),
   }),
 });
 
@@ -106,4 +114,5 @@ export const {
   useUpdateIsShopMutation,
   useGetStoryQuery,
   useSendEmailMutation,
+  useRegisterSendEmailMutation,
 } = authApi;
