@@ -32,8 +32,8 @@ const ListCoupons = ({ userInfo }: any) => {
   );
   useEffect(() => {
     if (isSuccess) {
-      setdataFetched(dataCoupons?.metadata?.discounts);
-      settotalCount(dataCoupons?.metadata?.totalCount);
+      setdataFetched(dataCoupons?.metadata?.discounts ?? []);
+      settotalCount(dataCoupons?.metadata?.totalCount ?? 0);
     }
   }, [dataCoupons]);
   return (
@@ -56,7 +56,7 @@ const ListCoupons = ({ userInfo }: any) => {
                 <h3 className="form-label">totalCount: {totalCount}</h3>
 
                 {dataFetched.map((item: any, index: number) => (
-                  <div className="mb-4" key={index}>
+                  <div className="mb-4" key={item._id}>
                     {index + 1}.
                     <div className="flex-box d-flex justify-content-between align-items-center gap10px">
                       <h6 className="form-label">discount_type</h6>
@@ -105,7 +105,7 @@ const ListCoupons = ({ userInfo }: any) => {
                                 <div className="name">{index + 1}.</div>
                                 <div className="name">{it?.product_name}</div>
                                 <img
-                                  src={it?.product_thumb}
+                                  src={it?.product_thumb_small ?? it?.product_thumb}
                                   alt="product_thumb"
                                 />
                               </div>
