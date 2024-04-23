@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { ACCESSTOKEN_STORAGE, NAME_STORAGE, REFRESHTOKEN_STORAGE } from "../../../utils/constants";
 
 interface IfAuth {
   userInfo: any;
@@ -17,7 +18,10 @@ const authSlice = createSlice({
     userLogout: (state: IfAuth, action: PayloadAction) => {
       state.accessToken = "";
       state.userInfo = {};
-      localStorage.clear();
+      localStorage.removeItem(NAME_STORAGE);
+      localStorage.removeItem(ACCESSTOKEN_STORAGE);
+      localStorage.removeItem(REFRESHTOKEN_STORAGE);
+      // localStorage.clear();
       // if (typeof window !== "undefined") {
       //   window.location.href = "/";
       // }

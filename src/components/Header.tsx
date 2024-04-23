@@ -20,7 +20,7 @@ import {
   useGetProductsMaxQuery,
 } from "../store/components/products/productsApi";
 import { getDataProducts, getUserInfo } from "../store/selector/RootSelector";
-import mainLogo from "./../images/AVA79.svg";
+import mainLogo from "./../images/logo_light.svg";
 
 import axios from "axios";
 import { toNonAccentVietnamese } from "../utils/commonFunction";
@@ -206,9 +206,9 @@ const Header = () => {
           <div className="container ">
             <div className="row ">
               <div className="col-6 d-flex align-items-center">
-                <Link className="navbar-brand" to="/">
-                  <img src={mainLogo} alt="userprofileimage" />
-                </Link>
+              <Link className=" df items__center navbar-brand" to="/">
+                <img src={mainLogo} alt="ShopNode" />
+              </Link>
                 {/* <button onClick={loginUser}>zzzzz</button> */}
               </div>
               <div className="col-6 d-flex align-items-center justify-content-end Login-Register">
@@ -318,8 +318,12 @@ const Header = () => {
                     <div className="dropdown">
                       {dataProducts1
                         .filter((item: any) => {
-                          const searchTerm = toNonAccentVietnamese(keyword.toLowerCase());
-                          const fullName = toNonAccentVietnamese(item?.product_name.toLowerCase());
+                          const searchTerm = toNonAccentVietnamese(
+                            keyword.toLowerCase()
+                          );
+                          const fullName = toNonAccentVietnamese(
+                            item?.product_name.toLowerCase()
+                          );
 
                           return (
                             searchTerm &&
@@ -362,12 +366,13 @@ const Header = () => {
         >
           <div className="row">
             <div className="col-md-3 col-4 d-flex align-items-center">
-              <Link className="navbar-brand" to="/">
-                <img src={mainLogo} alt="userprofileimage" />
+              <Link className=" df items__center navbar-brand" to="/">
+                <img src={mainLogo} alt="ShopNode" />
+                <h4 className="brand__Shop shadow__orangered">ShopNode</h4>
               </Link>
               {/* <button onClick={loginUser}>zzzzz</button> */}
             </div>
-            <div className="col-md-6 col-8 d-flex align-items-center zxc">
+            <div className="col-md-6 col-8 d-flex align-items-center zxc content__center">
               <div className="input-group">
                 <input
                   type="search"
@@ -423,8 +428,12 @@ const Header = () => {
                   <div className="dropdown">
                     {dataProducts1
                       .filter((item: any) => {
-                        const searchTerm = toNonAccentVietnamese(keyword.toLowerCase());
-                        const fullName = toNonAccentVietnamese(item?.product_name.toLowerCase());
+                        const searchTerm = toNonAccentVietnamese(
+                          keyword.toLowerCase()
+                        );
+                        const fullName = toNonAccentVietnamese(
+                          item?.product_name.toLowerCase()
+                        );
                         // console.log(searchTerm);
                         // console.log(fullName);
                         return (

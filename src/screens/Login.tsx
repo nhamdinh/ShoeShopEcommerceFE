@@ -71,6 +71,11 @@ const Login = () => {
           onLogin({ email: email, password: password });
         }}
       >
+        <h1>Welcome back!</h1>
+        <p className="ed1c24 fw600">
+          Đăng nhập bằng USER ở trên <br />Hoặc Đăng ký bằng Email mới
+        </p>
+
         <input
           type="email"
           placeholder="Email"
@@ -94,6 +99,7 @@ const Login = () => {
           onClick={() => {
             navigate("/register");
           }}
+          className="cursor__pointer"
         >
           Create Account
         </p>

@@ -96,7 +96,7 @@ const ProfileTabs = ({ userInfo }: any) => {
             />
           </div>
         </div>
-
+{/* 
         <div className="col-md-6">
           <div className="form">
             <label htmlFor="account-pass">New Password</label>
@@ -118,7 +118,7 @@ const ProfileTabs = ({ userInfo }: any) => {
               onChange={(e) => setConfirmPassword(e.target.value)}
             />
           </div>
-        </div>
+        </div> */}
         <button type="submit">
           {isLoading ? <Loading /> : "Update Profile"}
         </button>

@@ -56,41 +56,47 @@ const CartScreen = () => {
     useCheckoutOrderMutation();
   const onCheckoutOrder = async (checkout_cart: any) => {
     // console.log(checkout_cart);
-    const res = await checkoutOrder(checkout_cart);
+    await checkoutOrder(checkout_cart)
+      .then((res: any) => {
+        const data = res?.data;
+
+        if (data) {
+          if (data?.metadata?.length > 0) {
+            refetch();
+            navigate(`/profile`);
+            dispatch(
+              openToast({
+                isOpen: Date.now(),
+                content: "Checkout order Success",
+                step: 1,
+              })
+            );
+          }
+
+          // navigate(`/cart/${productId}?qty=${qty}`);
+          // navigate(`/cart`);
+          // dispatch(
+          //   openToast({
+          //     isOpen: Date.now(),
+          //     content: "Apply coupon Success",
+          //     step: 1,
+          //   })
+          // );
+        } else {
+          dispatch(
+            openToast({
+              isOpen: Date.now(),
+              content: res?.error?.data?.message ?? "Checkout Cart Failed !",
+              step: 2,
+            })
+          );
+          navigate(`/profile`);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     //@ts-ignore
-    const data = res?.data;
-
-    if (data) {
-      if (data?.metadata?.length > 0) {
-        refetch()
-        navigate(`/profile`);
-        dispatch(
-          openToast({
-            isOpen: Date.now(),
-            content: "Checkout order Success",
-            step: 1,
-          })
-        );
-      }
-
-      // navigate(`/cart/${productId}?qty=${qty}`);
-      // navigate(`/cart`);
-      // dispatch(
-      //   openToast({
-      //     isOpen: Date.now(),
-      //     content: "Apply coupon Success",
-      //     step: 1,
-      //   })
-      // );
-    } else {
-      dispatch(
-        openToast({
-          isOpen: Date.now(),
-          content: "Checkout Cart Failed !",
-          step: 2,
-        })
-      );
-    }
   };
 
   // console.log(cartReviews);

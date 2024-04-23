@@ -10,13 +10,15 @@ export default function TopHeader() {
         <div className="row">
           <div className="col-md-6 d-flex align-items-center display-none">
             <p
+            className="cursor__pointer"
               onClick={() => {
                 navigate("/");
               }}
             >
-              HOME
+              HOME &emsp; 0943 090 090
             </p>
-            <p onClick={() => {}}> 0943 090 090 </p>
+            <p onClick={() => {}}>{` admin@example.com | 123456`}</p>
+
           </div>
           <div className=" col-12 col-lg-6 justify-content-center justify-content-lg-end d-flex align-items-center">
             <Link to="">

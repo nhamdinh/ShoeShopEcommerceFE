@@ -40,8 +40,10 @@ textarea:focus {
   padding: 0;
 }
 .Announcement {
-  background-color: #ed1c24;
+  // background-color: #ed1c24;
   padding: 10px 0px 6px 0px;
+  background-image: linear-gradient(180deg, #f14130 , #fb6539);
+
 }
 .Announcement .col-md-6 p {
   color: white;
@@ -765,6 +767,16 @@ textarea:focus {
 .df {
   display: flex;
 }
+.items__center {
+  align-items: center;
+}
+.content__center {
+  justify-content: center;
+}
+.brand__Shop {
+  font-weight: 600;
+  color: #fff;
+}
 .content__between {
   justify-content: space-between;
 }
@@ -780,4 +792,25 @@ textarea:focus {
 }
 .color__035ecf {
   color: #035ecf !important;
+}
+.ed1c24 {
+  color: #ed1c24 !important;
+}
+.fw600 {
+  font-weight: 600;
+}
+.shadow__orangered {
+  font-weight: 600;
+  -webkit-text-shadow:
+    0 0 10px orangered,
+    0 0 20px orangered,
+    0 0 40px orangered,
+    0 0 80px orangered,
+    0 0 120px orangered;
+  text-shadow:
+    0 0 10px orangered,
+    0 0 20px orangered,
+    0 0 40px orangered,
+    0 0 80px orangered,
+    0 0 120px orangered;
 }
