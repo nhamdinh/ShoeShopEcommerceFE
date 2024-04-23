@@ -62,6 +62,7 @@ const CartScreen = () => {
 
     if (data) {
       if (data?.metadata?.length > 0) {
+        refetch()
         navigate(`/profile`);
         dispatch(
           openToast({
@@ -144,7 +145,11 @@ const CartScreen = () => {
   }, [discount_shopIds]);
 
   const [cartItems, setcartItems] = useState<any>([]);
-  const { data: dataCart, isSuccess: isSuccessCart } = useCheckCartQuery(
+  const {
+    data: dataCart,
+    isSuccess: isSuccessCart,
+    refetch,
+  } = useCheckCartQuery(
     {},
     {
       refetchOnMountOrArgChange: true,
@@ -384,7 +389,6 @@ const CompTableCartLv1 = ({ cartCurrent }: any) => {
                         return final;
                       });
                       if (!isNotValid) {
-
                         const _shopDiscount = _dataFetched
                           .filter((coupon: any) => coupon.checked)
                           .map((item: any) => {

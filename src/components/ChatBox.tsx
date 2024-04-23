@@ -8,7 +8,7 @@ import socketIOClient from "socket.io-client";
 import { SOCKET_HOST } from "../utils/constants";
 import { useGetStoryQuery } from "../store/components/auth/authApi";
 import Loading from "./LoadingError/Loading";
-import { rawMarkup } from "../utils/commonFunction";
+import { formatCustomerPhoneNumber, rawMarkup } from "../utils/commonFunction";
 import mainLogo1 from "./../images/icons8-facebook-messenger.gif";
 import { openDialog } from "../store/components/customDialog/dialogSlice";
 import { useDispatch } from "react-redux";
@@ -147,7 +147,7 @@ export default function ChatBox({ productShop }: any) {
             }}
             className="box__chat__name"
           >
-            {productShopName} - {phone}
+            {productShopName} - {formatCustomerPhoneNumber(phone.toString())}
           </p>
           {isLoading ? (
             <Loading />
