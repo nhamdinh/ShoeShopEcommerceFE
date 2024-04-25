@@ -56,7 +56,7 @@ const ListCoupons = ({ userInfo }: any) => {
                 <h3 className="form-label">totalCount: {totalCount}</h3>
 
                 {dataFetched.map((item: any, index: number) => (
-                  <div className="mb-4" key={item._id}>
+                  <div className="mb-4 capitalize" key={item._id}>
                     {index + 1}.
                     <div className="flex-box d-flex justify-content-between align-items-center gap10px">
                       <h6 className="form-label">discount_type</h6>
@@ -66,9 +66,9 @@ const ListCoupons = ({ userInfo }: any) => {
                     </div>
                     <div className="flex-box d-flex justify-content-between align-items-center gap10px">
                       <h6 className="form-label">discount_start</h6>
-                      {moment(item?.discount_start).format(FORMAT_DATE)}
+                      <span className="fw600">{moment(item?.discount_start).format(FORMAT_DATE)}</span>
                       <h6 className="form-label">discount_end</h6>
-                      {moment(item?.discount_end).format(FORMAT_DATE)}
+                      <span className="fw600">{moment(item?.discount_end).format(FORMAT_DATE)}</span>
                     </div>
                     <div className="flex-box d-flex justify-content-between align-items-center gap10px">
                       <h6 className="form-label">discount_code</h6>
