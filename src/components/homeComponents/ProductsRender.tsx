@@ -146,7 +146,7 @@ const ProductsRender = ({
                                 }
                                 alt={product?.product_name}
                               />
-                              <div className="shopBack__shopName capitalize">
+                              <div className="shopBack__shopName capitalize gradient__shopee">
                                 {product?.product_shop?.productShopName}
                               </div>
                             </div>

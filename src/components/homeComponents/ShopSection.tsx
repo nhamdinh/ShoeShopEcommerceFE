@@ -85,7 +85,7 @@ const ShopSection = ({ pagenumber, keyword, brand }: any) => {
                                 alt={product?.product_name}
                               />
                               <div
-                                className="shopBack__shopName capitalize"
+                                className="shopBack__shopName capitalize gradient__shopee"
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   navigate(
