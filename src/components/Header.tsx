@@ -261,7 +261,7 @@ const Header = () => {
                   <span className="badge">{cartItems.length}</span>
                 </Link>
               </div>
-              <div className="col-12 d-flex align-items-center zxc">
+              <div className="col-12 d-flex align-items-center column">
                 <div className="input-group">
                   <input
                     type="search"
@@ -372,7 +372,7 @@ const Header = () => {
               </Link>
               {/* <button onClick={loginUser}>zzzzz</button> */}
             </div>
-            <div className="col-md-6 col-8 d-flex align-items-center zxc content__center">
+            <div className="col-md-6 col-8 d-flex align-items-center column content__center">
               <div className="input-group">
                 <input
                   type="search"

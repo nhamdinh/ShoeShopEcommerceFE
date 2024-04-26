@@ -1,7 +1,6 @@
 .gradient__shopee {
   // background-color: #ed1c24;
-  background-image: linear-gradient(180deg, #f14130 , #fb6539) !important;
-
+  background-image: linear-gradient(180deg, #f14130, #fb6539) !important;
 }
 
 .STORE {
@@ -12,12 +11,20 @@
 
   h1 {
     font-weight: 600;
-    -webkit-text-shadow: 0 0 10px orangered, 0 0 20px orangered,
-      0 0 40px orangered, 0 0 80px orangered, 0 0 120px orangered;
-    text-shadow: 0 0 10px orangered, 0 0 20px orangered, 0 0 40px orangered,
-      0 0 80px orangered, 0 0 120px orangered;
-      color: #151516 !important;
-    }
+    -webkit-text-shadow:
+      0 0 10px orangered,
+      0 0 20px orangered,
+      0 0 40px orangered,
+      0 0 80px orangered,
+      0 0 120px orangered;
+    text-shadow:
+      0 0 10px orangered,
+      0 0 20px orangered,
+      0 0 40px orangered,
+      0 0 80px orangered,
+      0 0 120px orangered;
+    color: #151516 !important;
+  }
 }
 .section {
   .update__product {

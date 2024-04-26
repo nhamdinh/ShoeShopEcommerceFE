@@ -116,3 +116,18 @@ export const calPerDiscount = (product:any) => {
   const perDiscount = ((1 - product?.product_price/ product?.product_original_price) * 100).toFixed(0)
   return perDiscount;
 };
+
+export const removeNullObject = (obj:any) => {
+  for (let key in obj) {
+    if (obj[key] === null || obj[key] === undefined || obj[key] === "") {
+      delete obj[key];
+    } else if (typeof obj[key] === "object" && !Array.isArray(obj[key])) {
+      obj[key] = removeNullObject(obj[key]);
+      // if (Object.keys(obj[key]).length === 0) {
+      //   delete obj[key];
+      // }
+    }
+  }
+
+  return obj;
+};

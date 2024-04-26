@@ -10,15 +10,18 @@ const HomeScreen = () => {
   window.scrollTo(0, 0);
 
   const location = useLocation();
-  const [keyword, setkeyword] = useState<any>("");
-  const [brand, setbrand] = useState<any>("");
+
+  const [keyword, setKeyword] = useState<any>("");
+  const [brand, setBrand] = useState<any>("");
   const [pagenumber, setpagenumber] = useState<any>(1);
+
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
-    setkeyword(urlParams.get("search") ?? "");
-    setbrand(urlParams.get("brand") ?? "");
+    setKeyword(urlParams.get("search") ?? "");
+    setBrand(urlParams.get("brand") ?? "");
     setpagenumber(urlParams.get("page") ?? 1);
   }, [location.search]);
+  
   return (
     <>
       <DocumentTitle title={"Home"}></DocumentTitle>

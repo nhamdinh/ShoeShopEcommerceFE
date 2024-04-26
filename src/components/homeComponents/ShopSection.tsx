@@ -6,8 +6,19 @@ import { useGetProductsQuery } from "../../store/components/products/productsApi
 import Loading from "../LoadingError/Loading";
 import Message from "../LoadingError/Error";
 import Pagination from "./Pagination";
-import { PAGE_SIZE } from "../../utils/constants";
-import { calPerDiscount, formatMoneyCurrency } from "../../utils/commonFunction";
+import {
+  PAGE_SIZE,
+  ORDER_SORT_OPTIONS,
+  PRODUCT_CATEGORIES_REAL,
+} from "../../utils/constants";
+import {
+  calPerDiscount,
+  formatMoneyCurrency,
+  removeNullObject,
+} from "../../utils/commonFunction";
+import { Carousel, Col, Modal, Row, Select } from "antd";
+import { UpOutlined, DownOutlined } from "@ant-design/icons";
+import SelectApp from "../../ui/SelectApp";
 
 const ShopSection = ({ pagenumber, keyword, brand }: any) => {
   const navigate = useNavigate();
@@ -16,22 +27,55 @@ const ShopSection = ({ pagenumber, keyword, brand }: any) => {
   const [currentPage, setCurrentPage] = useState<any>(1);
   const [total, setTotal] = useState<any>(1);
 
+  const options = ORDER_SORT_OPTIONS.filter((option) => option);
+  const [sort, setSort] = useState<any>(options[0].value);
+  const optionsCate: any = PRODUCT_CATEGORIES_REAL.filter((option) => option);
+  const [category, setCategory] = useState<any>(optionsCate[0].value);
+
   const [params, setParams] = useState<any>({
     page: pagenumber ?? 1,
+    limit: PAGE_SIZE,
+    orderByValue: -1,
+    orderByKey: "_id",
+    product_type: "",
     keyword: keyword ?? "",
     brand: brand ?? "",
-    limit: PAGE_SIZE,
-    order: "desc",
-    orderBy: "createdAt",
   });
 
   useEffect(() => {
-    setParams({
-      ...params,
-      page: pagenumber ?? 1,
+    const final: any = {};
+    PRODUCT_CATEGORIES_REAL.map((opt) => {
+      if (opt.value === category) {
+        final.product_type = opt.product_type ?? "";
+      }
+    });
+    setParams((prev: any) => ({
+      ...prev,
+      ...final,
+    }));
+  }, [category]);
+
+  useEffect(() => {
+    const final: any = {};
+    ORDER_SORT_OPTIONS.map((opt) => {
+      if (opt.value === sort) {
+        final.orderByKey = opt.orderByKey ?? "_id";
+        final.orderByValue = opt.orderByValue ?? -1;
+      }
+    });
+    setParams((prev: any) => ({
+      ...prev,
+      ...final,
+    }));
+  }, [sort]);
+
+  useEffect(() => {
+    setParams((prev: any) => ({
+      ...prev,
+      page: +(pagenumber ?? 1),
       keyword: keyword ?? "",
       brand: brand ?? "",
-    });
+    }));
   }, [pagenumber, keyword, brand]);
 
   const {
@@ -39,7 +83,7 @@ const ShopSection = ({ pagenumber, keyword, brand }: any) => {
     error,
     isSuccess,
     isLoading,
-  } = useGetProductsQuery(params, {
+  } = useGetProductsQuery(removeNullObject(params), {
     refetchOnMountOrArgChange: true,
     skip: false,
   });
@@ -57,6 +101,31 @@ const ShopSection = ({ pagenumber, keyword, brand }: any) => {
         <div className="section">
           <div className="row">
             <div className="col-lg-12 col-md-12 article">
+              <div className="row mb40px">
+                <div className=" col-lg-6 col-md-6 col-sm-6"></div>
+                <div className=" col-lg-6 col-md-6 col-sm-6">
+                  <div className="row gap12px flex__content__end">
+                    <div className=" col-lg-5 col-md-12 col-sm-12 flex__content__end">
+                      <SelectApp
+                        options={optionsCate}
+                        value={category}
+                        cb_setValue={(value: any, opt: any) => {
+                          setCategory(value);
+                        }}
+                      />
+                    </div>
+                    <div className=" col-lg-5 col-md-12 col-sm-12 flex__content__end">
+                      <SelectApp
+                        options={options}
+                        value={sort}
+                        cb_setValue={(value: any, opt: any) => {
+                          setSort(value);
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
               <div className="shopcontainer row">
                 {isLoading ? (
                   <div className="mb-5">
@@ -68,7 +137,7 @@ const ShopSection = ({ pagenumber, keyword, brand }: any) => {
                   <>
                     {dataFetched?.map((product: any) => (
                       <div
-                        className="shop col-lg-4 col-md-6 col-sm-6"
+                        className="mb50px col-lg-4 col-md-6 col-sm-6"
                         key={product?._id}
                       >
                         <div className="border-product">
@@ -81,7 +150,10 @@ const ShopSection = ({ pagenumber, keyword, brand }: any) => {
                               <img
                                 className="scale shopBack__img cursor__pointer"
                                 loading="lazy"
-                                src={product?.product_thumb_small ?? product?.product_thumb}
+                                src={
+                                  product?.product_thumb_small ??
+                                  product?.product_thumb
+                                }
                                 alt={product?.product_name}
                               />
                               <div
@@ -119,7 +191,10 @@ const ShopSection = ({ pagenumber, keyword, brand }: any) => {
 
                             <div className="df content__between">
                               <h3 className="line__through">
-                                ${formatMoneyCurrency(product?.product_original_price)}
+                                $
+                                {formatMoneyCurrency(
+                                  product?.product_original_price
+                                )}
                               </h3>
                               <h3 className="ed1c24">
                                 - {calPerDiscount(product)} %
@@ -128,8 +203,6 @@ const ShopSection = ({ pagenumber, keyword, brand }: any) => {
                             <h3>
                               ${formatMoneyCurrency(product?.product_price)}
                             </h3>
-
-
                           </div>
                         </div>
                       </div>
