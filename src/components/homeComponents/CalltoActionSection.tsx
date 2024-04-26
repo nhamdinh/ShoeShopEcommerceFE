@@ -5,51 +5,40 @@ import { openToast } from "../../store/components/customDialog/toastSlice";
 import Loading from "../LoadingError/Loading";
 import { useSelector } from "react-redux";
 import { getUserInfo } from "../../store/selector/RootSelector";
+import { removeNullObject } from "../../utils/commonFunction";
 
-const CalltoActionSection = () => {
+const CalltoActionSection = ({ productShop }: any) => {
   const dispatch = useDispatch();
   const userInfo = useSelector(getUserInfo);
-  
-  const [email, setemail] = useState<any>("");
+  const [email, setEmail] = useState<any>("");
   const [sendEmail, { isLoading, error }] = useSendEmailMutation();
-
   const onSendEmail = async (values: any) => {
-    const res = await sendEmail(values);
-
-    //@ts-ignore
-    const data = res?.data;
-
-    if (data) {
-      console.log(data);
-      setemail("");
-      dispatch(
-        openToast({
-          isOpen: Date.now(),
-          content: "A Email Has been send !",
-          step: 1,
-        })
-      );
-    } else {
-      //@ts-ignore
-      const error = res?.error;
-      const dataError = error?.data ?? [];
-      if (dataError?.length > 0) {
-        dataError.map((err: any) => {
-          const content = err?.msg ?? "Operate Failed";
-          const myTimeout = setTimeout(() => {
-            dispatch(
-              openToast({
-                isOpen: Date.now(),
-                content: content,
-                step: 2,
-              })
-            );
-          }, 100);
-
-          return () => clearTimeout(myTimeout);
-        });
-      }
-    }
+    await sendEmail(values)
+      .then((res: any) => {
+        const data = res?.data;
+        if (data) {
+          console.log(data);
+          // setEmail("");
+          dispatch(
+            openToast({
+              isOpen: Date.now(),
+              content: "A Email Has been send !",
+              step: 1,
+            })
+          );
+        } else {
+          dispatch(
+            openToast({
+              isOpen: Date.now(),
+              content: res?.error?.data?.message ?? "Failed !",
+              step: 2,
+            })
+          );
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   };
 
   return (
@@ -58,32 +47,51 @@ const CalltoActionSection = () => {
         <div className="row">
           <div className="col-xs-12">
             <div className="subscribe-head">
-              <h2>FOLLOW SHOP</h2>
+              <h2 className="fw600 shadow__orangered">FOLLOW SHOP</h2>
               <p>Sign up free and get the latest tips.</p>
               <div className="form-section">
-                <input
-                  placeholder="Your Email..."
-                  name="email"
-                  type="email"
-                  value={email}
-                  onChange={(e: any) => {
-                    setemail(e.target.value);
-                  }}
-                />
+                {!userInfo?._id && (
+                  <input
+                    placeholder="Your Email..."
+                    name="email"
+                    type="email"
+                    value={email}
+                    onChange={(e: any) => {
+                      setEmail(e.target.value);
+                    }}
+                  />
+                )}
 
                 {isLoading ? (
                   <Loading />
                 ) : (
                   <input
-                    onClick={() => {
-                      onSendEmail({
-                        email: email,
-                        productShopName: userInfo?.productShopName,
-                      });
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      e.preventDefault();
+
+                      const params = {
+                        email,
+                        id: userInfo?._id,
+                        productShopName: productShop?.productShopName,
+                        productShopId: productShop?._id,
+                      };
+                      if (params.email || params.id) {
+                        onSendEmail(removeNullObject(params));
+                      } else {
+                        dispatch(
+                          openToast({
+                            isOpen: Date.now(),
+                            content: "You need Login or Enter your Email !",
+                            step: 2,
+                          })
+                        );
+                      }
                     }}
                     value="Yes. I want!"
                     name="subscribe"
                     type="submit"
+                    className="bgc__123b7a"
                   />
                 )}
               </div>

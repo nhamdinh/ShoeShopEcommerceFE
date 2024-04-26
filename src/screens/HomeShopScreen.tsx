@@ -41,7 +41,7 @@ const HomeShopScreen = () => {
   return (
     <>
       <DocumentTitle title={"Shop Home"}></DocumentTitle>
-
+      <CalltoActionSection productShop={dataProfileShop?.metadata} />
       <ShopDetailSection
         keyword={keyword}
         pagenumber={pagenumber}
@@ -49,7 +49,6 @@ const HomeShopScreen = () => {
         shopId={shopId}
         productShop={dataProfileShop?.metadata}
       />
-      <CalltoActionSection />
     </>
   );
 };
