@@ -310,7 +310,7 @@ const Header = () => {
                   >
                     search
                   </button>
-
+{/* 
                   <select
                     className="search-button capitalize"
                     value={brand}
@@ -334,7 +334,7 @@ const Header = () => {
                         </option>
                       );
                     })}
-                  </select>
+                  </select> */}
                 </div>
                 {dropdown && (
                   <div className="search-container">
@@ -407,7 +407,7 @@ const Header = () => {
                 >
                   search
                 </button>
-                <select
+{/*                 <select
                   className="search-button capitalize"
                   value={brand}
                   onChange={(e) => {
@@ -428,7 +428,7 @@ const Header = () => {
                       </option>
                     );
                   })}
-                </select>
+                </select> */}
               </div>
               {dropdown && (
                 <div className="search-container">

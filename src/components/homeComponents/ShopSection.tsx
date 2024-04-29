@@ -105,7 +105,7 @@ const ShopSection = ({ pagenumber, keyword, brand }: any) => {
                 <div className=" col-lg-6 col-md-6 col-sm-6"></div>
                 <div className=" col-lg-6 col-md-6 col-sm-6">
                   <div className="row gap12px flex__content__end">
-                    <div className=" col-lg-5 col-md-12 col-sm-12 flex__content__end">
+                    {/* <div className=" col-lg-5 col-md-12 col-sm-12 flex__content__end">
                       <SelectApp
                         options={optionsCate}
                         value={category}
@@ -113,7 +113,7 @@ const ShopSection = ({ pagenumber, keyword, brand }: any) => {
                           setCategory(value);
                         }}
                       />
-                    </div>
+                    </div> */}
                     <div className=" col-lg-5 col-md-12 col-sm-12 flex__content__end">
                       <SelectApp
                         options={options}

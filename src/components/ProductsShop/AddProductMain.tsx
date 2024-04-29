@@ -235,9 +235,14 @@ const AddProductMain = ({ userInfo }: any) => {
 
   const submitHandler = (e: any) => {
     e.preventDefault();
-    const product_variants = productVariants.filter(
-      (pp: any) => pp.name && pp.values.length > 1
-    );
+    const product_variants = productVariants
+      .filter((pp: any) => pp.name && pp.values.length > 1)
+      .map((kk: any) => {
+        const final: any = { ...kk };
+        final.values = kk.values.filter((vv: any) => vv !== "");
+        delete final["id"]
+        return final;
+      });
     const sku_list = dataTableDisplay
       .filter((pp: any) => pp.sku_price && pp.sku_stock)
       .map((sku: any) => {
@@ -248,7 +253,13 @@ const AddProductMain = ({ userInfo }: any) => {
         });
         return { sku_price, sku_stock, sku_tier_index, sku_values };
       });
-    if (product_variants.length && sku_list.length && image && cateArr.length) {
+    if (
+      product_variants.length &&
+      sku_list.length &&
+      image &&
+      brand &&
+      cateArr.length
+    ) {
       onCreateProduct({
         product_name: name,
         product_description: description,
@@ -260,6 +271,7 @@ const AddProductMain = ({ userInfo }: any) => {
           100
         ).toFixed(2),
         product_quantity: countInStock,
+        product_brand: brand,
         product_categories: cateArr,
         product_shop: userInfo._id,
         product_variants,

@@ -61,9 +61,9 @@ const TableCreateSku = ({
         final.values = kk.values.filter((vv: any) => vv !== "");
         return final;
       });
-    console.log(__productVariants);
+    // console.log(__productVariants);
     const __generateCombinations = generateCombinations(__productVariants);
-    console.log(__generateCombinations);
+    // console.log(__generateCombinations);
     if (cb_setDataTableDisplay)
       cb_setDataTableDisplay(
         __generateCombinations.map((vv: any, index: number) => {
