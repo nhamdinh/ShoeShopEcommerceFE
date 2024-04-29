@@ -5,7 +5,7 @@ import { DatePicker, DatePickerProps } from "antd";
 
 import Message from "../LoadingError/Error";
 import Loading from "../LoadingError/Loading";
-import { regexOnlyNumber } from "../../utils/constants";
+import { RE_ONLY_NUMBER } from "../../utils/constants";
 
 import { useDispatch } from "react-redux";
 import { openToast } from "../../store/components/customDialog/toastSlice";
@@ -152,7 +152,7 @@ const CreateCoupon = ({ userInfo }: any) => {
                         onChange={(e) => {
                           let val = e.target.value;
                           val = val.replaceAll(",", "");
-                          if (!val || val.match(regexOnlyNumber)) {
+                          if (!val || val.match(RE_ONLY_NUMBER)) {
                             setdiscount_value(val);
                           } else {
                           }
@@ -222,7 +222,7 @@ const CreateCoupon = ({ userInfo }: any) => {
                       onChange={(e) => {
                         let val = e.target.value;
                         val = val.replaceAll(",", "");
-                        if (!val || val.match(regexOnlyNumber)) {
+                        if (!val || val.match(RE_ONLY_NUMBER)) {
                           setdiscount_quantity(val);
                         } else {
                         }
@@ -245,7 +245,7 @@ const CreateCoupon = ({ userInfo }: any) => {
                       onChange={(e) => {
                         let val = e.target.value;
                         val = val.replaceAll(",", "");
-                        if (!val || val.match(regexOnlyNumber)) {
+                        if (!val || val.match(RE_ONLY_NUMBER)) {
                           setdiscount_useMax_user(val);
                         } else {
                         }
@@ -268,7 +268,7 @@ const CreateCoupon = ({ userInfo }: any) => {
                       onChange={(e) => {
                         let val = e.target.value;
                         val = val.replaceAll(",", "");
-                        if (!val || val.match(regexOnlyNumber)) {
+                        if (!val || val.match(RE_ONLY_NUMBER)) {
                           setdiscount_order_minValue(val);
                         } else {
                         }

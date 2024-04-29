@@ -2,21 +2,27 @@ import { memo, useState } from "react";
 import { Select } from "antd";
 import { UpOutlined, DownOutlined } from "@ant-design/icons";
 
-const SelectApp = ({ options, value, cb_setValue, width }: any) => {
+const SelectAppMultiple = ({
+  options,
+  value,
+  cb_setValue,
+  width,
+  placeholder,
+}: any) => {
   const [isShowDropDown, setShowDropdownFilter] = useState<any>(false);
 
   return (
     <Select
-      style={{
-        width: width ?? "320px",
-      }} 
-      placeholder="Please select"
-      suffixIcon={isShowDropDown ? <UpOutlined /> : <DownOutlined />}
-      onChange={(value, opt) => {
-        cb_setValue(value, opt);
-      }}
-      // value={productOption?.title}
+      loading={true}
+      mode="multiple"
+      placeholder={placeholder ?? "Please select"}
+      // defaultValue={["a10", "c12"]}
       value={value}
+      onChange={cb_setValue}
+      style={{ width: width ?? "300px" }}
+      options={options}
+      suffixIcon={isShowDropDown ? <UpOutlined /> : <DownOutlined />}
+      // value={productOption?.title}
       dropdownStyle={{
         color: "red",
       }}
@@ -58,4 +64,4 @@ alignItems: "center",
     </Select>
   );
 };
-export default memo(SelectApp);
+export default memo(SelectAppMultiple);

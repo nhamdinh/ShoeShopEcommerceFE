@@ -24,7 +24,10 @@ export const Toastobjects = {
   pauseOnHover: false,
   autoClose: 1000,
 };
-export const regexOnlyNumber = /^[0-9\b]+$/;
+export const RE_ONLY_NUMBER = /^[0-9\b]+$/;
+export const RE_DECIMAL = /^\d{1,}(\.\d{0,4})?$/;
+export const PRODUCT_CATEGORY = 'PRODUCT_MODEL';
+
 export const PRODUCT_CATEGORIES_REAL = [
   { value: "all", label: "All Products", product_type: "" },
   {

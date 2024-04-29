@@ -52,7 +52,8 @@
     "workbox-expiration": "^6.5.3",
     "workbox-precaching": "^6.5.3",
     "workbox-routing": "^6.5.3",
-    "workbox-strategies": "^6.5.3"
+    "workbox-strategies": "^6.5.3",
+    "uid": "^2.0.2"
   },
   "scripts": {
     "dev": "set PORT=3001&& set REACT_APP_API_URL=http://localhost:5000/api&& set REACT_APP_SOCKET_HOST=http://localhost:6000&& react-scripts --openssl-legacy-provider start",

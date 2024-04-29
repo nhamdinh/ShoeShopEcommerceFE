@@ -3,7 +3,10 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../LoadingError/Error";
 import Loading from "../LoadingError/Loading";
-import { FOLDER_PRODUCS_STORAGE } from "../../utils/constants";
+import {
+  FOLDER_PRODUCS_STORAGE,
+  PRODUCT_CATEGORY,
+} from "../../utils/constants";
 import {
   useGetBrandsQuery,
   useGetCodesQuery,
@@ -33,30 +36,33 @@ const EditProductMain = () => {
   const uploadImage = async (options: any) => {
     const { onSuccess, onError, file, onProgress } = options;
 
-    let sizeImg = file ? Number(file?.size) : sizeMax + 1;
+    const sizeImg = file ? +file?.size : sizeMax + 1;
     if (sizeImg <= sizeMax) {
       let formData = new FormData();
       const fileName = Date.now() + file.name;
       formData.append("name", fileName);
       formData.append("file", file);
 
-      try {
-        const res: any = await uploadImg({
-          formData,
-          folder: FOLDER_PRODUCS_STORAGE,
+      await uploadImg({
+        formData,
+        folder: FOLDER_PRODUCS_STORAGE,
+      })
+        .then((res: any) => {
+          const data = res?.data?.metadata;
+          if (data) handleImageAttribute(data);
+        })
+        .catch((err) => {
+          console.log(err);
         });
-
-        const data = res?.data?.metadata;
-        if (data) {
-
-          handleImageAttribute(data);
-
-
-        }
-      } catch (err) {
-        console.log(err);
-      }
     } else {
+      setFileList([{ url: product?.product_thumb }]);
+      dispatch(
+        openToast({
+          isOpen: Date.now(),
+          content: "File is so Big, must less than 5MB",
+          step: 2,
+        })
+      );
     }
   };
 
@@ -71,17 +77,16 @@ const EditProductMain = () => {
   };
 
   const onUploadImgUrl = async () => {
-    try {
-      const res: any = await uploadImgUrl({
-        urlImage,
+    await uploadImgUrl({
+      urlImage,
+    })
+      .then((res: any) => {
+        const data = res?.data?.metadata;
+        if (data) handleImageAttribute(data);
+      })
+      .catch((err: any) => {
+        console.error(err);
       });
-      const data = res?.data?.metadata;
-      if (data) {
-        handleImageAttribute(data);
-      }
-    } catch (err) {
-      console.log(err);
-    }
   };
 
   const onChange: UploadProps["onChange"] = ({ fileList: newFileList }) => {
@@ -120,7 +125,16 @@ const EditProductMain = () => {
   );
   useEffect(() => {
     if (brandsisSuccess) {
-      setbrands(brandsdata?.brands);
+      const dataBrands = brandsdata?.metadata.brands;
+      const __dataBrands = dataBrands.map((mm: any) => {
+        return {
+          value: mm._id,
+          label: mm.brand,
+        };
+      });
+      console.log(__dataBrands);
+      // setBrands(__dataBrands);
+      // setBrand(__dataBrands[0]?.value);
     }
   }, [brandsdata]);
 
@@ -134,7 +148,7 @@ const EditProductMain = () => {
     isLoading: isLoadingcategorys,
   } = useGetCodesQuery(
     {
-      mainCode_type: "PRODUCT_MODEL",
+      mainCode_type: PRODUCT_CATEGORY,
     },
     {
       refetchOnMountOrArgChange: true,
@@ -222,7 +236,10 @@ const EditProductMain = () => {
       product_name: name,
       product_description: description,
       product_price: price,
-      product_original_price: +((+price * ( (Math.random() * (50 - 10) + 10) +100    )/100).toFixed(2)),
+      product_original_price: +(
+        (+price * (Math.random() * (50 - 10) + 10 + 100)) /
+        100
+      ).toFixed(2),
       product_thumb: image,
       product_thumb_small,
       product_quantity: countInStock,
@@ -296,7 +313,7 @@ const EditProductMain = () => {
                             <div className="flex-box d-flex justify-content-between align-items-center">
                               <h6>Brand</h6>
                               <select
-                              className="capitalize"
+                                className="capitalize"
                                 value={brand}
                                 onChange={(e) => setbrand(e.target.value)}
                               >
@@ -309,7 +326,7 @@ const EditProductMain = () => {
                               <h6>Category</h6>
 
                               <select
-                              className="capitalize"
+                                className="capitalize"
                                 value={categor}
                                 disabled
                                 onChange={(e) => setcategory(e.target.value)}

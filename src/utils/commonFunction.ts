@@ -131,3 +131,27 @@ export const removeNullObject = (obj:any) => {
 
   return obj;
 };
+export const addZero = (number: any) => {
+  let numberString = number.toString();
+  if (Number(number) - 10 < 0) {
+    numberString = "0" + numberString;
+  }
+  return numberString;
+};
+
+export const cartesianProduct = (data: any, result = {}) => {
+  if (data.length === 0) {
+    return [result];
+  }
+
+  const current = data[0];
+  const rest = data.slice(1);
+  const newResult: any = [];
+
+  for (let value of current.values) {
+    const newEntry = { ...result, [current.name]: value };
+    newResult.push(...cartesianProduct(rest, newEntry));
+  }
+
+  return newResult;
+};

@@ -81,7 +81,7 @@ const Header = () => {
   const [brand, setbrand] = useState<any>("All");
   const [brands, setbrands] = useState<any>([]);
   const {
-    data: dataBrands,
+    data: databrands,
     error: errBrands,
     isSuccess: isSuccessBrands,
     isLoading: isLoadingBrands,
@@ -97,13 +97,34 @@ const Header = () => {
   );
   useEffect(() => {
     if (isSuccessBrands) {
-      setbrands(dataBrands?.brands);
+      const dataBrands = databrands?.metadata.brands;
+      const __dataBrands = dataBrands.map((mm: any) => {
+        return {
+          value: mm._id,
+          label: mm.brand,
+        };
+      });
+      setbrands(__dataBrands);
     }
-  }, [dataBrands]);
+  }, [databrands]);
 
   const [dropdown, setdropdown] = useState<any>(false);
   const dataProducts1 = useSelector(getDataProducts);
   const [dataProducts, setdataProducts] = useState<any>([]);
+
+  const dataProductsFilter = () => {
+    return dataProducts1
+      .filter((item: any) => {
+        const searchTerm = toNonAccentVietnamese(keyword.toLowerCase());
+        const fullName = toNonAccentVietnamese(
+          item?.product_name.toLowerCase()
+        );
+        return (
+          searchTerm && fullName.includes(searchTerm) && fullName !== searchTerm
+        );
+      })
+      .slice(0, 10);
+  };
   const {
     data: dataFetch,
     error: errdataProducts,
@@ -206,9 +227,9 @@ const Header = () => {
           <div className="container ">
             <div className="row ">
               <div className="col-6 d-flex align-items-center">
-              <Link className=" df items__center navbar-brand" to="/">
-                <img src={mainLogo} alt="ShopNode" />
-              </Link>
+                <Link className=" df items__center navbar-brand" to="/">
+                  <img src={mainLogo} alt="ShopNode" />
+                </Link>
                 {/* <button onClick={loginUser}>zzzzz</button> */}
               </div>
               <div className="col-6 d-flex align-items-center justify-content-end Login-Register">
@@ -294,6 +315,8 @@ const Header = () => {
                     className="search-button capitalize"
                     value={brand}
                     onChange={(e) => {
+                      console.log(e.target.value);
+
                       setbrand(e.target.value);
                       submitHandler(keyword, e.target.value);
                     }}
@@ -305,9 +328,9 @@ const Header = () => {
                         <option
                           className="option__br"
                           key={index}
-                          value={bra?.brand}
+                          value={bra?.value}
                         >
-                          {bra?.brand}
+                          {bra?.label}
                         </option>
                       );
                     })}
@@ -316,37 +339,21 @@ const Header = () => {
                 {dropdown && (
                   <div className="search-container">
                     <div className="dropdown">
-                      {dataProducts1
-                        .filter((item: any) => {
-                          const searchTerm = toNonAccentVietnamese(
-                            keyword.toLowerCase()
-                          );
-                          const fullName = toNonAccentVietnamese(
-                            item?.product_name.toLowerCase()
-                          );
+                      {dataProductsFilter().map((item: any) => (
+                        <div
+                          className="dropdown-row"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            // submitHandler(item?.name, brand);
 
-                          return (
-                            searchTerm &&
-                            fullName.includes(searchTerm) &&
-                            fullName !== searchTerm
-                          );
-                        })
-                        .slice(0, 10)
-                        .map((item: any) => (
-                          <div
-                            className="dropdown-row"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              // submitHandler(item?.name, brand);
-
-                              navigate(`product-detail?id=${item?._id}`);
-                              setKeyword("");
-                            }}
-                            key={item?._id}
-                          >
-                            {item?.product_name}
-                          </div>
-                        ))}
+                            navigate(`product-detail?id=${item?._id}`);
+                            setKeyword("");
+                          }}
+                          key={item?._id}
+                        >
+                          {item?.product_name}
+                        </div>
+                      ))}
                     </div>
                   </div>
                 )}
@@ -415,9 +422,9 @@ const Header = () => {
                       <option
                         className="option__br"
                         key={index}
-                        value={bra?.brand}
+                        value={bra?.value}
                       >
-                        {bra?.brand}
+                        {bra?.label}
                       </option>
                     );
                   })}
@@ -426,38 +433,21 @@ const Header = () => {
               {dropdown && (
                 <div className="search-container">
                   <div className="dropdown">
-                    {dataProducts1
-                      .filter((item: any) => {
-                        const searchTerm = toNonAccentVietnamese(
-                          keyword.toLowerCase()
-                        );
-                        const fullName = toNonAccentVietnamese(
-                          item?.product_name.toLowerCase()
-                        );
-                        // console.log(searchTerm);
-                        // console.log(fullName);
-                        return (
-                          searchTerm &&
-                          fullName.includes(searchTerm) &&
-                          fullName !== searchTerm
-                        );
-                      })
-                      .slice(0, 10)
-                      .map((item: any, index: number) => (
-                        <div
-                          className="dropdown-row"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            // submitHandler(item?.name, brand);
-                            navigate(`product-detail?id=${item?._id}`);
-                            setKeyword("");
-                          }}
-                          key={item?._id}
-                        >
-                          <div className="name">{item?.product_name}</div>
-                          <img src={item?.product_thumb} alt="" />
-                        </div>
-                      ))}
+                    {dataProductsFilter().map((item: any, index: number) => (
+                      <div
+                        className="dropdown-row"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          // submitHandler(item?.name, brand);
+                          navigate(`product-detail?id=${item?._id}`);
+                          setKeyword("");
+                        }}
+                        key={item?._id}
+                      >
+                        <div className="name">{item?.product_name}</div>
+                        <img src={item?.product_thumb} alt="" />
+                      </div>
+                    ))}
                   </div>
                 </div>
               )}

@@ -180,6 +180,13 @@ export const productsApi = createApi({
       }),
       invalidatesTags: ["tag_getDraftProducts"],
     }),
+    getAllBrandByCategories: builder.mutation({
+      query: (data) => ({
+        url: `/categorys/get-all-brands-categories`,
+        method: "PUT",
+        body: data,
+      }),
+    }),
   }),
 });
 
@@ -203,4 +210,5 @@ export const {
   useUpdateProductMutation,
   useDeleteProductMutation,
   usePublishProductMutation,
+  useGetAllBrandByCategoriesMutation,
 } = productsApi;
