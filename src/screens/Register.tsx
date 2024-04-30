@@ -155,7 +155,7 @@ const Register = () => {
           </button>
           {showOtp && (
             <>
-              <div className="zzz33 mt20px"></div>
+              <div className="border__e92227 mt20px"></div>
               <input
                 type="text"
                 placeholder="OTP (6)"

@@ -23,6 +23,9 @@ import { getProductsCart, getUserInfo } from "../store/selector/RootSelector";
 import { openToast } from "../store/components/customDialog/toastSlice";
 import DocumentTitle from "../components/DocumentTitle";
 
+const BF1 = "===";
+const BF2 = ";;;";
+
 const SingleProduct = () => {
   const dispatch = useDispatch();
   const productsCart = useSelector(getProductsCart);
@@ -43,6 +46,10 @@ const SingleProduct = () => {
   }, [productsCart, productId]);
 
   const [product, setdataFetched] = useState<any>({});
+  const [skus, setSkus] = useState<any>({});
+  const [skuSelected, setSkuSelected] = useState<any>({});
+  const [skuSelectedId, setSkuSelectedId] = useState<any>("");
+  const [product_variants, setProduct_variants] = useState<any>([]);
   const {
     data: dataFetch,
     error,
@@ -60,9 +67,52 @@ const SingleProduct = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      setdataFetched(dataFetch?.metadata);
+      const __product = dataFetch?.metadata;
+
+      const __skus = __product.skus;
+      const final: any = {};
+      __skus.map((sk: any) => {
+        const sku_values = sk.sku_values;
+        const stringValues = Object.keys(sku_values)
+          .sort((aa: any, bb: any) =>
+            aa.toLowerCase() < bb.toLowerCase() ? -1 : 1
+          )
+          .reduce((acc: any, kk: any) => {
+            acc = acc + kk + BF1 + sku_values[kk] + BF2;
+            return acc;
+          }, "");
+        final[stringValues] = sk._id + BF2 + sk.sku_price + BF2 + sk.sku_stock;
+      });
+      setdataFetched(__product);
+      setProduct_variants(__product?.product_variants);
+      setSkus(final);
+      const __skusSort = [...__skus];
+      __skusSort.sort((sk1: any, sk2: any) =>
+        sk1.sku_price < sk2.sku_price ? -1 : 1
+      );
+      setSkuSelected(__skusSort[0]?.sku_values);
     }
   }, [dataFetch]);
+  useEffect(() => {
+    const keys = Object.keys(skuSelected);
+    if (keys.length) {
+      const stringValues = keys
+        .sort((aa: any, bb: any) =>
+          aa.toLowerCase() < bb.toLowerCase() ? -1 : 1
+        )
+        .reduce((acc: any, kk: any) => {
+          acc = acc + kk + BF1 + skuSelected[kk] + BF2;
+          return acc;
+        }, "");
+      if (Object.keys(skus).includes(stringValues)) {
+        setSkuSelectedId(skus[stringValues]);
+      } else {
+        setSkuSelectedId("");
+      }
+    } else {
+      setSkuSelectedId("");
+    }
+  }, [skuSelected]);
 
   const [dataReview1, setdataReview1] = useState<any>([]);
 
@@ -198,6 +248,14 @@ const SingleProduct = () => {
     return string.slice(0, 2) + "***";
   };
 
+  const product1: any = {};
+  product1.product_original_price = +product?.product_original_price;
+  product1.product_price = +(skuSelectedId
+    ? skuSelectedId.split(BF2)[1]
+    : product?.product_price);
+  product1.product_quantity = +(skuSelectedId
+    ? skuSelectedId.split(BF2)[2]
+    : product.product_quantity);
   return (
     <>
       <DocumentTitle title={"Product Detail"}></DocumentTitle>
@@ -227,23 +285,57 @@ const SingleProduct = () => {
                   <p>{product?.product_description}</p>
 
                   <div className="product-count col-lg-7 ">
+                    {product_variants.map((ppp: any, index: number) => {
+                      const { values = [] } = ppp;
+                      return (
+                        <div
+                          key={index}
+                          className="flex-box d-flex justify-content-between align-items-center"
+                        >
+                          {/* <h6>{ppp.name}</h6> */}
+                          {values.map((vvv: any, index: number) => {
+                            return (
+                              <span
+                                className={
+                                  skuSelected[ppp?.name] === vvv
+                                    ? "active__value pr8px pl8px"
+                                    : "pr8px pl8px"
+                                }
+                                key={index}
+                                onClick={() => {
+                                  const final: any = {};
+                                  final[ppp?.name] = vvv;
+                                  setSkuSelected((prev: any) => ({
+                                    ...prev,
+                                    ...final,
+                                  }));
+                                }}
+                              >
+                                {vvv}
+                              </span>
+                            );
+                          })}
+                        </div>
+                      );
+                    })}
+
                     <div className="flex-box d-flex justify-content-between align-items-center">
                       <h6>Price</h6>
                       <span className="line__through">
-                        ${product?.product_original_price}
+                        ${product1?.product_original_price}
                       </span>
                     </div>
                     <div className="flex-box d-flex justify-content-between align-items-center">
                       <h6>Sale Price</h6>
                       <span className="ed1c24">
-                        - {calPerDiscount(product)} %
+                        - {calPerDiscount(product1)} %
                       </span>
-                      <span>${product?.product_price}</span>
+                      <span>${product1?.product_price}</span>
                     </div>
                     <div className="flex-box d-flex justify-content-between align-items-center">
                       <h6 className="color__00ba9d">Available</h6>
                       <span className="color__00ba9d">
-                        {formatMoney(product.product_quantity) || 0}
+                        {formatMoney(product1.product_quantity) || 0}
                       </span>
                     </div>
 

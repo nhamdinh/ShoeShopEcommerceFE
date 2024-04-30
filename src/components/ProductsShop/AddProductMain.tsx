@@ -37,6 +37,7 @@ const AddProductMain = ({ userInfo }: any) => {
   const [fileList, setFileList] = useState<any>([]);
   const [name, setName] = useState<any>("");
   const [price, setPrice] = useState<any>(0);
+  const [priceMax, setPriceMax] = useState<any>(0);
   const [image, setImage] = useState<any>("");
   const [urlImage, setUrlImage] = useState<any>("");
   const [product_thumb_small, setProduct_thumb_small] = useState<any>("");
@@ -222,6 +223,7 @@ const AddProductMain = ({ userInfo }: any) => {
       setFileList([]);
 
       setPrice(0);
+      setPriceMax(0);
     } else {
       dispatch(
         openToast({
@@ -240,7 +242,7 @@ const AddProductMain = ({ userInfo }: any) => {
       .map((kk: any) => {
         const final: any = { ...kk };
         final.values = kk.values.filter((vv: any) => vv !== "");
-        delete final["id"]
+        delete final["id"];
         return final;
       });
     const sku_list = dataTableDisplay
@@ -267,7 +269,7 @@ const AddProductMain = ({ userInfo }: any) => {
         product_thumb_small,
         product_price: price,
         product_original_price: +(
-          (+price * (Math.random() * (50 - 10) + 10 + 100)) /
+          (+priceMax * (Math.random() * (50 - 10) + 10 + 100)) /
           100
         ).toFixed(2),
         product_quantity: countInStock,
@@ -499,8 +501,9 @@ const AddProductMain = ({ userInfo }: any) => {
                     cb_setDataTableDisplay={(val: any) => {
                       setDataTableDisplay(val);
                     }}
-                    cb_setPrice={(val: any) => {
-                      setPrice(val);
+                    cb_setPrice={(val: any, max: any) => {
+                      setPrice(+val);
+                      setPriceMax(+max);
                     }}
                     cb_setCountInStock={(val: any) => {
                       setCountInStock(val);

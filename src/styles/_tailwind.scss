@@ -90,11 +90,6 @@
 .capitalize {
   text-transform: capitalize;
 }
-.scale {
-  &:hover {
-    transform: scale(1.05);
-  }
-}
 
 .line__through {
   text-decoration: line-through;
@@ -136,8 +131,10 @@
   text-transform: capitalize;
 }
 .scale {
+
   &:hover {
     transform: scale(1.05);
+    transition: 500ms;
   }
 }
 .line__through {

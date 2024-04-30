@@ -92,9 +92,13 @@ const TableCreateSku = ({
     );
     priceArr.sort((aa: any, bb: any) => aa.sku_price - bb.sku_price);
     if (priceArr.length) {
-      if (cb_setPrice) cb_setPrice(priceArr[0]?.sku_price);
+      if (cb_setPrice)
+        cb_setPrice(
+          priceArr[0]?.sku_price,
+          priceArr[priceArr.length - 1]?.sku_price
+        );
     } else {
-      if (cb_setPrice) cb_setPrice(0);
+      if (cb_setPrice) cb_setPrice(0, 0);
     }
 
     const totalQuantity = _tableVariant.reduce(
