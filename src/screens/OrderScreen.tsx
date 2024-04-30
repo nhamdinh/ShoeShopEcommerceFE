@@ -30,7 +30,6 @@ const OrderScreen = () => {
   const [orderId, setorderId] = useState<any>(location.pathname.split("/")[2]);
   const [orderItems, setorderItems] = useState<any>([]);
 
-  console.log(order);
   const {
     data: dataFetch,
     error,
@@ -46,7 +45,7 @@ const OrderScreen = () => {
   useEffect(() => {
     if (isSuccess) {
       setorderDetails(dataFetch?.metadata);
-      setorderItems(dataFetch?.metadata?.orderItems[0]?.itemProducts);
+      setorderItems(dataFetch?.metadata?.orderItems);
 
       const addPayPalScript = async () => {
         const { data: clientId } = await axios.get(`${API_LINK}/config/paypal`);
@@ -217,8 +216,8 @@ const OrderScreen = () => {
                         <div className="col-md-3 col-6">
                           <img src={item?.image} alt={item?.name} />
                         </div>
-                        <div className="col-md-5 col-6 d-flex align-items-center">
-                          <h6
+                        <div className="col-md-5 col-6 d-flex align-items-center content__center direction__column">
+                          <h5
                             onClick={() => {
                               navigate(
                                 `/product-detail?id=${item?.product_id}`
@@ -226,6 +225,13 @@ const OrderScreen = () => {
                             }}
                           >
                             {item?.name}
+                          </h5>
+                          <h6 className="ed1c24">
+                            {item?.sku_values && Object.keys(item?.sku_values)
+                              .reduce((acc, key: any) => {
+                                return acc + "" + item?.sku_values[key] + " / ";
+                              }, "")
+                              .slice(0, -3)}
                           </h6>
                         </div>
                         <div className="mt-3 mt-md-0 col-md-2 col-6  d-flex align-items-center flex-column justify-content-center ">

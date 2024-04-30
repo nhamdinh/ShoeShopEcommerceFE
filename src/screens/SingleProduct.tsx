@@ -430,7 +430,7 @@ const SingleProduct = () => {
               </div>
               <div className="col-md-6">
                 <h6>WRITE A CUSTOMER REVIEW </h6>
-                <h6>( IF YOU HAVE MADE A PURCHASE ) </h6>
+                {/* <h6>( IF YOU HAVE MADE A PURCHASE ) </h6> */}
                 <div className="my-4">
                   {LoadingcreateReview && <Loading />}
                   {errorcreateReview && (

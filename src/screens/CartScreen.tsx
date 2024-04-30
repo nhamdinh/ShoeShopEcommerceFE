@@ -590,8 +590,8 @@ const CompTableCartLv2 = memo(({ itemProduct, cart_shopId }: any) => {
         <h5>{itemProduct?.name}</h5>
         <h6 className="ed1c24">
           {Object.keys(itemProduct?.sku_values)
-            .reduce((acc, item) => {
-              return acc + itemProduct?.sku_values[item] + " / ";
+            .reduce((acc, key: any) => {
+              return acc + itemProduct?.sku_values[key] + " / ";
             }, "")
             .slice(0, -3)}
         </h6>
