@@ -4,11 +4,15 @@
   .direction__column {
     flex-direction: column;
   }
+  .position__relative {
+    position: relative;
+  }
+
   .search-container {
     padding-top: 10px;
-    position: relative;
+    position: absolute;
     width: 100%;
-
+    bottom: -10px;
     .dropdown {
       position: absolute;
       width: 100%;

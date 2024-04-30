@@ -16,7 +16,7 @@ import PublishedProducts from "../components/ProductsShop/PublishedProducts";
 import DocumentTitle from "../components/DocumentTitle";
 
 const ProfileScreen = () => {
-  window.scrollTo(0, 0);
+  // window.scrollTo(0, 0);
   const navigate = useNavigate();
 
   const dispatch = useDispatch();

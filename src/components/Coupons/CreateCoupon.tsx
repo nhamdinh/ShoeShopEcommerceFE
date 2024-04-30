@@ -109,7 +109,7 @@ const CreateCoupon = ({ userInfo }: any) => {
         <form onSubmit={submitHandler}>
           <div className="content-header">
             <div className=" opa0">Go to coupons</div>
-            <h2 className="content-title">CreateCoupon</h2>
+            <h2 className="content-title">Create Coupon</h2>
             <div>
               <button type="submit" className="btn btn-primary">
                 Publish now

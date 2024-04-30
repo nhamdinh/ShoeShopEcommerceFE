@@ -33,13 +33,13 @@
     margin-bottom: #{$i}px !important;
   }
 }
-@for $i from 0 through 400 {
+@for $i from -100 through 400 {
   .ml#{$i}px {
     margin-left: #{$i}px !important;
   }
 }
 
-@for $i from 0 through 400 {
+@for $i from -100 through 400 {
   .mr#{$i}px {
     margin-right: #{$i}px !important;
   }

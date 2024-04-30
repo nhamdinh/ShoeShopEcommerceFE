@@ -2,7 +2,10 @@ import "./styles.scss";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Rating from "./Rating";
-import { useGetProductsQuery } from "../../store/components/products/productsApi";
+import {
+  useGetAllBrandByCategoriesMutation,
+  useGetProductsQuery,
+} from "../../store/components/products/productsApi";
 import Loading from "../LoadingError/Loading";
 import Message from "../LoadingError/Error";
 import Pagination from "./Pagination";
@@ -19,9 +22,39 @@ import {
 import { Carousel, Col, Modal, Row, Select } from "antd";
 import { UpOutlined, DownOutlined } from "@ant-design/icons";
 import SelectApp from "../../ui/SelectApp";
+import SelectCategories from "../../ui/SelectCategories";
 
-const ShopSection = ({ pagenumber, keyword, brand }: any) => {
+const ShopSection = ({ pagenumber, keyword }: any) => {
   const navigate = useNavigate();
+
+  const [brand, setBrand] = useState<any>(null);
+  const [brands, setBrands] = useState<any>([]);
+  const [product_categories, setCateArr] = useState<any>([]);
+  const [getAllBrandByCategories, { isLoading: illz, error: errz }] =
+    useGetAllBrandByCategoriesMutation();
+
+  const onGetAllBrandByCategories = async (values: any) => {
+    await getAllBrandByCategories(values)
+      .then((res: any) => {
+        const data = res?.data;
+        if (data) {
+          const dataBrands = data?.metadata.brands;
+          const __dataBrands = dataBrands.map((mm: any) => {
+            return {
+              value: mm._id,
+              label: mm.brand,
+            };
+          });
+          setBrands(__dataBrands);
+        } else {
+          setBrands([]);
+        }
+      })
+      .catch((err: any) => {
+        console.error(err);
+      });
+  };
+
   const [dataFetched, setdataFetched] = useState<any>([]);
 
   const [currentPage, setCurrentPage] = useState<any>(1);
@@ -40,6 +73,7 @@ const ShopSection = ({ pagenumber, keyword, brand }: any) => {
     product_type: "",
     keyword: keyword ?? "",
     brand: brand ?? "",
+    product_categories
   });
 
   useEffect(() => {
@@ -75,8 +109,9 @@ const ShopSection = ({ pagenumber, keyword, brand }: any) => {
       page: +(pagenumber ?? 1),
       keyword: keyword ?? "",
       brand: brand ?? "",
+      product_categories,
     }));
-  }, [pagenumber, keyword, brand]);
+  }, [pagenumber, keyword, brand, product_categories]);
 
   const {
     data: dataProducts,
@@ -101,11 +136,46 @@ const ShopSection = ({ pagenumber, keyword, brand }: any) => {
         <div className="section">
           <div className="row">
             <div className="col-lg-12 col-md-12 article">
-              <div className="row mb40px">
-                <div className=" col-lg-6 col-md-6 col-sm-6"></div>
-                <div className=" col-lg-6 col-md-6 col-sm-6">
-                  <div className="row gap12px flex__content__end">
-                    {/* <div className=" col-lg-5 col-md-12 col-sm-12 flex__content__end">
+              <div className="row mb40px gap12px">
+                <div className=" col-lg-4 col-md-12 col-sm-12 df content__center mr-6px ml-6px ">
+                  <SelectCategories
+                    cb_setBrands={(val: any) => {
+                      setBrands(val);
+                    }}
+                    cb_setBrand={(val: any, cateArr: any) => {
+                      setBrand(val);
+                      setCateArr(cateArr);
+                    }}
+                    cb_onGetAllBrandByCategories={(val: any) => {
+                      onGetAllBrandByCategories(val);
+                    }}
+                  />
+                </div>
+
+                <div className=" col-lg-4 col-md-12 col-sm-12  df content__center mr-6px ml-6px">
+                  <SelectApp
+                    options={brands}
+                    value={brand}
+                    cb_setValue={(value: any, opt: any) => {
+                      setBrand(value);
+                    }}
+                    placeholder={"Brand"}
+                    // width={"140px"}
+                  />
+                </div>
+                <div className=" col-lg-4 col-md-12 col-sm-12 df content__center mr-6px ml-6px">
+                  <SelectApp
+                    options={options}
+                    value={sort}
+                    cb_setValue={(value: any, opt: any) => {
+                      setSort(value);
+                    }}
+                  />
+                </div>
+
+                {/*   <div className=" col-lg-6 col-md-6 col-sm-6">
+             <div className="row gap12px flex__content__end">
+                 <div className=" col-lg-5 col-md-12 col-sm-12 flex__content__end">
                       <SelectApp
                         options={optionsCate}
                         value={category}
@@ -113,18 +183,9 @@ const ShopSection = ({ pagenumber, keyword, brand }: any) => {
                           setCategory(value);
                         }}
                       />
-                    </div> */}
-                    <div className=" col-lg-5 col-md-12 col-sm-12 flex__content__end">
-                      <SelectApp
-                        options={options}
-                        value={sort}
-                        cb_setValue={(value: any, opt: any) => {
-                          setSort(value);
-                        }}
-                      />
-                    </div>
+                    </div> 
                   </div>
-                </div>
+                </div>*/}
               </div>
               <div className="shopcontainer row">
                 {isLoading ? (

@@ -2,15 +2,21 @@ import { memo, useState } from "react";
 import { Select } from "antd";
 import { UpOutlined, DownOutlined } from "@ant-design/icons";
 
-const SelectApp = ({ options, value, cb_setValue, width }: any) => {
+const SelectApp = ({
+  options,
+  value,
+  cb_setValue,
+  width,
+  placeholder,
+}: any) => {
   const [isShowDropDown, setShowDropdownFilter] = useState<any>(false);
 
   return (
     <Select
       style={{
         width: width ?? "320px",
-      }} 
-      placeholder="Please select"
+      }}
+      placeholder={placeholder ?? "Please select"}
       suffixIcon={isShowDropDown ? <UpOutlined /> : <DownOutlined />}
       onChange={(value, opt) => {
         cb_setValue(value, opt);

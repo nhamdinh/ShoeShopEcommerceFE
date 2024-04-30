@@ -45,6 +45,8 @@ const AddProductMain = ({ userInfo }: any) => {
   const [description, setDescription] = useState<any>("");
   const [brand, setBrand] = useState<any>(null);
   const [brands, setBrands] = useState<any>([]);
+  const [cateArr, setCateArr] = useState<any>([]);
+
   const [productVariants, setProductVariants] = useState<any>([
     // {
     //   images: [],
@@ -65,7 +67,6 @@ const AddProductMain = ({ userInfo }: any) => {
   ]);
   const [dataTableDisplay, setDataTableDisplay] = useState<any>([]);
 
-  const [cateArr, setCateArr] = useState<any>([]);
 
   const [getAllBrandByCategories, { isLoading: illz, error: errz }] =
     useGetAllBrandByCategoriesMutation();
