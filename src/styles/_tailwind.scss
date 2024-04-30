@@ -74,7 +74,6 @@
   }
 }
 
-
 .cursor__pointer {
   cursor: pointer;
 }
@@ -131,7 +130,6 @@
   text-transform: capitalize;
 }
 .scale {
-
   &:hover {
     transform: scale(1.05);
     transition: 500ms;
@@ -190,4 +188,7 @@
     0 0 40px orangered,
     0 0 80px orangered,
     0 0 120px orangered;
+}
+.direction__column {
+  flex-direction: column;
 }

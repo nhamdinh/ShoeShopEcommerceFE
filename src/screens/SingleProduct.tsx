@@ -194,16 +194,33 @@ const SingleProduct = () => {
 
   const AddToCartHandle = (e: any) => {
     e.preventDefault();
-    onCreateCart({
-      product: {
-        cart_shopId: product?.product_shop,
-        product_id: product?._id,
-        quantity: +qty,
-        price: product?.product_price,
-        name: product?.product_name,
-        image: product?.product_thumb,
-      },
-    });
+    if(skuSelectedId){
+      // console.log({
+      //   product: {
+      //     cart_shopId: product?.product_shop,
+      //     product_id: product?._id,
+      //     sku_id: skuSelectedId.split(BF2)[0],
+      //     quantity: +qty,
+      //     price: product?.product_price,
+      //     name: product?.product_name,
+      //     image: product?.product_thumb,
+      //   },
+      // })
+  
+  
+      onCreateCart({
+        product: {
+          cart_shopId: product?.product_shop,
+          product_id: product?._id,
+          sku_id: skuSelectedId.split(BF2)[0],
+          quantity: +qty,
+          price: product?.product_price,
+          name: product?.product_name,
+          image: product?.product_thumb,
+        },
+      });
+    }
+
   };
   const [
     createReviewProduct,
@@ -299,7 +316,7 @@ const SingleProduct = () => {
                                 className={
                                   skuSelected[ppp?.name] === vvv
                                     ? "active__value pr8px pl8px"
-                                    : "pr8px pl8px"
+                                    : "pr8px pl8px cursor__pointer"
                                 }
                                 key={index}
                                 onClick={() => {

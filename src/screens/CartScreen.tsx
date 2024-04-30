@@ -1,6 +1,6 @@
 import "./style.scss";
 
-import React, { useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { formatMoney } from "../utils/commonFunction";
@@ -24,7 +24,7 @@ import { getCheckoutCartsParam } from "../store/selector/RootSelector";
 import DocumentTitle from "../components/DocumentTitle";
 
 const CartScreen = () => {
-  window.scrollTo(0, 0);
+  // window.scrollTo(0, 0);
   // const checkedCarts = useSelector(getCheckedCarts);
   const dispatch = useDispatch();
   const location = useLocation();
@@ -32,7 +32,9 @@ const CartScreen = () => {
   const checkoutCartsParam = useSelector(getCheckoutCartsParam);
   const [total, settotal] = useState<any>(1);
   const [cartsCurrent, setCartsCurrent] = useState<any>([]);
+
   const [discount_shopIds, setdiscount_shopIds] = useState<any>([]);
+  const [cartItems, setCartItems] = useState<any>([]);
   const [addressId, setaddressId] = useState<any>("");
   const {
     data: dataCheckAddress,
@@ -115,7 +117,7 @@ const CartScreen = () => {
       const _cartsCurrent = [...cartsCurrent];
       const _cartsCurrent_empty: any = [];
       const _checkoutCartsParams: any = [];
-
+      /* add discount to cart */
       _cartsCurrent.map((cart: any) => {
         const cart_shopId = cart?.cart_shopId?._id;
         const _checkoutCart = {
@@ -151,7 +153,6 @@ const CartScreen = () => {
     }
   }, [discount_shopIds]);
 
-  const [cartItems, setcartItems] = useState<any>([]);
   const {
     data: dataCart,
     isSuccess: isSuccessCart,
@@ -173,7 +174,7 @@ const CartScreen = () => {
           (cart: any) => cart.cart_products
         );
 
-        setcartItems(productsCart || []);
+        setCartItems(productsCart || []);
         const shopIds: any = [];
         cartsFetched.map((cart: any) => {
           shopIds.push(cart?.cart_shopId?._id);
@@ -260,7 +261,7 @@ const CartScreen = () => {
     </>
   );
 };
-const CompTableCartLv1 = ({ cartCurrent }: any) => {
+const CompTableCartLv1 = memo(({ cartCurrent }: any) => {
   const checkoutCartsParam = useSelector(getCheckoutCartsParam);
 
   const navigate = useNavigate();
@@ -490,9 +491,9 @@ const CompTableCartLv1 = ({ cartCurrent }: any) => {
       </div>
     </>
   );
-};
+});
 
-const CompTableCartLv2 = ({ itemProduct, cart_shopId }: any) => {
+const CompTableCartLv2 = memo(({ itemProduct, cart_shopId }: any) => {
   useEffect(() => {
     setQty(itemProduct?.quantity);
   }, [itemProduct]);
@@ -539,6 +540,7 @@ const CompTableCartLv2 = ({ itemProduct, cart_shopId }: any) => {
       product: {
         cart_shopId: cart_shopId?._id,
         product_id: itemX?.product_id,
+        sku_id: itemX?.sku_id,
         quantity: +itemX.quantity,
         price: itemX?.price,
         name: itemX?.name,
@@ -556,6 +558,7 @@ const CompTableCartLv2 = ({ itemProduct, cart_shopId }: any) => {
             product: {
               cart_shopId: cart_shopId?._id,
               product_id: itemX?.product_id,
+              sku_id: itemX?.sku_id,
               quantity: 0,
               price: itemX?.price,
               name: itemX?.name,
@@ -583,8 +586,15 @@ const CompTableCartLv2 = ({ itemProduct, cart_shopId }: any) => {
       >
         <img src={itemProduct?.image} alt="image" />
       </div>
-      <div className="cart-text col-md-5 d-flex align-items-center">
-        <h4>{itemProduct?.name}</h4>
+      <div className="cart-text col-md-5 d-flex align-items-center content__center direction__column">
+        <h5>{itemProduct?.name}</h5>
+        <h6 className="ed1c24">
+          {Object.keys(itemProduct?.sku_values)
+            .reduce((acc, item) => {
+              return acc + itemProduct?.sku_values[item] + " / ";
+            }, "")
+            .slice(0, -3)}
+        </h6>
       </div>
       <div className="cart-qty col-md-2 col-sm-5 mt-md-5 mt-3 mt-md-0 d-flex flex-column justify-content-center">
         <h6>QUANTITY</h6>
@@ -617,5 +627,5 @@ const CompTableCartLv2 = ({ itemProduct, cart_shopId }: any) => {
       </div>
     </div>
   );
-};
+});
 export default CartScreen;
