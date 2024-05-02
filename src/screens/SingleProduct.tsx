@@ -133,7 +133,7 @@ const SingleProduct = () => {
 
   useEffect(() => {
     if (iss) {
-      setdataReview1(dataReview?.metadata);
+      setdataReview1(dataReview?.metadata?.reviews);
     }
   }, [dataReview]);
 
@@ -194,7 +194,7 @@ const SingleProduct = () => {
 
   const AddToCartHandle = (e: any) => {
     e.preventDefault();
-    if(skuSelectedId){
+    if (skuSelectedId) {
       // console.log({
       //   product: {
       //     cart_shopId: product?.product_shop,
@@ -206,8 +206,7 @@ const SingleProduct = () => {
       //     image: product?.product_thumb,
       //   },
       // })
-  
-  
+
       onCreateCart({
         product: {
           cart_shopId: product?.product_shop,
@@ -220,7 +219,6 @@ const SingleProduct = () => {
         },
       });
     }
-
   };
   const [
     createReviewProduct,
@@ -414,9 +412,11 @@ const SingleProduct = () => {
                       key={review?._id}
                       className="mb-5 mb-md-3 bg-light p-3 shadow-sm rounded"
                     >
-                      <strong>{review?.name}</strong>
                       <Rating value={review?.rating ?? 5} />
-                      <p>Created by: {sliceString(review?.userId?.name)}</p>
+                      <p>
+                        Created by:
+                        <strong>{sliceString(review?.userId?.name)}</strong>
+                      </p>
                       <span>{moment(review?.createdAt).calendar()}</span>
                       <div className="alert alert-info mt-3 pre-wrap">
                         {/* {review?.comment} */}
