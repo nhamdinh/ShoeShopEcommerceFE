@@ -186,14 +186,14 @@ const ProductsRender = ({
                         </div>
                         {product?.product_shop?.email === userInfo?.email && (
                           <div className="update__product mt20px">
-                            {/* <div
+                             <div
                               className="btn btn-warning"
                               onClick={() => {
                                 navigate(`/product/${product?._id}/edit`);
                               }}
                             >
                               edit
-                            </div> */}
+                            </div>
                             {product?.isPublished ? (
                               <div
                                 className="btn btn-dark"

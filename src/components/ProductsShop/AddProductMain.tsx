@@ -1,29 +1,22 @@
 import "./style.scss";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 import Message from "../LoadingError/Error";
 import Loading from "../LoadingError/Loading";
-import { FOLDER_PRODUCS_STORAGE } from "../../utils/constants";
 import {
   useCreateProductMutation,
-  useUploadImgMutation,
-  useUploadImgUrlMutation,
   useGetAllBrandByCategoriesMutation,
 } from "../../store/components/products/productsApi";
-import { Upload } from "antd";
-import type { RcFile, UploadFile, UploadProps } from "antd/es/upload/interface";
 import { useDispatch } from "react-redux";
 import { openToast } from "../../store/components/customDialog/toastSlice";
-import LoadingButton from "../LoadingError/LoadingButton";
 import SelectCategories from "../../ui/SelectCategories";
 import SelectApp from "../../ui/SelectApp";
 import VariantItem from "./components/VariantItem";
 import TableCreateSku from "./components/TableCreateSku";
 import { formatMoney } from "../../utils/commonFunction";
-
-const SIZE = 5;
-const sizeMax = SIZE * 1000 * 1000;
+import UploadAntd from "../../ui/UploadAntd";
+import UploadByUrl from "../../ui/UploadByUrl";
 
 const VARIANT = {
   images: [],
@@ -39,14 +32,12 @@ const AddProductMain = ({ userInfo }: any) => {
   const [price, setPrice] = useState<any>(0);
   const [priceMax, setPriceMax] = useState<any>(0);
   const [image, setImage] = useState<any>("");
-  const [urlImage, setUrlImage] = useState<any>("");
   const [product_thumb_small, setProduct_thumb_small] = useState<any>("");
   const [countInStock, setCountInStock] = useState<any>(0);
   const [description, setDescription] = useState<any>("");
   const [brand, setBrand] = useState<any>(null);
   const [brands, setBrands] = useState<any>([]);
   const [cateArr, setCateArr] = useState<any>([]);
-
   const [productVariants, setProductVariants] = useState<any>([
     // {
     //   images: [],
@@ -66,7 +57,6 @@ const AddProductMain = ({ userInfo }: any) => {
     },
   ]);
   const [dataTableDisplay, setDataTableDisplay] = useState<any>([]);
-
 
   const [getAllBrandByCategories, { isLoading: illz, error: errz }] =
     useGetAllBrandByCategoriesMutation();
@@ -91,62 +81,6 @@ const AddProductMain = ({ userInfo }: any) => {
       .catch((err: any) => {
         console.error(err);
       });
-  };
-
-  const [uploadImg, { isLoading: isLoadingUpload }] = useUploadImgMutation();
-  const [uploadImgUrl, { isLoading: isLoadingUploadUrl }] =
-    useUploadImgUrlMutation();
-
-  const uploadImage = async (options: any) => {
-    const { onSuccess, onError, file, onProgress } = options;
-
-    const sizeImg = file ? +file?.size : sizeMax + 1;
-    if (sizeImg <= sizeMax) {
-      let formData = new FormData();
-      const fileName = Date.now() + file.name;
-      formData.append("name", fileName);
-      formData.append("file", file);
-
-      await uploadImg({
-        formData,
-        folder: FOLDER_PRODUCS_STORAGE,
-      })
-        .then((res: any) => {
-          const data = res?.data?.metadata;
-          if (data) handleImageAttribute(data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } else {
-      setFileList([]);
-      dispatch(
-        openToast({
-          isOpen: Date.now(),
-          content: "File is so Big, must less than 5MB",
-          step: 2,
-        })
-      );
-    }
-  };
-
-  const onChange: UploadProps["onChange"] = ({ fileList: newFileList }) => {
-    setFileList(newFileList);
-  };
-
-  const onPreview = async (file: UploadFile) => {
-    let src = file.url as string;
-    if (!src) {
-      src = await new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file.originFileObj as RcFile);
-        reader.onload = () => resolve(reader.result as string);
-      });
-    }
-    const image = new Image();
-    image.src = src;
-    const imgWindow = window.open(src);
-    imgWindow?.document.write(image.outerHTML);
   };
 
   const checkVariantsName = (__productVariants: any) => {
@@ -338,19 +272,6 @@ const AddProductMain = ({ userInfo }: any) => {
     }
   };
 
-  const onUploadImgUrl = async () => {
-    await uploadImgUrl({
-      urlImage,
-    })
-      .then((res: any) => {
-        const data = res?.data?.metadata;
-        if (data) handleImageAttribute(data);
-      })
-      .catch((err: any) => {
-        console.error(err);
-      });
-  };
-
   const handleImageAttribute = (data: any) => {
     setFileList([
       {
@@ -360,6 +281,13 @@ const AddProductMain = ({ userInfo }: any) => {
     setImage(data?.url);
     setProduct_thumb_small(data?.thumb_url);
   };
+
+  useEffect(() => {
+    if (!fileList.length) {
+      setImage("");
+      setProduct_thumb_small("");
+    }
+  }, [fileList]);
 
   return (
     <>
@@ -445,12 +373,9 @@ const AddProductMain = ({ userInfo }: any) => {
                     </div>
                   </div>
                   <div className="mb-4">
-                    <label
-                      htmlFor="product_title"
-                      className="form-label underline fw600"
-                    >
+                    <div className="form-label underline fw600">
                       Product Options
-                    </label>
+                    </div>
                   </div>
 
                   <div className="mb-4">
@@ -468,8 +393,11 @@ const AddProductMain = ({ userInfo }: any) => {
                     />
                   </div>
                   <div className="mb-4">
-                    <label className="form-label">Description</label>
+                    <label htmlFor="product_description" className="form-label">
+                      Description
+                    </label>
                     <textarea
+                      id="product_description"
                       placeholder="Type here"
                       className="form-control"
                       rows={7}
@@ -527,14 +455,17 @@ const AddProductMain = ({ userInfo }: any) => {
                     />
                   </div>
                   <div className="mb-4">
-                    <label htmlFor="product_price" className="form-label">
+                    <label
+                      htmlFor="product_countInStock"
+                      className="form-label"
+                    >
                       Count In Stock
                     </label>
                     <input
                       // type="number"
                       placeholder="Type here"
                       className="form-control"
-                      id="product_price"
+                      id="product_countInStock"
                       required
                       value={formatMoney(countInStock)}
                       readOnly={true}
@@ -544,49 +475,27 @@ const AddProductMain = ({ userInfo }: any) => {
 
                   <div className="mb-4">
                     <label className="form-label">Images</label>
-                    <Upload
+                    <UploadAntd
                       fileList={fileList}
-                      listType="picture-card"
-                      accept=".png,.jpeg,.gif,.jpg"
-                      onChange={onChange}
-                      onPreview={onPreview}
-                      customRequest={uploadImage}
-                    >
-                      {fileList.length < 1 && "Choose file"}
-                    </Upload>
+                      cb_handleImageAttribute={(data: any) => {
+                        handleImageAttribute(data);
+                      }}
+                      cb_setFileList={(data: any) => {
+                        setFileList(data);
+                      }}
+                    ></UploadAntd>
                   </div>
 
                   <div className="mb-4">
                     <label htmlFor="urlImage" className="form-label">
                       url Image
                     </label>
-                    <input
-                      type="text"
-                      placeholder="Type here"
-                      className="form-control"
-                      id="urlImage"
-                      value={urlImage}
-                      onChange={(e) => setUrlImage(e.target.value)}
-                    />
-                  </div>
 
-                  <div className="mb-4">
-                    {isLoadingUploadUrl ? (
-                      <LoadingButton />
-                    ) : (
-                      <button
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          onUploadImgUrl();
-                        }}
-                        disabled={!urlImage}
-                        type="submit"
-                        className="btn btn-primary"
-                      >
-                        Upload Url Image
-                      </button>
-                    )}
+                    <UploadByUrl
+                      cb_handleImageAttribute={(data: any) => {
+                        handleImageAttribute(data);
+                      }}
+                    ></UploadByUrl>
                   </div>
                 </div>
               </div>

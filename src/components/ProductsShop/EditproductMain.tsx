@@ -8,6 +8,7 @@ import {
   PRODUCT_CATEGORY,
 } from "../../utils/constants";
 import {
+  useGetAllBrandByCategoriesMutation,
   useGetBrandsQuery,
   useGetCodesQuery,
   useGetProductsDetailQuery,
@@ -21,12 +22,20 @@ import type { RcFile, UploadFile, UploadProps } from "antd/es/upload/interface";
 import { openToast } from "../../store/components/customDialog/toastSlice";
 import { getUserInfo } from "../../store/selector/RootSelector";
 import LoadingButton from "../LoadingError/LoadingButton";
+import DocumentTitle from "../DocumentTitle";
+import SelectCategories from "../../ui/SelectCategories";
+import SelectApp from "../../ui/SelectApp";
 
 const SIZE = 5;
 const sizeMax = SIZE * 1000 * 1000;
 
 const EditProductMain = () => {
   const dispatch = useDispatch();
+  const userInfo = useSelector(getUserInfo);
+
+  const [brand, setBrand] = useState<any>(null);
+  const [brands, setBrands] = useState<any>([]);
+  const [cateArr, setCateArr] = useState<any>([]);
 
   const [fileList, setFileList] = useState<any>([]);
   const [uploadImg, { isLoading: isLoadingUpload }] = useUploadImgMutation();
@@ -107,9 +116,6 @@ const EditProductMain = () => {
     const imgWindow = window.open(src);
     imgWindow?.document.write(image.outerHTML);
   };
-
-  const [brand, setbrand] = useState<any>("");
-  const [brands, setbrands] = useState<any>([]);
 
   const {
     data: brandsdata,
@@ -206,27 +212,30 @@ const EditProductMain = () => {
   ] = useUpdateProductMutation();
 
   const onUpdateProduct = async (values: any) => {
-    const res = await updateProduct(values);
-    //@ts-ignore
-    const data = res?.data;
-
-    if (data) {
-      dispatch(
-        openToast({
-          isOpen: Date.now(),
-          content: "Updated Product Success",
-          step: 1,
-        })
-      );
-    } else {
-      dispatch(
-        openToast({
-          isOpen: Date.now(),
-          content: "Update Product Failed",
-          step: 2,
-        })
-      );
-    }
+    await updateProduct(values)
+      .then((res: any) => {
+        const data = res?.data;
+        if (data) {
+          dispatch(
+            openToast({
+              isOpen: Date.now(),
+              content: "Updated Product Success",
+              step: 1,
+            })
+          );
+        } else {
+          dispatch(
+            openToast({
+              isOpen: Date.now(),
+              content: "Update Product Failed",
+              step: 2,
+            })
+          );
+        }
+      })
+      .catch((e: any) => {
+        console.error(e);
+      });
   };
 
   const submitHandler = (e: any) => {
@@ -263,12 +272,37 @@ const EditProductMain = () => {
 
     setCountInStock(product?.product_quantity);
     setcategory(product?.product_type);
-    setbrand(product?.product_attributes?.brand);
+    setBrand(product?.product_attributes?.brand);
   }, [product]);
-  const userInfo = useSelector(getUserInfo);
+
+  const [getAllBrandByCategories, { isLoading: illz, error: errz }] =
+    useGetAllBrandByCategoriesMutation();
+
+  const onGetAllBrandByCategories = async (values: any) => {
+    await getAllBrandByCategories(values)
+      .then((res: any) => {
+        const data = res?.data;
+        if (data) {
+          const dataBrands = data?.metadata.brands;
+          const __dataBrands = dataBrands.map((mm: any) => {
+            return {
+              value: mm._id,
+              label: mm.brand,
+            };
+          });
+          setBrands(__dataBrands);
+        } else {
+          setBrands([]);
+        }
+      })
+      .catch((err: any) => {
+        console.error(err);
+      });
+  };
 
   return (
     <>
+      <DocumentTitle title={"Edit Product"}></DocumentTitle>
       <div className="container mt-lg-5 mt-3">
         <div className="row align-items-start">
           <div className="col-lg-4 p-0 shadow "></div>
@@ -311,43 +345,47 @@ const EditProductMain = () => {
                         <>
                           <div className="mb-4">
                             <div className="flex-box d-flex justify-content-between align-items-center">
-                              <h6>Brand</h6>
-                              <select
-                                className="capitalize"
-                                value={brand}
-                                onChange={(e) => setbrand(e.target.value)}
-                              >
-                                {brands.map((br: any, index: number) => (
-                                  <option key={index} value={br?.brand}>
-                                    {br?.brand}
-                                  </option>
-                                ))}
-                              </select>
-                              <h6>Category</h6>
-
-                              <select
-                                className="capitalize"
-                                value={categor}
-                                disabled
-                                onChange={(e) => setcategory(e.target.value)}
-                              >
-                                {categorys.map((cate: any, index: number) => (
-                                  <option
-                                    key={index}
-                                    value={cate?.mainCode_value}
-                                  >
-                                    {cate?.mainCode_value}
-                                  </option>
-                                ))}
-                              </select>
+                              <h6>Categories</h6>
+                              <SelectCategories
+                                cb_setBrands={(val: any) => {
+                                  setBrands(val);
+                                }}
+                                cb_setBrand={(val: any, cateArr: any) => {
+                                  setBrand(val);
+                                  setCateArr(cateArr);
+                                }}
+                                cb_onGetAllBrandByCategories={(val: any) => {
+                                  onGetAllBrandByCategories(val);
+                                }}
+                              />
                             </div>
                           </div>
+
+                          <div className="mb-4">
+                            <div className="flex-box d-flex justify-content-between align-items-center">
+                              <h6>Brand</h6>
+                              <SelectApp
+                                options={brands}
+                                value={brand}
+                                cb_setValue={(value: any, opt: any) => {
+                                  setBrand(value);
+                                }}
+                                width={"140px"}
+                              />
+                            </div>
+                          </div>
+                          <div className="mb-4">
+                            <div className="form-label underline fw600">
+                              Product Options
+                            </div>
+                          </div>
+
                           <div className="mb-4">
                             <label
                               htmlFor="product_title"
                               className="form-label"
                             >
-                              Product title
+                              Product name
                             </label>
                             <input
                               type="text"
