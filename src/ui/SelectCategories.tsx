@@ -6,6 +6,7 @@ import { useGetCodesQuery } from "../store/components/products/productsApi";
 const SelectCategories = ({
   cb_onGetAllBrandByCategories,
   cb_setCateArr,
+  cb_resetBrands,
   cateArr = [],
 }: any) => {
   // const [cateArr, setCateArr] = useState<any>([]);
@@ -47,7 +48,10 @@ const SelectCategories = ({
   }, [dataFetch]);
 
   const handleChange = (value: string | string[]) => {
-    if (value.length < 4) cb_setCateArr(value);
+    if (value.length < 4) {
+      cb_setCateArr(value);
+      cb_resetBrands();
+    }
   };
 
   return (

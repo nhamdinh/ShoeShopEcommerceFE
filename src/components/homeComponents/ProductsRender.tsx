@@ -187,7 +187,7 @@ const ProductsRender = ({
                         {product?.product_shop?.email === userInfo?.email && (
                           <div className="update__product mt20px">
                              <div
-                              className="btn btn-warning"
+                              className="btn btn-warning df items__center"
                               onClick={() => {
                                 navigate(`/product/${product?._id}/edit`);
                               }}
@@ -196,7 +196,7 @@ const ProductsRender = ({
                             </div>
                             {product?.isPublished ? (
                               <div
-                                className="btn btn-dark"
+                                className="btn btn-dark df items__center"
                                 onClick={() => deleteHandler(product?._id)}
                               >
                                 to draft

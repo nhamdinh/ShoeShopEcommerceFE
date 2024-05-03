@@ -193,6 +193,7 @@ const AddProductMain = ({ userInfo }: any) => {
     if (
       product_variants.length &&
       sku_list.length &&
+      name &&
       image &&
       brand &&
       cateArr.length
@@ -289,11 +290,6 @@ const AddProductMain = ({ userInfo }: any) => {
     }
   }, [fileList]);
 
-  useEffect(() => {
-    setBrand(null);
-    setBrands([]);
-  }, [cateArr]);
-
   return (
     <>
       <section className="content-main" style={{ maxWidth: "1200px" }}>
@@ -327,6 +323,10 @@ const AddProductMain = ({ userInfo }: any) => {
                       <h6>Categories</h6>
                       <SelectCategories
                         cateArr={cateArr}
+                        cb_resetBrands={() => {
+                          setBrand(null);
+                          setBrands([]);
+                        }}
                         cb_setCateArr={(val: any) => {
                           setCateArr(val);
                         }}
@@ -376,7 +376,7 @@ const AddProductMain = ({ userInfo }: any) => {
                   </div>
                   <div className="mb-4">
                     <div className="form-label underline fw600">
-                      Product Options
+                      Product Sku
                     </div>
                   </div>
 

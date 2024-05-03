@@ -6,8 +6,6 @@ import Loading from "../LoadingError/Loading";
 import { PRODUCT_CATEGORY } from "../../utils/constants";
 import {
   useGetAllBrandByCategoriesMutation,
-  useGetBrandsQuery,
-  useGetCodesQuery,
   useGetProductsDetailQuery,
   useUpdateProductMutation,
 } from "../../store/components/products/productsApi";
@@ -32,13 +30,11 @@ const EditProductMain = () => {
   const [brands, setBrands] = useState<any>([]);
   const [cateArr, setCateArr] = useState<any>([]);
 
-  const [categor, setcategory] = useState<any>("");
-  const [categorys, setcategorys] = useState<any>([]);
-
   const [fileList, setFileList] = useState<any>([]);
 
   const [name, setName] = useState<any>("");
-  const [price, setPrice] = useState<any>("0");
+  const [price, setPrice] = useState<any>(0);
+  const [priceMax, setPriceMax] = useState<any>(0);
   const [image, setImage] = useState<any>("");
   const [product_thumb_small, setProduct_thumb_small] = useState<any>("");
   const [countInStock, setCountInStock] = useState<any>(0);
@@ -63,19 +59,31 @@ const EditProductMain = () => {
   useEffect(() => {
     if (isSuccess) setDataFetched(dataFetch?.metadata);
   }, [dataFetch]);
-
   useEffect(() => {
-    setName(product?.product_name);
-    setDescription(product?.product_description);
-    setPrice(product?.product_price);
+    const {
+      product_name,
+      product_description,
+      product_price,
+      product_thumb,
+      product_thumb_small,
+      product_quantity,
+      product_categories,
+      product_brand,
+    } = product;
 
-    setImage(product?.product_thumb);
-    setProduct_thumb_small(product?.product_thumb_small);
-    setFileList([{ url: product?.product_thumb }]);
+    console.log(product);
 
-    setCountInStock(product?.product_quantity);
-    setcategory(product?.product_type);
-    setBrand(product?.product_attributes?.brand);
+    setName(product_name);
+    setDescription(product_description);
+    setImage(product_thumb);
+    setProduct_thumb_small(product_thumb_small);
+    setFileList([{ url: product_thumb }]);
+
+    setPrice(product_price);
+    setCountInStock(product_quantity);
+
+    setCateArr(product_categories);
+    setBrand(product_brand);
   }, [product]);
 
   const handleImageAttribute = (data: any) => {
@@ -87,54 +95,6 @@ const EditProductMain = () => {
     setImage(data?.url);
     setProduct_thumb_small(data?.thumb_url);
   };
-
-  const {
-    data: brandsdata,
-    error: brandsserror,
-    isSuccess: brandsisSuccess,
-    isLoading: isLoadingbrands,
-  } = useGetBrandsQuery(
-    {},
-    {
-      refetchOnMountOrArgChange: true,
-      skip: false,
-    }
-  );
-  useEffect(() => {
-    if (brandsisSuccess) {
-      const dataBrands = brandsdata?.metadata.brands;
-      const __dataBrands = dataBrands.map((mm: any) => {
-        return {
-          value: mm._id,
-          label: mm.brand,
-        };
-      });
-      console.log(__dataBrands);
-      // setBrands(__dataBrands);
-      // setBrand(__dataBrands[0]?.value);
-    }
-  }, [brandsdata]);
-
-  const {
-    data,
-    error: categoryserror,
-    isSuccess: isSuccesscategorys,
-    isLoading: isLoadingcategorys,
-  } = useGetCodesQuery(
-    {
-      mainCode_type: PRODUCT_CATEGORY,
-    },
-    {
-      refetchOnMountOrArgChange: true,
-      skip: false,
-    }
-  );
-  useEffect(() => {
-    if (isSuccesscategorys) {
-      setcategorys(data?.metadata?.mainCodes);
-      setcategory(data?.metadata?.mainCodes[0]?.mainCode_value);
-    }
-  }, [data]);
 
   useEffect(() => {
     setProductId(location.pathname.split("/")[2]);
@@ -174,25 +134,52 @@ const EditProductMain = () => {
 
   const submitHandler = (e: any) => {
     e.preventDefault();
-    onUpdateProduct({
-      productId: productId,
-      product_name: name,
-      product_description: description,
-      product_price: price,
-      product_original_price: +(
-        (+price * (Math.random() * (50 - 10) + 10 + 100)) /
-        100
-      ).toFixed(2),
-      product_thumb: image,
-      product_thumb_small,
-      product_quantity: countInStock,
-      product_type: categor,
-      product_attributes: {
-        brand: brand,
-        size: "10inch",
-        material: "gold",
-      },
-    });
+    if (
+      // product_variants.length &&
+      // sku_list.length &&
+      image &&
+      name &&
+      brand &&
+      cateArr.length
+    ) {
+      onUpdateProduct({
+        productId: productId,
+        product_name: name,
+        product_description: description,
+        product_thumb: image,
+        product_thumb_small,
+        // product_price: price,
+        // product_original_price: +(
+        //   (+priceMax * (Math.random() * (50 - 10) + 10 + 100)) /
+        //   100
+        // ).toFixed(2),
+        // product_quantity: countInStock,
+        product_brand: brand,
+        product_categories: cateArr,
+        // product_type: categor,
+        // product_attributes: [
+        //   {
+        //     attribute_id: "abc123",
+        //     attribute_values: [
+        //       {
+        //         value_id: "value11",
+        //       },
+        //       {
+        //         value_id: "value2",
+        //       },
+        //     ],
+        //   },
+        // ],
+      });
+    } else {
+      dispatch(
+        openToast({
+          isOpen: Date.now(),
+          content: "Please enter complete information!",
+          step: 2,
+        })
+      );
+    }
   };
 
   const [getAllBrandByCategories, { isLoading: illz, error: errz }] =
@@ -220,11 +207,6 @@ const EditProductMain = () => {
       });
   };
 
-  useEffect(() => {
-    setBrand(null);
-    setBrands([]);
-  }, [cateArr]);
-
   return (
     <>
       <DocumentTitle title={"Edit Product"}></DocumentTitle>
@@ -246,7 +228,7 @@ const EditProductMain = () => {
                 <h2 className="content-title">Update Product</h2>
                 <div>
                   <button type="submit" className="btn btn-primary">
-                    Publish now
+                    Update now
                   </button>
                 </div>
               </div>
@@ -271,6 +253,10 @@ const EditProductMain = () => {
                               <h6>Categories</h6>
                               <SelectCategories
                                 cateArr={cateArr}
+                                cb_resetBrands={() => {
+                                  setBrand(null);
+                                  setBrands([]);
+                                }}
                                 cb_setCateArr={(val: any) => {
                                   setCateArr(val);
                                 }}
@@ -296,7 +282,7 @@ const EditProductMain = () => {
                           </div>
                           <div className="mb-4">
                             <div className="form-label underline fw600">
-                              Product Options
+                              Product Sku
                             </div>
                           </div>
 

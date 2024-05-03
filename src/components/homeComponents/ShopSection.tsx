@@ -129,11 +129,6 @@ const ShopSection = ({ pagenumber, keyword }: any) => {
     }
   }, [dataProducts]);
 
-  useEffect(() => {
-    setBrand(null);
-    setBrands([]);
-  }, [product_categories]);
-
   return (
     <>
       <div className="container">
@@ -144,6 +139,10 @@ const ShopSection = ({ pagenumber, keyword }: any) => {
                 <div className=" col-lg-4 col-md-12 col-sm-12 df content__center mr-6px ml-6px ">
                   <SelectCategories
                     cateArr={product_categories}
+                    cb_resetBrands={() => {
+                      setBrand(null);
+                      setBrands([]);
+                    }}
                     cb_setCateArr={(val: any) => {
                       setCateArr(val);
                     }}
