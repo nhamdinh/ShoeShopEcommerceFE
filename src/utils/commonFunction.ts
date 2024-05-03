@@ -90,7 +90,7 @@ export const rawMarkup = (rawMarkup = "") => {
   return { __html: rawMarkup };
 };
 
-export const toNonAccentVietnamese = (str:any) => {
+export const toNonAccentVietnamese = (str: any) => {
   str = str.replace(/A|Á|À|Ã|Ạ|Ả|Â|Ấ|Ầ|Ẫ|Ậ|Ẩ|Ă|Ắ|Ằ|Ẵ|Ặ|Ẳ/g, "A");
   str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
   str = str.replace(/E|É|È|Ẽ|Ẹ|Ẻ|Ê|Ế|Ề|Ễ|Ệ|Ể/, "E");
@@ -111,13 +111,15 @@ export const toNonAccentVietnamese = (str:any) => {
   return str;
 };
 
-
-export const calPerDiscount = (product:any) => {
-  const perDiscount = ((1 - product?.product_price/ product?.product_original_price) * 100).toFixed(0)
+export const calPerDiscount = (product: any) => {
+  const perDiscount = (
+    (1 - product?.product_price / product?.product_original_price) *
+    100
+  ).toFixed(0);
   return perDiscount;
 };
 
-export const removeNullObject = (obj:any) => {
+export const removeNullObject = (obj: any) => {
   for (let key in obj) {
     if (obj[key] === null || obj[key] === undefined || obj[key] === "") {
       delete obj[key];
@@ -154,4 +156,24 @@ export const cartesianProduct = (data: any, result = {}) => {
   }
 
   return newResult;
+};
+
+export const equal = (a: any, b: any) => {
+  if (a.length !== b.length) {
+    return false;
+  } else {
+    for (let i = 0; i < a.length; i++) {
+      if (a[i] !== b[i]) {
+        return false;
+      }
+    }
+    return true;
+  }
+};
+
+export const countOccurrences = (arr: any) => {
+  return arr.reduce(function (a: any, b: any) {
+    a[b] = a[b] + 1 || 1;
+    return a;
+  }, {});
 };

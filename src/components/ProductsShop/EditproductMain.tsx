@@ -1,3 +1,4 @@
+import { uid } from "uid";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,6 +18,15 @@ import SelectCategories from "../../ui/SelectCategories";
 import SelectApp from "../../ui/SelectApp";
 import UploadAntd from "../../ui/UploadAntd";
 import UploadByUrl from "../../ui/UploadByUrl";
+import VariantItem from "./components/VariantItem";
+import TableCreateSku from "./components/TableCreateSku";
+import { countOccurrences } from "../../utils/commonFunction";
+
+const VARIANT = {
+  images: [],
+  name: "",
+  values: [""],
+};
 
 const EditProductMain = () => {
   const dispatch = useDispatch();
@@ -60,30 +70,43 @@ const EditProductMain = () => {
     if (isSuccess) setDataFetched(dataFetch?.metadata);
   }, [dataFetch]);
   useEffect(() => {
-    const {
-      product_name,
-      product_description,
-      product_price,
-      product_thumb,
-      product_thumb_small,
-      product_quantity,
-      product_categories,
-      product_brand,
-    } = product;
+    if (Object.keys(product).length) {
+      const {
+        product_name,
+        product_description,
+        product_price,
+        product_thumb,
+        product_thumb_small,
+        product_quantity,
+        product_categories,
+        product_brand,
+        product_variants,
+        skus,
+      } = product;
 
-    console.log(product);
+      // console.log(product);
 
-    setName(product_name);
-    setDescription(product_description);
-    setImage(product_thumb);
-    setProduct_thumb_small(product_thumb_small);
-    setFileList([{ url: product_thumb }]);
+      setName(product_name);
+      setDescription(product_description);
+      setImage(product_thumb);
+      setProduct_thumb_small(product_thumb_small);
+      setFileList([{ url: product_thumb }]);
 
-    setPrice(product_price);
-    setCountInStock(product_quantity);
+      setPrice(product_price);
+      setCountInStock(product_quantity);
 
-    setCateArr(product_categories);
-    setBrand(product_brand);
+      setCateArr(product_categories);
+      setBrand(product_brand);
+
+      setProductVariants([
+        ...product_variants.map((pvv: any, index: any) => {
+          return { ...pvv, id: uid() + index };
+        }),
+        { ...VARIANT, id: uid() + Date.now() },
+      ]);
+
+      setSkus(skus);
+    }
   }, [product]);
 
   const handleImageAttribute = (data: any) => {
@@ -132,11 +155,136 @@ const EditProductMain = () => {
       });
   };
 
+  const [productVariants, setProductVariants] = useState<any>([
+    // {
+    //   images: [],
+    //   name: "color",
+    //   values: ["red", "green", "blue"],
+    //   id: Date.now() + 888844,
+    // },
+    // {
+    //   images: [],
+    //   name: "size",
+    //   values: ["X", "M", "L"],
+    //   id: Date.now(),
+    // },
+    // {
+    //   ...VARIANT,
+    //   id: Date.now(),
+    // },
+  ]);
+  const [skuProduct, setSkus] = useState<any>([]);
+  const [dataTableDisplay, setDataTableDisplay] = useState<any>([]);
+  const checkVariantsName = (__productVariants: any) => {
+    let __variants = [...__productVariants];
+    const variantArr = __productVariants.filter((vvv: any) => vvv.name === "");
+
+    if (variantArr.length === 0)
+      __variants.push({
+        ...VARIANT,
+        id: uid() + Date.now(),
+      });
+
+    if (variantArr.length === 2) {
+      __variants = __productVariants.filter((vvv: any) => vvv.name !== "");
+      __variants.push({
+        ...VARIANT,
+        id: uid() + Date.now(),
+      });
+    }
+    return __variants;
+  };
+
+  const checkVariantsValues = (__variantValues: any) => {
+    let __values = [...__variantValues];
+
+    const variantArr = __variantValues.filter((vvv: any) => vvv === "");
+
+    if (variantArr.length === 0) __values.push("");
+
+    if (variantArr.length === 2) {
+      __values = __variantValues.filter((vvv: any) => vvv !== "");
+      __values.push("");
+    }
+    return __values;
+  };
+
+  const handleChangeVariants = (id: any, key: any, value: any) => {
+    const foundVariant = productVariants.find((vvv: any) => vvv.id === id);
+    if (foundVariant) {
+      const __productVariants = productVariants.map((pv: any) => {
+        if (foundVariant.id === pv.id) {
+          foundVariant[key] = value;
+          foundVariant.values = checkVariantsValues(foundVariant.values);
+          return foundVariant;
+        }
+        return pv;
+      });
+
+      setProductVariants(checkVariantsName(__productVariants));
+    }
+  };
+
   const submitHandler = (e: any) => {
     e.preventDefault();
+
+    const product_variants = productVariants
+      .filter((pp: any) => pp.name && pp.values.length > 1)
+      .map((kk: any) => {
+        const final: any = { ...kk };
+        final.values = kk.values.filter((vv: any) => vv !== "");
+        delete final["id"];
+        return final;
+      });
+    const sku_list = dataTableDisplay
+      .filter((pp: any) => pp.sku_price && pp.sku_stock)
+      .map((sku: any) => {
+        const { sku_price, sku_stock, sku_tier_index, _id } = sku;
+        const sku_values = { ...sku };
+        ["id", "_id", "sku_price", "sku_stock", "sku_tier_index"].map((key) => {
+          delete sku_values[key];
+        });
+        return { sku_price, sku_stock, sku_tier_index, sku_values };
+      });
+    /* check double value */
+    const countValue = countOccurrences(
+      product_variants.map((vv: any) => vv?.name.trim())
+    );
+    const hasDouble = Object.keys(countValue).find(
+      (vv: any) => countValue[vv] > 1
+    );
+    if (hasDouble) {
+      dispatch(
+        openToast({
+          isOpen: Date.now(),
+          content: `Option ${hasDouble} has been duplicate !!`,
+          step: 2,
+        })
+      );
+      return;
+    }
+
+    for (let oo in product_variants) {
+      const countValue = countOccurrences(product_variants[oo]?.values);
+      const hasDouble = Object.keys(countValue).find(
+        (vv: any) => countValue[vv] > 1
+      );
+      if (hasDouble) {
+        dispatch(
+          openToast({
+            isOpen: Date.now(),
+            content: `${product_variants[oo]?.name} has duplicate value ${hasDouble} !!`,
+            step: 2,
+          })
+        );
+        return;
+      }
+    }
+    /* check double value */
+
     if (
-      // product_variants.length &&
-      // sku_list.length &&
+      product_variants.length &&
+      sku_list.length &&
       image &&
       name &&
       brand &&
@@ -148,12 +296,12 @@ const EditProductMain = () => {
         product_description: description,
         product_thumb: image,
         product_thumb_small,
-        // product_price: price,
-        // product_original_price: +(
-        //   (+priceMax * (Math.random() * (50 - 10) + 10 + 100)) /
-        //   100
-        // ).toFixed(2),
-        // product_quantity: countInStock,
+        product_price: price,
+        product_original_price: +(
+          (+priceMax * (Math.random() * (50 - 10) + 10 + 100)) /
+          100
+        ).toFixed(2),
+        product_quantity: countInStock,
         product_brand: brand,
         product_categories: cateArr,
         // product_type: categor,
@@ -170,6 +318,8 @@ const EditProductMain = () => {
         //     ],
         //   },
         // ],
+        product_variants,
+        sku_list,
       });
     } else {
       dispatch(
@@ -206,7 +356,6 @@ const EditProductMain = () => {
         console.error(err);
       });
   };
-
   return (
     <>
       <DocumentTitle title={"Edit Product"}></DocumentTitle>
@@ -280,11 +429,6 @@ const EditProductMain = () => {
                               />
                             </div>
                           </div>
-                          <div className="mb-4">
-                            <div className="form-label underline fw600">
-                              Product Sku
-                            </div>
-                          </div>
 
                           <div className="mb-4">
                             <label
@@ -303,6 +447,63 @@ const EditProductMain = () => {
                               onChange={(e) => setName(e.target.value)}
                             />
                           </div>
+                          <div className="mb-4">
+                            <label
+                              htmlFor="product_description"
+                              className="form-label"
+                            >
+                              Description
+                            </label>
+                            <textarea
+                              id="product_description"
+                              placeholder="Type here"
+                              className="form-control"
+                              rows={7}
+                              required
+                              value={description}
+                              onChange={(e) => setDescription(e.target.value)}
+                            ></textarea>
+                          </div>
+                          <div className="mb-4">
+                            <div className="form-label underline fw600">
+                              Product Sku
+                            </div>
+                          </div>
+                          {productVariants.map((vvv: any, index: number) => {
+                            return (
+                              <VariantItem
+                                index={index}
+                                key={vvv?.id}
+                                variantItem={vvv}
+                                cb_setProduct_variants={(
+                                  id: any,
+                                  key: any,
+                                  value: any
+                                ) => {
+                                  handleChangeVariants(id, key, value);
+                                }}
+                              />
+                            );
+                          })}
+
+                          <TableCreateSku
+                            skuProduct={skuProduct}
+                            productVariants={productVariants}
+                            dataTableDisplay={dataTableDisplay}
+                            cb_setDataTableDisplay={(val: any) => {
+                              setDataTableDisplay(val);
+                            }}
+                            cb_setPrice={(val: any) => {
+                              setPrice(+val);
+                            }}
+                            cb_setPriceMax={(max: any) => {
+                              setPriceMax(+max);
+                            }}
+                            cb_setCountInStock={(val: any) => {
+                              setCountInStock(val);
+                            }}
+                          />
+
                           <div className="mb-4">
                             <label
                               htmlFor="product_price"
@@ -338,23 +539,6 @@ const EditProductMain = () => {
                               readOnly={true}
                               // onChange={(e) => setCountInStock(e.target.value)}
                             />
-                          </div>
-                          <div className="mb-4">
-                            <label
-                              htmlFor="product_description"
-                              className="form-label"
-                            >
-                              Description
-                            </label>
-                            <textarea
-                              id="product_description"
-                              placeholder="Type here"
-                              className="form-control"
-                              rows={7}
-                              required
-                              value={description}
-                              onChange={(e) => setDescription(e.target.value)}
-                            ></textarea>
                           </div>
                           <div className="mb-4">
                             <label className="form-label">Images</label>

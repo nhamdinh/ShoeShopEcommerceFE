@@ -15,5 +15,10 @@
     ],
     "[javascript]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
-    }
+    },
+    "search.exclude": {
+        "**/.git": true,
+        "**/build": true,
+        "**/public": true,
+    },
 }

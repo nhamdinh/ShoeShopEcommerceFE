@@ -9,7 +9,7 @@ import VariantItemValue from "./VariantItemValue";
 import type { ColumnsType } from "antd/es/table";
 import { Button, Input, Radio, Select } from "antd";
 import { Table, Checkbox } from "antd";
-import { addZero } from "../../../utils/commonFunction";
+import { addZero, equal } from "../../../utils/commonFunction";
 import { RE_ONLY_NUMBER } from "../../../utils/constants";
 
 interface DataType {
@@ -17,10 +17,12 @@ interface DataType {
 }
 
 const TableCreateSku = ({
-  productVariants,
-  dataTableDisplay,
+  skuProduct = [],
+  productVariants = [],
+  dataTableDisplay = [],
   cb_setDataTableDisplay,
   cb_setPrice,
+  cb_setPriceMax,
   cb_setCountInStock,
 }: any) => {
   function generateCombinations(dataArr: any) {
@@ -53,6 +55,7 @@ const TableCreateSku = ({
 
     return result;
   }
+
   useEffect(() => {
     const __productVariants = productVariants
       .filter((pp: any) => pp.name && pp.values.length > 1)
@@ -78,7 +81,7 @@ const TableCreateSku = ({
   }, [productVariants]);
 
   const onChangeData = (field: any, record: any, value: any) => {
-    const _tableVariant = dataTableDisplay.map((item: any) => {
+    const _tableVariant: any = dataTableDisplay.map((item: any) => {
       const final = { ...item };
       if (final?.id === record?.id) {
         final[field] = value;
@@ -87,19 +90,7 @@ const TableCreateSku = ({
     });
     if (cb_setDataTableDisplay) cb_setDataTableDisplay(_tableVariant);
 
-    const priceArr = _tableVariant.filter(
-      ({ sku_price }: any) => sku_price > 0
-    );
-    priceArr.sort((aa: any, bb: any) => aa.sku_price - bb.sku_price);
-    if (priceArr.length) {
-      if (cb_setPrice)
-        cb_setPrice(
-          priceArr[0]?.sku_price,
-          priceArr[priceArr.length - 1]?.sku_price
-        );
-    } else {
-      if (cb_setPrice) cb_setPrice(0, 0);
-    }
+    setPrice(_tableVariant);
 
     const totalQuantity = _tableVariant.reduce(
       (accumulator: any, item: any) => +accumulator + +item?.sku_stock,
@@ -192,6 +183,69 @@ const TableCreateSku = ({
 
     return columns;
   }, [productVariants, dataTableDisplay]);
+
+  useEffect(() => {
+    if (skuProduct.length && productVariants.length) {
+      const __productVariants = productVariants
+        .filter((pp: any) => pp.name && pp.values.length > 1)
+        .map((kk: any) => {
+          const final: any = { ...kk };
+          final.values = kk.values.filter((vv: any) => vv !== "");
+          return final;
+        });
+      // console.log(__productVariants);
+      const __generateCombinations = generateCombinations(__productVariants);
+
+      const addStock = __generateCombinations.map((vv: any, index: number) => {
+        return {
+          ...vv,
+          id: index,
+          sku_stock: 0,
+          sku_price: 0,
+        };
+      });
+
+      const changeStock: any = addStock.map((vv: any, index: number) => {
+        const final: any = {};
+        for (let oo in skuProduct) {
+          const {
+            sku_tier_index = [],
+            _id,
+            sku_stock,
+            sku_price,
+          } = skuProduct[oo];
+          if (equal(sku_tier_index, vv.sku_tier_index)) {
+            final._id = _id;
+            final.sku_stock = sku_stock;
+            final.sku_price = sku_price;
+          }
+        }
+
+        return { ...vv, ...final };
+      });
+
+      setPrice(changeStock);
+
+      if (cb_setDataTableDisplay) cb_setDataTableDisplay(changeStock);
+    }
+  }, [skuProduct]);
+
+  const setPrice = (_tableVariant = []) => {
+    /*  */
+    const priceArr: any = _tableVariant.filter(
+      ({ sku_price }: any) => sku_price > 0
+    );
+    priceArr.sort((aa: any, bb: any) => aa.sku_price - bb.sku_price);
+    if (priceArr.length) {
+      if (cb_setPrice) cb_setPrice(priceArr[0]?.sku_price);
+      if (cb_setPriceMax)
+        cb_setPriceMax(priceArr[priceArr.length - 1]?.sku_price);
+    } else {
+      if (cb_setPrice) cb_setPrice(0);
+      if (cb_setPriceMax) cb_setPriceMax(0);
+    }
+    /*  */
+  };
 
   return (
     <Table

@@ -1,4 +1,5 @@
 import "./style.scss";
+import { uid } from "uid";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
@@ -14,7 +15,7 @@ import SelectCategories from "../../ui/SelectCategories";
 import SelectApp from "../../ui/SelectApp";
 import VariantItem from "./components/VariantItem";
 import TableCreateSku from "./components/TableCreateSku";
-import { formatMoney } from "../../utils/commonFunction";
+import { countOccurrences, formatMoney } from "../../utils/commonFunction";
 import UploadAntd from "../../ui/UploadAntd";
 import UploadByUrl from "../../ui/UploadByUrl";
 
@@ -38,6 +39,7 @@ const AddProductMain = ({ userInfo }: any) => {
   const [brand, setBrand] = useState<any>(null);
   const [brands, setBrands] = useState<any>([]);
   const [cateArr, setCateArr] = useState<any>([]);
+
   const [productVariants, setProductVariants] = useState<any>([
     // {
     //   images: [],
@@ -53,7 +55,7 @@ const AddProductMain = ({ userInfo }: any) => {
     // },
     {
       ...VARIANT,
-      id: Date.now(),
+      id: uid() + Date.now(),
     },
   ]);
   const [dataTableDisplay, setDataTableDisplay] = useState<any>([]);
@@ -90,14 +92,14 @@ const AddProductMain = ({ userInfo }: any) => {
     if (variantArr.length === 0)
       __variants.push({
         ...VARIANT,
-        id: Date.now(),
+        id: uid() + Date.now(),
       });
 
     if (variantArr.length === 2) {
       __variants = __productVariants.filter((vvv: any) => vvv.name !== "");
       __variants.push({
         ...VARIANT,
-        id: Date.now(),
+        id: uid() + Date.now(),
       });
     }
     return __variants;
@@ -180,16 +182,54 @@ const AddProductMain = ({ userInfo }: any) => {
         delete final["id"];
         return final;
       });
+
     const sku_list = dataTableDisplay
       .filter((pp: any) => pp.sku_price && pp.sku_stock)
       .map((sku: any) => {
         const { sku_price, sku_stock, sku_tier_index } = sku;
         const sku_values = { ...sku };
-        ["id", "sku_price", "sku_stock", "sku_tier_index"].map((key) => {
+        ["id", "_id", "sku_price", "sku_stock", "sku_tier_index"].map((key) => {
           delete sku_values[key];
         });
         return { sku_price, sku_stock, sku_tier_index, sku_values };
       });
+
+    /* check double value */
+    const countValue = countOccurrences(
+      product_variants.map((vv: any) => vv?.name.trim())
+    );
+    const hasDouble = Object.keys(countValue).find(
+      (vv: any) => countValue[vv] > 1
+    );
+    if (hasDouble) {
+      dispatch(
+        openToast({
+          isOpen: Date.now(),
+          content: `Option ${hasDouble} has been duplicate !!`,
+          step: 2,
+        })
+      );
+      return;
+    }
+
+    for (let oo in product_variants) {
+      const countValue = countOccurrences(product_variants[oo]?.values);
+      const hasDouble = Object.keys(countValue).find(
+        (vv: any) => countValue[vv] > 1
+      );
+      if (hasDouble) {
+        dispatch(
+          openToast({
+            isOpen: Date.now(),
+            content: `${product_variants[oo]?.name} has duplicate value ${hasDouble} !!`,
+            step: 2,
+          })
+        );
+        return;
+      }
+    }
+    /* check double value */
+
     if (
       product_variants.length &&
       sku_list.length &&
@@ -374,11 +414,6 @@ const AddProductMain = ({ userInfo }: any) => {
                       </select> */}
                     </div>
                   </div>
-                  <div className="mb-4">
-                    <div className="form-label underline fw600">
-                      Product Sku
-                    </div>
-                  </div>
 
                   <div className="mb-4">
                     <label htmlFor="product_title" className="form-label">
@@ -408,7 +443,11 @@ const AddProductMain = ({ userInfo }: any) => {
                       onChange={(e) => setDescription(e.target.value)}
                     ></textarea>
                   </div>
-
+                  <div className="mb-4">
+                    <div className="form-label underline fw600">
+                      Product Sku
+                    </div>
+                  </div>
                   {productVariants.map((vvv: any, index: number) => {
                     return (
                       <VariantItem
@@ -432,8 +471,10 @@ const AddProductMain = ({ userInfo }: any) => {
                     cb_setDataTableDisplay={(val: any) => {
                       setDataTableDisplay(val);
                     }}
-                    cb_setPrice={(val: any, max: any) => {
+                    cb_setPrice={(val: any) => {
                       setPrice(+val);
+                    }}
+                    cb_setPriceMax={(max: any) => {
                       setPriceMax(+max);
                     }}
                     cb_setCountInStock={(val: any) => {
