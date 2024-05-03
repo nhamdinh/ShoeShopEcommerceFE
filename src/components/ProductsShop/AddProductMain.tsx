@@ -289,6 +289,11 @@ const AddProductMain = ({ userInfo }: any) => {
     }
   }, [fileList]);
 
+  useEffect(() => {
+    setBrand(null);
+    setBrands([]);
+  }, [cateArr]);
+
   return (
     <>
       <section className="content-main" style={{ maxWidth: "1200px" }}>
@@ -321,12 +326,9 @@ const AddProductMain = ({ userInfo }: any) => {
                     <div className="flex-box d-flex justify-content-between align-items-center">
                       <h6>Categories</h6>
                       <SelectCategories
-                        cb_setBrands={(val: any) => {
-                          setBrands(val);
-                        }}
-                        cb_setBrand={(val: any, cateArr: any) => {
-                          setBrand(val);
-                          setCateArr(cateArr);
+                        cateArr={cateArr}
+                        cb_setCateArr={(val: any) => {
+                          setCateArr(val);
                         }}
                         cb_onGetAllBrandByCategories={(val: any) => {
                           onGetAllBrandByCategories(val);
@@ -450,7 +452,6 @@ const AddProductMain = ({ userInfo }: any) => {
                       required
                       value={formatMoney(price)}
                       readOnly={true}
-
                       // onChange={(e) => setPrice(e.target.value)}
                     />
                   </div>

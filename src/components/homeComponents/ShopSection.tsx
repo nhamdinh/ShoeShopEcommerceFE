@@ -1,6 +1,6 @@
 import "./styles.scss";
-import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Rating from "./Rating";
 import {
   useGetAllBrandByCategoriesMutation,
@@ -19,8 +19,6 @@ import {
   formatMoneyCurrency,
   removeNullObject,
 } from "../../utils/commonFunction";
-import { Carousel, Col, Modal, Row, Select } from "antd";
-import { UpOutlined, DownOutlined } from "@ant-design/icons";
 import SelectApp from "../../ui/SelectApp";
 import SelectCategories from "../../ui/SelectCategories";
 
@@ -30,6 +28,7 @@ const ShopSection = ({ pagenumber, keyword }: any) => {
   const [brand, setBrand] = useState<any>(null);
   const [brands, setBrands] = useState<any>([]);
   const [product_categories, setCateArr] = useState<any>([]);
+
   const [getAllBrandByCategories, { isLoading: illz, error: errz }] =
     useGetAllBrandByCategoriesMutation();
 
@@ -73,7 +72,7 @@ const ShopSection = ({ pagenumber, keyword }: any) => {
     product_type: "",
     keyword: keyword ?? "",
     brand: brand ?? "",
-    product_categories
+    product_categories,
   });
 
   useEffect(() => {
@@ -130,6 +129,11 @@ const ShopSection = ({ pagenumber, keyword }: any) => {
     }
   }, [dataProducts]);
 
+  useEffect(() => {
+    setBrand(null);
+    setBrands([]);
+  }, [product_categories]);
+
   return (
     <>
       <div className="container">
@@ -139,12 +143,9 @@ const ShopSection = ({ pagenumber, keyword }: any) => {
               <div className="row mb40px gap12px">
                 <div className=" col-lg-4 col-md-12 col-sm-12 df content__center mr-6px ml-6px ">
                   <SelectCategories
-                    cb_setBrands={(val: any) => {
-                      setBrands(val);
-                    }}
-                    cb_setBrand={(val: any, cateArr: any) => {
-                      setBrand(val);
-                      setCateArr(cateArr);
+                    cateArr={product_categories}
+                    cb_setCateArr={(val: any) => {
+                      setCateArr(val);
                     }}
                     cb_onGetAllBrandByCategories={(val: any) => {
                       onGetAllBrandByCategories(val);

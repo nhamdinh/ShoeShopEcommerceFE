@@ -34,7 +34,7 @@ const OrderScreen = () => {
     data: dataFetch,
     error,
     isSuccess,
-    isLoading,
+    isFetching,
   } = useGetOrderDetailQuery(
     { orderId: orderId },
     {
@@ -109,7 +109,7 @@ const OrderScreen = () => {
       <DocumentTitle title={"Order"}></DocumentTitle>
 
       <div className="container">
-        {isLoading ? (
+        {isFetching ? (
           <Loading />
         ) : error ? (
           <Message variant="alert-danger" mess={error}></Message>

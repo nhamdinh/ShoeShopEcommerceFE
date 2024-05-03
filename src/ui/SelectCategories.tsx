@@ -4,11 +4,11 @@ import { PRODUCT_CATEGORY } from "../utils/constants";
 import { useGetCodesQuery } from "../store/components/products/productsApi";
 
 const SelectCategories = ({
-  cb_setBrands,
-  cb_setBrand,
   cb_onGetAllBrandByCategories,
+  cb_setCateArr,
+  cateArr = [],
 }: any) => {
-  const [cateArr, setCateArr] = useState<any>([]);
+  // const [cateArr, setCateArr] = useState<any>([]);
   const [categories, setCategories] = useState<any>([]);
 
   useEffect(() => {
@@ -16,17 +16,14 @@ const SelectCategories = ({
       cb_onGetAllBrandByCategories({
         ids: cateArr,
       });
-    } else {
-      cb_setBrands([]);
     }
-    cb_setBrand(null,cateArr);
   }, [cateArr]);
 
   const {
     data: dataFetch,
     error,
     isSuccess,
-    isLoading,
+    isFetching,
   } = useGetCodesQuery(
     {
       mainCode_type: PRODUCT_CATEGORY,
@@ -50,7 +47,7 @@ const SelectCategories = ({
   }, [dataFetch]);
 
   const handleChange = (value: string | string[]) => {
-    if (value.length < 4) setCateArr(value);
+    if (value.length < 4) cb_setCateArr(value);
   };
 
   return (
