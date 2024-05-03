@@ -1,3 +1,6 @@
+import eng from './../images/flags/eng.webp';
+import vi from './../images/flags/vi.png';
+
 export const API_LINK =
   process.env.REACT_APP_API_URL ??
   "http://ec2-18-139-1-145.ap-southeast-1.compute.amazonaws.com:5000/api";
@@ -8,6 +11,7 @@ export const SOCKET_HOST =
 // export const API_LINK = 'http://localhost:5000/api';
 // export const SOCKET_HOST = 'http://localhost:6000';
 /* env */
+export const LANG_STORAGE = "LANG_STORAGE_user";
 export const NAME_STORAGE = "nameUser";
 export const ACCESSTOKEN_STORAGE = "accessTokenUser";
 export const REFRESHTOKEN_STORAGE = "refreshTokenUser";
@@ -92,3 +96,9 @@ export const ORDER_SORT_OPTIONS = [
     orderByValue: 1,
   },
 ];
+export const LOCALES = [
+  {value: 'en', label: 'English (EN)', icon: eng},
+  {value: 'vi', label: 'Vietnamese (VI)', icon: vi},
+  // {value: 'dk-DK', label: 'Dansk (DK)', icon: dk},
+  // {value: 'ua-UA', label: 'Українська (UA)', icon: ua}
+]

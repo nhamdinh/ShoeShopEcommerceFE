@@ -24,8 +24,11 @@ import mainLogo from "./../images/logo_light.svg";
 
 import axios from "axios";
 import { toNonAccentVietnamese } from "../utils/commonFunction";
+import { useTranslation } from "react-i18next";
 
 const Header = () => {
+  const { t } = useTranslation();
+
   const [keyword, setKeyword] = useState<any>("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -462,7 +465,7 @@ const Header = () => {
                     aria-haspopup="true"
                     aria-expanded="false"
                   >
-                    Hi, {userInfo?.name}
+                    {t("hello")}, {userInfo?.name?.slice(0,6) + "***"} 
                   </button>
                   <div className="dropdown-menu">
                     <Link className="dropdown-item" to="/profile">

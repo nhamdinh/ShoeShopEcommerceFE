@@ -230,3 +230,20 @@
 ::-webkit-scrollbar-track {
   background: #f1f2f3;
 }
+.ppp {
+  overflow: hidden;
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  img {
+    border-radius: 50%;
+    width: 34px;
+    height: 34px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center center;
+  }
+}
