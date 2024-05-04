@@ -9,5 +9,10 @@
   "Orders": "Đơn hàng",
   "Sales Analytics": "Phân tích bán hàng",
   "Top Products": "Sản phẩm hàng đầu",
-  "Products Management": "Quản lý sản phẩm"
+  "Products Management": "Quản lý sản phẩm",
+  "Default sorting": "Sắp xếp Mặc Định",
+  "Name: A-Z": "Tên: A-Z",
+  "Name: Z-A": "Tên: Z-A",
+  "Price: High -> Low": "Giá: Cao -> Thấp",
+  "Price: Low -> High": "Giá: Thấp -> Cao"
 }

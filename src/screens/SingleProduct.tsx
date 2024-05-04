@@ -93,6 +93,7 @@ const SingleProduct = () => {
       setSkuSelected(__skusSort[0]?.sku_values);
     }
   }, [dataFetch]);
+
   useEffect(() => {
     const keys = Object.keys(skuSelected);
     if (keys.length) {
@@ -206,12 +207,36 @@ const SingleProduct = () => {
       //     image: product?.product_thumb,
       //   },
       // })
+      const sku_id = skuSelectedId.split(BF2)[0];
+
+      const foundSku = product?.skus.find((item: any) => item?._id === sku_id);
+      if (!foundSku || foundSku?.isDraft || !foundSku?.isPublished) {
+        dispatch(
+          openToast({
+            isOpen: Date.now(),
+            content: `The Option has been Discontinued !!`,
+            step: 2,
+          })
+        );
+        return;
+      }
+
+      if (product?.isDraft || !product?.isPublished) {
+        dispatch(
+          openToast({
+            isOpen: Date.now(),
+            content: `The Product has been Discontinued !!`,
+            step: 2,
+          })
+        );
+        return;
+      }
 
       onCreateCart({
         product: {
           cart_shopId: product?.product_shop,
           product_id: product?._id,
-          sku_id: skuSelectedId.split(BF2)[0],
+          sku_id,
           quantity: +qty,
           price: product?.product_price,
           name: product?.product_name,
@@ -263,14 +288,33 @@ const SingleProduct = () => {
     return string.slice(0, 2) + "***";
   };
 
-  const product1: any = {};
-  product1.product_original_price = +product?.product_original_price;
-  product1.product_price = +(skuSelectedId
-    ? skuSelectedId.split(BF2)[1]
-    : product?.product_price);
-  product1.product_quantity = +(skuSelectedId
-    ? skuSelectedId.split(BF2)[2]
-    : product.product_quantity);
+  const productRender: any = {};
+
+  if (skuSelectedId) {
+    if (Object.keys(product).length) {
+      const sku_id = skuSelectedId.split(BF2)[0];
+      const sku_price = skuSelectedId.split(BF2)[1];
+      const sku_quantity = skuSelectedId.split(BF2)[2];
+
+      const {
+        product_original_price = 0,
+        product_price = 0,
+        product_quantity = 0,
+      } = product;
+
+      productRender.product_original_price = +product_original_price;
+      productRender.product_price = +(sku_price ?? product_price);
+      productRender.product_quantity = +(sku_quantity ?? product_quantity);
+
+      if (product?.isDraft || !product?.isPublished)
+        productRender.product_quantity = 0;
+
+      const foundSku = product?.skus.find((item: any) => item?._id === sku_id);
+      if (!foundSku || foundSku?.isDraft || !foundSku?.isPublished)
+        productRender.product_quantity = 0;
+    }
+  }
+
   return (
     <>
       <DocumentTitle title={"Product Detail"}></DocumentTitle>
@@ -337,20 +381,20 @@ const SingleProduct = () => {
                     <div className="flex-box d-flex justify-content-between align-items-center">
                       <h6>Price</h6>
                       <span className="line__through">
-                        ${product1?.product_original_price}
+                        ${productRender?.product_original_price}
                       </span>
                     </div>
                     <div className="flex-box d-flex justify-content-between align-items-center">
                       <h6>Sale Price</h6>
                       <span className="ed1c24">
-                        - {calPerDiscount(product1)} %
+                        - {calPerDiscount(productRender)} %
                       </span>
-                      <span>${product1?.product_price}</span>
+                      <span>${productRender?.product_price}</span>
                     </div>
                     <div className="flex-box d-flex justify-content-between align-items-center">
                       <h6 className="color__00ba9d">Available</h6>
                       <span className="color__00ba9d">
-                        {formatMoney(product1.product_quantity) || 0}
+                        {formatMoney(productRender.product_quantity) || 0}
                       </span>
                     </div>
 

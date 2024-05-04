@@ -9,5 +9,10 @@
   "Orders": "Orders",
   "Sales Analytics": "Sales Analytics",
   "Top Products": "Top Products",
-  "Products Management": "Products Management"
+  "Products Management": "Products Management",
+  "Default sorting": "Default sorting",
+  "Name: A-Z": "Name: A-Z",
+  "Name: Z-A": "Name: Z-A",
+  "Price: High -> Low": "Price: High -> Low",
+  "Price: Low -> High": "Price: Low -> High"
 }

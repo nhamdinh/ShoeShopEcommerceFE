@@ -1,6 +1,7 @@
 import { memo, useState } from "react";
 import { Select } from "antd";
 import { UpOutlined, DownOutlined } from "@ant-design/icons";
+import { useTranslation } from "react-i18next";
 
 const SelectApp = ({
   options,
@@ -9,6 +10,8 @@ const SelectApp = ({
   width,
   placeholder,
 }: any) => {
+
+  const { t } = useTranslation();
   const [isShowDropDown, setShowDropdownFilter] = useState<any>(false);
 
   return (
@@ -41,11 +44,11 @@ const SelectApp = ({
           <Select.Option
             key={index}
             value={item?.value}
-            label={item?.label}
+            label={t(item?.label)}
             // disabled={!checkAllow(item.value)}
             // hidden={!allow}
           >
-            <div className="opt-lbl">{item?.label}</div>
+            <div className="opt-lbl">{t(item?.label)}</div>
             {/* 
 <div
 role="button"

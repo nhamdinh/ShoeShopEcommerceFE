@@ -112,6 +112,7 @@ export const toNonAccentVietnamese = (str: any) => {
 };
 
 export const calPerDiscount = (product: any) => {
+  if (!product?.product_original_price) return 0;
   const perDiscount = (
     (1 - product?.product_price / product?.product_original_price) *
     100
