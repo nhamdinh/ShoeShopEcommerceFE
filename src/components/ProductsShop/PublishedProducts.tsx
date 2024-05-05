@@ -17,38 +17,25 @@ const PublishedProducts = ({
 }: any) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const userInfo = useSelector(getUserInfo);
 
   const [dataFetched, setdataFetched] = useState<any>([]);
 
   const [currentPage, setCurrentPage] = useState<any>(1);
   const [total, setTotal] = useState<any>(1);
 
-  const [params, setParams] = useState<any>({
-    page: pagenumber ?? 1,
-    keyword: keyword ?? "",
-    brand: brand ?? "",
-    limit: PAGE_SIZE,
-    order: "desc",
-    orderBy: "createdAt",
-  });
-
-  useEffect(() => {
-    setParams({
-      ...params,
-      page: pagenumber ?? 1,
-      keyword: keyword ?? "",
-      brand: brand ?? "",
-    });
-  }, [pagenumber, keyword, brand]);
-
   const {
     data: dataProducts,
     error,
     isSuccess,
-    isLoading,
+    isFetching,
   } = useGetPublishedProductsQuery(
     {
       product_shop: shopId,
+      limit: PAGE_SIZE,
+      page: pagenumber ?? 1,
+      orderByKey: "_id",
+      orderByValue: -1,
     },
     {
       refetchOnMountOrArgChange: true,
@@ -57,16 +44,16 @@ const PublishedProducts = ({
   );
   useEffect(() => {
     if (isSuccess) {
-      setdataFetched(dataProducts?.metadata?.products);
-      setTotal(dataProducts?.totalPages);
-      setCurrentPage(dataProducts?.page);
+      const { products = [], totalPages, page } = dataProducts?.metadata;
+      setdataFetched(products);
+      setTotal(totalPages);
+      setCurrentPage(page);
     }
   }, [dataProducts]);
-  const userInfo = useSelector(getUserInfo);
 
   return (
     <ProductsRender
-      isLoading={isLoading}
+      isLoading={isFetching}
       keyword={keyword}
       brand={brand}
       error={error}

@@ -246,7 +246,7 @@ const CartScreen = () => {
                 <div className="col-md-6 d-flex justify-content-md-end mt-3 mt-md-0">
                   <button
                     onClick={() => {
-                      console.log(checkoutCartsParam);
+                      // console.log(checkoutCartsParam);
                       onCheckoutOrder(checkoutCartsParam);
                     }}
                   >

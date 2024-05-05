@@ -206,13 +206,18 @@ textarea:focus {
 
 /* NEWSLATTER */
 .subscribe-section {
-  width: 1200px;
+  // width: 1200px;
   margin: 0 auto;
   background:
     linear-gradient(0deg, rgba(0, 0, 0, 0.226), rgba(0, 0, 0, 0.226)),
     url("https://img.tgdd.vn/imgt/f_webp,fit_outside,quality_100/https://cdn.tgdd.vn/2023/08/banner/Banner-Big-TGDD-Desk-1920x450-4.jpg")
       no-repeat scroll center / cover;
   padding: 100px 0 100px;
+
+  // background-size: cover;
+  // background-repeat: no-repeat;
+  // background-attachment: fixed;
+  // background-position: center center;
 }
 .subscribe-head h2 {
   color: #fff;
@@ -230,6 +235,10 @@ textarea:focus {
 }
 .subscribe-head {
   text-align: center;
+  // display: flex;
+  // justify-content: center;
+  // align-items: center;
+  // flex-direction: column;
 }
 .form-section input[type="email"] {
   border: 0 none;
@@ -665,4 +674,9 @@ textarea:focus {
 .page-item.active .page-link {
   background-color: black;
   border: 1px solid black;
+}
+.pagination{
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
 }

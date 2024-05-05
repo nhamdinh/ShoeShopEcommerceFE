@@ -1,10 +1,7 @@
 import "./styles.scss";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  useGetProductsDetailQuery,
-  useGetPublishedProductsQuery,
-} from "../../store/components/products/productsApi";
+import { useGetPublishedProductsQuery } from "../../store/components/products/productsApi";
 import { PAGE_SIZE } from "../../utils/constants";
 import { useSelector } from "react-redux";
 import { getUserInfo } from "../../store/selector/RootSelector";
@@ -12,8 +9,8 @@ import { useDispatch } from "react-redux";
 import ProductsRender from "./ProductsRender";
 
 const ShopDetailSection = ({
-  pagenumber,
   keyword,
+  pagenumber,
   brand,
   shopId,
   productShop,
@@ -26,32 +23,19 @@ const ShopDetailSection = ({
   const [currentPage, setCurrentPage] = useState<any>(1);
   const [total, setTotal] = useState<any>(1);
 
-  const [params, setParams] = useState<any>({
-    page: pagenumber ?? 1,
-    keyword: keyword ?? "",
-    brand: brand ?? "",
-    limit: PAGE_SIZE,
-    order: "desc",
-    orderBy: "createdAt",
-  });
-
-  useEffect(() => {
-    setParams({
-      ...params,
-      page: pagenumber ?? 1,
-      keyword: keyword ?? "",
-      brand: brand ?? "",
-    });
-  }, [pagenumber, keyword, brand]);
-
   const {
     data: dataProducts,
     error,
     isSuccess,
-    isLoading,
+    isFetching,
   } = useGetPublishedProductsQuery(
     {
       product_shop: shopId,
+      limit: PAGE_SIZE,
+      page: pagenumber ?? 1,
+      orderByKey: "_id",
+      orderByValue: -1,
+      keyword
     },
     {
       refetchOnMountOrArgChange: true,
@@ -60,12 +44,13 @@ const ShopDetailSection = ({
   );
   useEffect(() => {
     if (isSuccess) {
-      setdataFetched(dataProducts?.metadata?.products);
-      setTotal(dataProducts?.totalPages);
-      setCurrentPage(dataProducts?.page);
+      const { products = [], totalPages, page } = dataProducts?.metadata;
+      setdataFetched(products);
+      setTotal(totalPages);
+      setCurrentPage(page);
 
+      /*  */
       const urls: any = [];
-
       const productsArr = dataProducts?.metadata?.products ?? [];
       if (Array.isArray(productsArr) && productsArr.length > 0) {
         productsArr.map((product) => {
@@ -73,6 +58,7 @@ const ShopDetailSection = ({
         });
         // const zz = concurrencyRequest(urls, 3);
       }
+      /*  */
     }
   }, [dataProducts]);
   const userInfo = useSelector(getUserInfo);
@@ -113,12 +99,15 @@ const ShopDetailSection = ({
 
     const maxConcurrency = Math.min(maxNum, urls.length); // Số lần yêu cầu tối đa có thể được thực hiện đồng thời
     // Bắt đầu thực hiện yêu cầu đồng thời
-    const zzz = Array.from({ length: maxConcurrency }, () => setTimeout(request, 1000));
+    const zzz = Array.from({ length: maxConcurrency }, () =>
+      setTimeout(request, 1000)
+    );
     // console.log(`:::zzz::`, zzz);
   };
+
   return (
     <ProductsRender
-      isLoading={isLoading}
+      isLoading={isFetching}
       keyword={keyword}
       brand={brand}
       error={error}

@@ -11,7 +11,7 @@ import mainLogo3 from "./../images/user.png";
 import DraftProducts from "../components/ProductsShop/DraftProducts";
 import CreateCoupon from "../components/Coupons/CreateCoupon";
 import ListCoupons from "../components/Coupons/ListCoupons";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import PublishedProducts from "../components/ProductsShop/PublishedProducts";
 import DocumentTitle from "../components/DocumentTitle";
 
@@ -19,7 +19,19 @@ const ProfileScreen = () => {
   // window.scrollTo(0, 0);
   const navigate = useNavigate();
 
-  const dispatch = useDispatch();
+  const location = useLocation();
+
+  const [keyword, setKeyword] = useState<any>("");
+  const [brand, setBrand] = useState<any>("");
+  const [pagenumber, setpagenumber] = useState<any>(1);
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search);
+    setKeyword(urlParams.get("search") ?? "");
+    setBrand(urlParams.get("brand") ?? "");
+    setpagenumber(urlParams.get("page") ?? 1);
+  }, [location.search]);
+
   const [tab, setTab] = useState<any>(1);
 
   const userInfo = useSelector(getUserInfo);
@@ -135,6 +147,7 @@ const ProfileScreen = () => {
                     aria-selected="true"
                     onClick={() => {
                       setTab(1);
+                      navigate("/profile");
                     }}
                   >
                     Profile Settings
@@ -166,6 +179,7 @@ const ProfileScreen = () => {
                     aria-selected="false"
                     onClick={() => {
                       setTab(2);
+                      navigate("/profile");
                     }}
                   >
                     Orders List
@@ -183,6 +197,7 @@ const ProfileScreen = () => {
                       aria-selected="false"
                       onClick={() => {
                         setTab(3);
+                        navigate("/profile");
                       }}
                     >
                       Become Seller
@@ -201,6 +216,7 @@ const ProfileScreen = () => {
                       aria-selected="false"
                       onClick={() => {
                         setTab(4);
+                        navigate("/profile");
                       }}
                     >
                       Create Product
@@ -219,6 +235,7 @@ const ProfileScreen = () => {
                       aria-selected="false"
                       onClick={() => {
                         setTab(5);
+                        navigate("/profile");
                       }}
                     >
                       Products Draft
@@ -237,6 +254,7 @@ const ProfileScreen = () => {
                       aria-selected="false"
                       onClick={() => {
                         setTab(8);
+                        navigate("/profile");
                       }}
                     >
                       Products Published
@@ -255,6 +273,7 @@ const ProfileScreen = () => {
                       aria-selected="false"
                       onClick={() => {
                         setTab(6);
+                        navigate("/profile");
                       }}
                     >
                       Create Coupon
@@ -273,6 +292,7 @@ const ProfileScreen = () => {
                       aria-selected="false"
                       onClick={() => {
                         setTab(7);
+                        navigate("/profile");
                       }}
                     >
                       List Coupons
@@ -318,6 +338,7 @@ const ProfileScreen = () => {
                   isShopTrue={() => {
                     setisShop(true);
                     setTab(1);
+                    navigate("/profile");
                   }}
                 />
               )}{" "}
@@ -327,8 +348,8 @@ const ProfileScreen = () => {
                   productShop={userInfo}
                   shopId={userInfo?._id}
                   brand=""
-                  keyword=""
-                  pagenumber=""
+                  keyword={keyword}
+                  pagenumber={pagenumber}
                 />
               )}{" "}
               {tab === 8 && (
@@ -336,8 +357,8 @@ const ProfileScreen = () => {
                   productShop={userInfo}
                   shopId={userInfo?._id}
                   brand=""
-                  keyword=""
-                  pagenumber=""
+                  keyword={keyword}
+                  pagenumber={pagenumber}
                 />
               )}{" "}
               {tab === 6 && <CreateCoupon userInfo={userInfo} />}{" "}

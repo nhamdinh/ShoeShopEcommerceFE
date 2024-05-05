@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 const Pagination = (props: any) => {
   const navigate = useNavigate();
-
+  const location = useLocation();
   const [iterator, setiterator] = useState<any>([]);
   const [total, settotal] = useState<any>(1);
   const [page, setpage] = useState<any>(1);
@@ -29,7 +30,7 @@ const Pagination = (props: any) => {
           >
             <div
               onClick={() => {
-                navigate(`/?page=${x + 1}&&search=${keyword}&&brand=${brand}`);
+                navigate(`${location.pathname}?page=${x + 1}&&search=${keyword}&&brand=${brand}`);
               }}
               className="page-link"
             >

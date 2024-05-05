@@ -19,11 +19,9 @@ const ProductsShopTable = ({
   const [keyword, setKeyword] = useState<any>("");
 
   const [dataFetched, setdataFetched] = useState<any>([]);
-  const [currentPage, setCurrentPage] = useState<any>(1);
-  const [total, setTotal] = useState<any>(1);
 
   useEffect(() => {
-    let productIds_temp: any = [];
+    const productIds_temp: any = [];
     dataFetched.map((data: any) => {
       if (data?.checked) {
         productIds_temp.push(data?._id);
@@ -32,32 +30,16 @@ const ProductsShopTable = ({
     setproductIds(productIds_temp);
   }, [dataFetched]);
 
-  const [params, setParams] = useState<any>({
-    page: pagenumber ?? 1,
-    keyword: keyword ?? "",
-    brand: brand ?? "",
-    limit: PAGE_SIZE,
-    order: "desc",
-    orderBy: "createdAt",
-  });
-
-  useEffect(() => {
-    setParams({
-      ...params,
-      page: pagenumber ?? 1,
-      keyword: keyword ?? "",
-      brand: brand ?? "",
-    });
-  }, [pagenumber, keyword, brand]);
-
   const {
     data: dataProducts,
     error,
     isSuccess,
-    isLoading,
+    isFetching,
   } = useGetPublishedProductsQuery(
     {
       product_shop: shopId,
+      limit: 999,
+      page: 1,
     },
     {
       refetchOnMountOrArgChange: true,
@@ -66,13 +48,12 @@ const ProductsShopTable = ({
   );
   useEffect(() => {
     if (isSuccess) {
-      const dataFetched_temp: any = [];
-      dataProducts?.metadata?.products.map((data: any, index: number) => {
-        dataFetched_temp.push({ ...data, checked: false, index: index + 1 });
-      });
-      setdataFetched(dataFetched_temp);
-      setTotal(dataProducts?.totalPages);
-      setCurrentPage(dataProducts?.page);
+      const { products = [] } = dataProducts?.metadata;
+      setdataFetched(
+        products.map((data: any, index: number) => {
+          return { ...data, checked: false, index: index + 1 };
+        })
+      );
     }
   }, [dataProducts]);
 
@@ -107,14 +88,16 @@ const ProductsShopTable = ({
             {dataFetched
               .filter((item: any) => {
                 const searchTerm = toNonAccentVietnamese(keyword.toLowerCase());
-                const fullName = toNonAccentVietnamese(item?.product_name.toLowerCase());
+                const fullName = toNonAccentVietnamese(
+                  item?.product_name.toLowerCase()
+                );
                 // console.log(searchTerm);
                 // console.log(fullName);
                 return fullName.includes(searchTerm) && fullName !== searchTerm;
               })
               .map((item: any, index: number) => {
                 return (
-                  <div className="ProductsShopTable__row">
+                  <div className="ProductsShopTable__row" key={index}>
                     <Checkbox
                       checked={item?.checked}
                       onChange={(e) => {
@@ -137,7 +120,11 @@ const ProductsShopTable = ({
                       key={item?._id}
                     >
                       <div className="name">{item?.product_name}</div>
-                      <img src={item?.product_thumb} alt="product_thumb" />
+                      <img
+                        loading="lazy"
+                        src={item?.product_thumb_small ?? item?.product_thumb}
+                        alt="product_thumb"
+                      />
                     </div>
                   </div>
                 );

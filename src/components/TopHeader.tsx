@@ -39,7 +39,7 @@ export default function TopHeader() {
 
           </div>
           <div className=" col-12 col-lg-6 justify-content-center justify-content-lg-end d-flex align-items-center">
-                          <button className="w36px h36px ppp"
+                          <button className="w36px h36px flag"
                                     aria-label="Change language"
                                     onClick={()=>{
                                         if (i18n1?.language === "vi") {

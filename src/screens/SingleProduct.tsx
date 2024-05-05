@@ -293,23 +293,25 @@ const SingleProduct = () => {
   if (skuSelectedId) {
     if (Object.keys(product).length) {
       const sku_id = skuSelectedId.split(BF2)[0];
-      const sku_price = skuSelectedId.split(BF2)[1];
-      const sku_quantity = skuSelectedId.split(BF2)[2];
+      const foundSku = product?.skus.find((item: any) => item?._id === sku_id);
+
+      const { sku_stock = 0, sku_price = 0, sku_sold = 0 } = foundSku;
 
       const {
         product_original_price = 0,
+        product_sold = 0,
         product_price = 0,
         product_quantity = 0,
       } = product;
 
       productRender.product_original_price = +product_original_price;
       productRender.product_price = +(sku_price ?? product_price);
-      productRender.product_quantity = +(sku_quantity ?? product_quantity);
+      productRender.product_quantity = +(sku_stock ?? product_quantity);
+      productRender.sku_sold = sku_sold ?? product_sold;
 
       if (product?.isDraft || !product?.isPublished)
         productRender.product_quantity = 0;
 
-      const foundSku = product?.skus.find((item: any) => item?._id === sku_id);
       if (!foundSku || foundSku?.isDraft || !foundSku?.isPublished)
         productRender.product_quantity = 0;
     }
@@ -401,7 +403,7 @@ const SingleProduct = () => {
                     <div className="flex-box d-flex justify-content-between align-items-center">
                       <h6 className="color__035ecf">Already sold</h6>
                       <span className="color__035ecf">
-                        {formatMoney(product.product_sold) || 0}
+                        {formatMoney(productRender.sku_sold) || 0}
                       </span>
                     </div>
 

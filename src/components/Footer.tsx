@@ -6,14 +6,14 @@ const Footer = () => {
       <div className="justify-content-center d-flex">
         <div className="card-name">
           <img
-            alt="mastercard"
-            src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/MasterCard_Logo.svg/1200px-MasterCard_Logo.svg.png"
+            alt="visa"
+            src="https://upload.wikimedia.org/wikipedia/commons/4/41/Visa_Logo.png"
           />
         </div>
         <div className="card-name">
           <img
-            alt="visa"
-            src="https://upload.wikimedia.org/wikipedia/commons/4/41/Visa_Logo.png"
+            alt="mastercard"
+            src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/MasterCard_Logo.svg/1200px-MasterCard_Logo.svg.png"
           />
         </div>
         <div className="card-name">
@@ -31,7 +31,7 @@ const Footer = () => {
         <div className="card-name">
           <img
             alt="discover"
-            src="https://icons-for-free.com/iconfiles/png/512/cash+checkout+discover+network+online+shopping+payment+method-1320191225548835050.png"
+            src="https://e7.pngegg.com/pngimages/557/637/png-clipart-discover-financial-services-discover-card-credit-card-diners-club-international-credit-card-text-rectangle-thumbnail.png"
           />
         </div>
       </div>
