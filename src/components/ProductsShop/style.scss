@@ -34,3 +34,125 @@
   width: 100%;
   border: 1px #f14130 dashed;
 }
+.editor {
+  margin-top: 24px;
+  min-height: 400px;
+  .editor-row {
+    display: flex;
+    .tox.tox-tinymce {
+      width: 100% !important;
+    }
+    .df-center {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .editor-col10 {
+      flex: 1;
+      background: #fafafa;
+      font-family: "Pretendard";
+      font-style: normal;
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 24px;
+      /* identical to box height, or 150% */
+
+      display: flex;
+      align-items: center;
+
+      /* Dark Gray/Dark Gray-900 */
+
+      color: #222222;
+      min-height: 52px;
+
+      border: 1px solid #e0e0e0;
+    }
+    .editor-col90 {
+      flex: 9;
+      border: 1px solid #e0e0e0;
+      gap: 16px;
+
+      .list_url {
+        display: flex;
+        gap: 8px;
+        flex-direction: column;
+        margin-top: 8px;
+        margin-bottom: 8px;
+        .line-url {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 16px;
+          font-family: "Pretendard";
+          font-style: normal;
+          font-weight: 400;
+          font-size: 14px;
+          line-height: 22px;
+          /* identical to box height, or 157% */
+
+          display: flex;
+          align-items: center;
+
+          /* Dark Gray/Dark Gray-500 */
+
+          color: #9e9e9e;
+        }
+        .fileUrl {
+          font-family: "Pretendard";
+          font-style: normal;
+          font-weight: 400;
+          font-size: 12px;
+          line-height: 20px;
+          /* identical to box height, or 167% */
+
+          /* Dark Gray/Dark Gray-500 */
+
+          color: #9e9e9e;
+          border: 1px solid #eeeeee;
+          outline: none;
+        }
+      }
+      .ant-upload-list-text {
+        display: none;
+      }
+      @mixin btn-upload {
+        width: 98px;
+        height: 36px;
+        border: none;
+        margin-left: 20px;
+        margin-top: 8px;
+      }
+      .btn-upload {
+        @include btn-upload;
+        cursor: pointer;
+      }
+      .btn-upload-disabled {
+        @include btn-upload;
+        cursor: not-allowed;
+      }
+      .editor-input {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 24px;
+        /* identical to box height, or 150% */
+
+        display: flex;
+        align-items: center;
+
+        /* Dark Gray/Dark Gray-400 */
+        outline: none;
+        border: none;
+      }
+    }
+    .df-start {
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-start;
+    }
+  }
+
+  .tox-tinymce {
+    min-height: 1000px !important;
+  }
+}

@@ -340,11 +340,9 @@ const SingleProduct = () => {
               </div>
               <div className="col-md-6">
                 <div className="product-dtl">
-                  <div className="product-info">
+                <div className="product-info">
                     <div className="product-name">{product?.product_name}</div>
                   </div>
-                  <p>{product?.product_description}</p>
-
                   <div className="product-count col-lg-7 ">
                     {product_variants.map((ppp: any, index: number) => {
                       const { values = [] } = ppp;
@@ -438,6 +436,14 @@ const SingleProduct = () => {
                       </>
                     ) : null}
                   </div>
+                    <div className="mt24px">
+                    <div
+                    dangerouslySetInnerHTML={rawMarkup(
+                      product?.product_description
+                    )}
+                  ></div>
+                    </div>
+
                 </div>
               </div>
             </div>

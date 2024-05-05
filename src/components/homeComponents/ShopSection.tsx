@@ -16,6 +16,7 @@ import {
 } from "../../utils/constants";
 import {
   calPerDiscount,
+  formatMoney,
   formatMoneyCurrency,
   removeNullObject,
 } from "../../utils/commonFunction";
@@ -261,9 +262,12 @@ const ShopSection = ({ pagenumber, keyword }: any) => {
                                 - {calPerDiscount(product)} %
                               </h3>
                             </div>
-                            <h3>
-                              ${formatMoneyCurrency(product?.product_price)}
-                            </h3>
+                            <div className="df content__between items__center mt12px">
+                              <h3 className="mt0px">
+                                ${formatMoneyCurrency(product?.product_price)}
+                              </h3>
+                              <h6 className="color__035ecf">Already sold : {formatMoney(product.product_sold) || 0}</h6>
+                            </div>
                           </div>
                         </div>
                       </div>

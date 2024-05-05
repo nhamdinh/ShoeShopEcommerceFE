@@ -1,13 +1,15 @@
 import "./style.scss";
 import { uid } from "uid";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
+import { Editor } from "@tinymce/tinymce-react";
 
 import Message from "../LoadingError/Error";
 import Loading from "../LoadingError/Loading";
 import {
   useCreateProductMutation,
   useGetAllBrandByCategoriesMutation,
+  useUploadImgMutation,
 } from "../../store/components/products/productsApi";
 import { useDispatch } from "react-redux";
 import { openToast } from "../../store/components/customDialog/toastSlice";
@@ -18,6 +20,7 @@ import TableCreateSku from "./components/TableCreateSku";
 import { countOccurrences, formatMoney } from "../../utils/commonFunction";
 import UploadAntd from "../../ui/UploadAntd";
 import UploadByUrl from "../../ui/UploadByUrl";
+import { FOLDER_PRODUCS_STORAGE } from "../../utils/constants";
 
 const VARIANT = {
   images: [],
@@ -174,6 +177,7 @@ const AddProductMain = ({ userInfo }: any) => {
 
   const submitHandler = (e: any) => {
     e.preventDefault();
+    const product_description = editorRef?.current?.getContent();
     const product_variants = productVariants
       .filter((pp: any) => pp.name && pp.values.length > 1)
       .map((kk: any) => {
@@ -240,7 +244,7 @@ const AddProductMain = ({ userInfo }: any) => {
     ) {
       onCreateProduct({
         product_name: name,
-        product_description: description,
+        product_description,
         product_thumb: image,
         product_thumb_small,
         product_price: price,
@@ -329,6 +333,36 @@ const AddProductMain = ({ userInfo }: any) => {
       setProduct_thumb_small("");
     }
   }, [fileList]);
+
+  const editorRef: any = useRef(null);
+
+  const [uploadImg, { isLoading: isLoadingUpload }] = useUploadImgMutation();
+
+  const uploadImageHandler = (blobInfo: any, progress: any) =>
+    new Promise<string>(async (resolve, reject) => {
+      try {
+        const formData = new FormData();
+        const fileName = uid() + Date.now();
+
+        formData.append("name", fileName);
+        formData.append("file", blobInfo.blob());
+
+        await uploadImg({
+          formData,
+          folder: FOLDER_PRODUCS_STORAGE,
+        })
+          .then((res: any) => {
+            const data = res?.data?.metadata;
+            return resolve(data?.url);
+          })
+          .catch((err) => {
+            console.log(err);
+            return reject("Something went wrong!");
+          });
+      } catch (error) {
+        return reject("Something went wrong!");
+      }
+    });
 
   return (
     <>
@@ -433,7 +467,30 @@ const AddProductMain = ({ userInfo }: any) => {
                     <label htmlFor="product_description" className="form-label">
                       Description
                     </label>
-                    <textarea
+
+                    <div className="editor">
+                      <div className="editor-row">
+                        <Editor
+                          onInit={(_, editor) => (editorRef.current = editor)}
+                          apiKey="ytlxyafeoqebwontx5k6jihqppqg5atb3ke3uch14g6p7r13"
+                          // initialValue={medicalReply ? medicalReply?.content : ''}
+                          initialValue={""}
+                          plugins="advlist autolink lists link image charmap preview 
+                              searchreplace visualblocks code fullscreen
+                                paste code help wordcount media"
+                          init={{
+                            toolbar:
+                              "undo redo | formatselect | bold italic backcolor | \
+                          alignleft aligncenter alignright alignjustify | \
+                          bullist numlist outdent indent | removeformat | image | media",
+                            placeholder: "Description",
+                            images_upload_handler: uploadImageHandler,
+                          }}
+                        />
+                      </div>
+                    </div>
+
+                    {/*                     <textarea
                       id="product_description"
                       placeholder="Type here"
                       className="form-control"
@@ -441,7 +498,7 @@ const AddProductMain = ({ userInfo }: any) => {
                       required
                       value={description}
                       onChange={(e) => setDescription(e.target.value)}
-                    ></textarea>
+                    ></textarea> */}
                   </div>
                   <div className="mb-4">
                     <div className="form-label underline fw600">
