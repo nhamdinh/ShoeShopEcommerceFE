@@ -31,7 +31,13 @@ const VARIANT = {
 const AddProductMain = ({ userInfo }: any) => {
   const dispatch = useDispatch();
 
+  /*  */
+  const [urls, setUrls] = useState<any>({});
   const [fileList, setFileList] = useState<any>([]);
+  const [fileList2, setFileList2] = useState<any>([]);
+  const [fileList3, setFileList3] = useState<any>([]);
+  const [fileList4, setFileList4] = useState<any>([]);
+  /*  */
   const [name, setName] = useState<any>("");
   const [price, setPrice] = useState<any>(0);
   const [priceMax, setPriceMax] = useState<any>(0);
@@ -178,6 +184,8 @@ const AddProductMain = ({ userInfo }: any) => {
   const submitHandler = (e: any) => {
     e.preventDefault();
     const product_description = editorRef?.current?.getContent();
+    const images: any = Object.keys(urls).map((key) => urls[key]);
+
     const product_variants = productVariants
       .filter((pp: any) => pp.name && pp.values.length > 1)
       .map((kk: any) => {
@@ -245,6 +253,7 @@ const AddProductMain = ({ userInfo }: any) => {
       onCreateProduct({
         product_name: name,
         product_description,
+        product_images: images,
         product_thumb: image,
         product_thumb_small,
         product_price: price,
@@ -317,14 +326,53 @@ const AddProductMain = ({ userInfo }: any) => {
     }
   };
 
-  const handleImageAttribute = (data: any) => {
-    setFileList([
-      {
-        url: data?.url,
-      },
-    ]);
-    setImage(data?.url);
-    setProduct_thumb_small(data?.thumb_url);
+  const handleImageAttribute = (data: any, index: number) => {
+    if (index === 1) {
+      setFileList([
+        {
+          url: data?.url,
+        },
+      ]);
+      setImage(data?.url);
+      setProduct_thumb_small(data?.thumb_url);
+      return;
+    }
+    if (index === 2) {
+      setFileList2([
+        {
+          url: data?.url,
+        },
+      ]);
+      setUrls((prev: any) => ({
+        ...prev,
+        url2: data?.url,
+      }));
+      return;
+    }
+    if (index === 3) {
+      setFileList3([
+        {
+          url: data?.url,
+        },
+      ]);
+      setUrls((prev: any) => ({
+        ...prev,
+        url3: data?.url,
+      }));
+      return;
+    }
+    if (index === 4) {
+      setFileList4([
+        {
+          url: data?.url,
+        },
+      ]);
+      setUrls((prev: any) => ({
+        ...prev,
+        url4: data?.url,
+      }));
+      return;
+    }
   };
 
   useEffect(() => {
@@ -333,6 +381,20 @@ const AddProductMain = ({ userInfo }: any) => {
       setProduct_thumb_small("");
     }
   }, [fileList]);
+
+  useEffect(() => {
+    const final: any = { ...urls };
+    if (!fileList2.length) {
+      delete final["url2"];
+    }
+    if (!fileList3.length) {
+      delete final["url3"];
+    }
+    if (!fileList4.length) {
+      delete final["url4"];
+    }
+    setUrls(final);
+  }, [fileList2, fileList3, fileList4]);
 
   const editorRef: any = useRef(null);
 
@@ -574,7 +636,54 @@ const AddProductMain = ({ userInfo }: any) => {
 
                   <div className="mb-4">
                     <label className="form-label">Images</label>
-                    <UploadAntd
+                    <div className="row">
+                      <div className="col-xl-3 col-lg-3 col-md-5 col-sm-12">
+                        <UploadAntd
+                          fileList={fileList}
+                          cb_handleImageAttribute={(data: any) => {
+                            handleImageAttribute(data, 1);
+                          }}
+                          cb_setFileList={(data: any) => {
+                            setFileList(data);
+                          }}
+                        />
+                      </div>
+                      <div className="col-xl-3 col-lg-3 col-md-5 col-sm-12">
+                        <UploadAntd
+                          fileList={fileList2}
+                          cb_handleImageAttribute={(data: any) => {
+                            handleImageAttribute(data, 2);
+                          }}
+                          cb_setFileList={(data: any) => {
+                            setFileList2(data);
+                          }}
+                        />
+                      </div>
+                      <div className="col-xl-3 col-lg-3 col-md-5 col-sm-12">
+                        <UploadAntd
+                          fileList={fileList3}
+                          cb_handleImageAttribute={(data: any) => {
+                            handleImageAttribute(data, 3);
+                          }}
+                          cb_setFileList={(data: any) => {
+                            setFileList3(data);
+                          }}
+                        />
+                      </div>
+                      <div className="col-xl-3 col-lg-3 col-md-5 col-sm-12">
+                        <UploadAntd
+                          fileList={fileList4}
+                          cb_handleImageAttribute={(data: any) => {
+                            handleImageAttribute(data, 4);
+                          }}
+                          cb_setFileList={(data: any) => {
+                            setFileList4(data);
+                          }}
+                        />
+                      </div>
+                    </div>
+
+                    {/* <UploadAntd
                       fileList={fileList}
                       cb_handleImageAttribute={(data: any) => {
                         handleImageAttribute(data);
@@ -582,7 +691,7 @@ const AddProductMain = ({ userInfo }: any) => {
                       cb_setFileList={(data: any) => {
                         setFileList(data);
                       }}
-                    ></UploadAntd>
+                    ></UploadAntd> */}
                   </div>
 
                   <div className="mb-4">
@@ -592,7 +701,7 @@ const AddProductMain = ({ userInfo }: any) => {
 
                     <UploadByUrl
                       cb_handleImageAttribute={(data: any) => {
-                        handleImageAttribute(data);
+                        handleImageAttribute(data, 1);
                       }}
                     ></UploadByUrl>
                   </div>

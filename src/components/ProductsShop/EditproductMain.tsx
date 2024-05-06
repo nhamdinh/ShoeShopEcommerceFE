@@ -6,7 +6,10 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../LoadingError/Error";
 import Loading from "../LoadingError/Loading";
-import { FOLDER_PRODUCS_STORAGE, PRODUCT_CATEGORY } from "../../utils/constants";
+import {
+  FOLDER_PRODUCS_STORAGE,
+  PRODUCT_CATEGORY,
+} from "../../utils/constants";
 import {
   useGetAllBrandByCategoriesMutation,
   useGetProductsDetailQuery,
@@ -43,7 +46,13 @@ const EditProductMain = () => {
   const [brands, setBrands] = useState<any>([]);
   const [cateArr, setCateArr] = useState<any>([]);
 
+  /*  */
+  const [urls, setUrls] = useState<any>({});
   const [fileList, setFileList] = useState<any>([]);
+  const [fileList2, setFileList2] = useState<any>([]);
+  const [fileList3, setFileList3] = useState<any>([]);
+  const [fileList4, setFileList4] = useState<any>([]);
+  /*  */
 
   const [name, setName] = useState<any>("");
   const [price, setPrice] = useState<any>(0);
@@ -85,9 +94,26 @@ const EditProductMain = () => {
         product_brand,
         product_variants,
         skus,
+        product_images = [],
       } = product;
 
       // console.log(product);
+      const __urls: any = {};
+      product_images.map((img: any, ind: number) => {
+        if (ind === 0) {
+          setFileList2([{ url: img }]);
+          __urls.url2 = img;
+        }
+        if (ind === 1) {
+          setFileList3([{ url: img }]);
+          __urls.url3 = img;
+        }
+        if (ind === 2) {
+          setFileList4([{ url: img }]);
+          __urls.url4 = img;
+        }
+      });
+      setUrls(__urls);
 
       setName(product_name);
       setDescription(product_description);
@@ -112,14 +138,53 @@ const EditProductMain = () => {
     }
   }, [product]);
 
-  const handleImageAttribute = (data: any) => {
-    setFileList([
-      {
-        url: data?.url,
-      },
-    ]);
-    setImage(data?.url);
-    setProduct_thumb_small(data?.thumb_url);
+  const handleImageAttribute = (data: any, index: number) => {
+    if (index === 1) {
+      setFileList([
+        {
+          url: data?.url,
+        },
+      ]);
+      setImage(data?.url);
+      setProduct_thumb_small(data?.thumb_url);
+      return;
+    }
+    if (index === 2) {
+      setFileList2([
+        {
+          url: data?.url,
+        },
+      ]);
+      setUrls((prev: any) => ({
+        ...prev,
+        url2: data?.url,
+      }));
+      return;
+    }
+    if (index === 3) {
+      setFileList3([
+        {
+          url: data?.url,
+        },
+      ]);
+      setUrls((prev: any) => ({
+        ...prev,
+        url3: data?.url,
+      }));
+      return;
+    }
+    if (index === 4) {
+      setFileList4([
+        {
+          url: data?.url,
+        },
+      ]);
+      setUrls((prev: any) => ({
+        ...prev,
+        url4: data?.url,
+      }));
+      return;
+    }
   };
 
   useEffect(() => {
@@ -231,6 +296,8 @@ const EditProductMain = () => {
   const submitHandler = (e: any) => {
     e.preventDefault();
     const product_description = editorRef?.current?.getContent();
+    const images: any = Object.keys(urls).map((key) => urls[key]);
+
     const product_variants = productVariants
       .filter((pp: any) => pp.name && pp.values.length > 1)
       .map((kk: any) => {
@@ -297,6 +364,7 @@ const EditProductMain = () => {
         productId: productId,
         product_name: name,
         product_description,
+        product_images: images,
         product_thumb: image,
         product_thumb_small,
         product_price: price,
@@ -360,6 +428,27 @@ const EditProductMain = () => {
       });
   };
 
+  useEffect(() => {
+    if (!fileList.length) {
+      setImage("");
+      setProduct_thumb_small("");
+    }
+  }, [fileList]);
+
+  useEffect(() => {
+    const final: any = { ...urls };
+    if (!fileList2.length) {
+      delete final["url2"];
+    }
+    if (!fileList3.length) {
+      delete final["url3"];
+    }
+    if (!fileList4.length) {
+      delete final["url4"];
+    }
+    setUrls(final);
+  }, [fileList2, fileList3, fileList4]);
+
   const editorRef: any = useRef(null);
 
   const [uploadImg, { isLoading: isLoadingUpload }] = useUploadImgMutation();
@@ -389,8 +478,6 @@ const EditProductMain = () => {
         return reject("Something went wrong!");
       }
     });
-
-
 
   return (
     <>
@@ -491,26 +578,28 @@ const EditProductMain = () => {
                               Description
                             </label>
                             <div className="editor">
-                      <div className="editor-row">
-                        <Editor
-                          onInit={(_, editor) => (editorRef.current = editor)}
-                          apiKey="ytlxyafeoqebwontx5k6jihqppqg5atb3ke3uch14g6p7r13"
-                          // initialValue={medicalReply ? medicalReply?.content : ''}
-                          initialValue={description}
-                          plugins="advlist autolink lists link image charmap preview 
+                              <div className="editor-row">
+                                <Editor
+                                  onInit={(_, editor) =>
+                                    (editorRef.current = editor)
+                                  }
+                                  apiKey="ytlxyafeoqebwontx5k6jihqppqg5atb3ke3uch14g6p7r13"
+                                  // initialValue={medicalReply ? medicalReply?.content : ''}
+                                  initialValue={description}
+                                  plugins="advlist autolink lists link image charmap preview 
                               searchreplace visualblocks code fullscreen
                                 paste code help wordcount media"
-                          init={{
-                            toolbar:
-                              "undo redo | formatselect | bold italic backcolor | \
+                                  init={{
+                                    toolbar:
+                                      "undo redo | formatselect | bold italic backcolor | \
                           alignleft aligncenter alignright alignjustify | \
                           bullist numlist outdent indent | removeformat | image | media",
-                            placeholder: "Description",
-                            images_upload_handler: uploadImageHandler,
-                          }}
-                        />
-                      </div>
-                    </div>
+                                    placeholder: "Description",
+                                    images_upload_handler: uploadImageHandler,
+                                  }}
+                                />
+                              </div>
+                            </div>
                           </div>
                           <div className="mb-4">
                             <div className="form-label underline fw600">
@@ -588,17 +677,65 @@ const EditProductMain = () => {
                               // onChange={(e) => setCountInStock(e.target.value)}
                             />
                           </div>
+
                           <div className="mb-4">
                             <label className="form-label">Images</label>
-                            <UploadAntd
-                              fileList={fileList}
-                              cb_handleImageAttribute={(data: any) => {
-                                handleImageAttribute(data);
-                              }}
-                              cb_setFileList={(data: any) => {
-                                setFileList(data);
-                              }}
-                            ></UploadAntd>
+                            <div className="row">
+                              <div className="col-xl-3 col-lg-3 col-md-5 col-sm-12">
+                                <UploadAntd
+                                  fileList={fileList}
+                                  cb_handleImageAttribute={(data: any) => {
+                                    handleImageAttribute(data, 1);
+                                  }}
+                                  cb_setFileList={(data: any) => {
+                                    setFileList(data);
+                                  }}
+                                />
+                              </div>
+                              <div className="col-xl-3 col-lg-3 col-md-5 col-sm-12">
+                                <UploadAntd
+                                  fileList={fileList2}
+                                  cb_handleImageAttribute={(data: any) => {
+                                    handleImageAttribute(data, 2);
+                                  }}
+                                  cb_setFileList={(data: any) => {
+                                    setFileList2(data);
+                                  }}
+                                />
+                              </div>
+                              <div className="col-xl-3 col-lg-3 col-md-5 col-sm-12">
+                                <UploadAntd
+                                  fileList={fileList3}
+                                  cb_handleImageAttribute={(data: any) => {
+                                    handleImageAttribute(data, 3);
+                                  }}
+                                  cb_setFileList={(data: any) => {
+                                    setFileList3(data);
+                                  }}
+                                />
+                              </div>
+                              <div className="col-xl-3 col-lg-3 col-md-5 col-sm-12">
+                                <UploadAntd
+                                  fileList={fileList4}
+                                  cb_handleImageAttribute={(data: any) => {
+                                    handleImageAttribute(data, 4);
+                                  }}
+                                  cb_setFileList={(data: any) => {
+                                    setFileList4(data);
+                                  }}
+                                />
+                              </div>
+                            </div>
+
+                            {/* <UploadAntd
+                      fileList={fileList}
+                      cb_handleImageAttribute={(data: any) => {
+                        handleImageAttribute(data);
+                      }}
+                      cb_setFileList={(data: any) => {
+                        setFileList(data);
+                      }}
+                    ></UploadAntd> */}
                           </div>
                           <div className="mb-4">
                             <label htmlFor="urlImage" className="form-label">
@@ -606,7 +743,7 @@ const EditProductMain = () => {
                             </label>
                             <UploadByUrl
                               cb_handleImageAttribute={(data: any) => {
-                                handleImageAttribute(data);
+                                handleImageAttribute(data, 1);
                               }}
                             ></UploadByUrl>
                           </div>

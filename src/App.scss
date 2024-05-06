@@ -42,8 +42,7 @@ textarea:focus {
 .Announcement {
   // background-color: #ed1c24;
   padding: 10px 0px 6px 0px;
-  background-image: linear-gradient(180deg, #f14130 , #fb6539);
-
+  background-image: linear-gradient(180deg, #f14130, #fb6539);
 }
 .Announcement .col-md-6 p {
   color: white;
@@ -65,7 +64,6 @@ textarea:focus {
 .input-group {
   height: 50px;
   width: 100%;
-
 }
 .search-button {
   width: 20%;
@@ -306,12 +304,15 @@ textarea:focus {
 .single-image {
   background-color: #f3fbf7;
   margin-right: 20px;
-  height: 700px;
+  // height: 700px;
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-wrap: wrap;
 }
-.single-image img {
+.single-image {
+}
+.product_thumb {
   width: 90%;
   height: 700px;
   object-fit: contain;
@@ -330,7 +331,7 @@ textarea:focus {
 .product-info {
   width: 100%;
 }
-.product-dtl{
+.product-dtl {
   overflow: hidden;
 }
 .product-dtl p {
@@ -678,7 +679,7 @@ textarea:focus {
   background-color: black;
   border: 1px solid black;
 }
-.pagination{
+.pagination {
   display: flex;
   gap: 4px;
   flex-wrap: wrap;

@@ -39,7 +39,7 @@ const SingleProduct = () => {
   const [qty, setQty] = useState<any>(1);
 
   useEffect(() => {
-    let cartItems_temp: any = productsCart || [];
+    const cartItems_temp: any = productsCart || [];
     cartItems_temp?.map((item: any) => {
       if (productId === item?.product_id) setQty(item?.quantity);
     });
@@ -49,7 +49,7 @@ const SingleProduct = () => {
   const [skus, setSkus] = useState<any>({});
   const [skuSelected, setSkuSelected] = useState<any>({});
   const [skuSelectedId, setSkuSelectedId] = useState<any>("");
-  const [product_variants, setProduct_variants] = useState<any>([]);
+  const [productVariants, setProduct_variants] = useState<any>([]);
   const {
     data: dataFetch,
     error,
@@ -64,10 +64,17 @@ const SingleProduct = () => {
       skip: false,
     }
   );
+  const [imgSlide, setImgSlide] = useState<any>([]);
+  const [thumbnail, setThumbnail] = useState<any>("");
 
   useEffect(() => {
     if (isSuccess) {
       const __product = dataFetch?.metadata;
+      const {
+        product_images = [],
+        product_variants = [],
+        product_thumb,
+      } = __product;
 
       const __skus = __product.skus;
       const final: any = {};
@@ -83,8 +90,17 @@ const SingleProduct = () => {
           }, "");
         final[stringValues] = sk._id + BF2 + sk.sku_price + BF2 + sk.sku_stock;
       });
+
       setdataFetched(__product);
-      setProduct_variants(__product?.product_variants);
+      setImgSlide(
+        product_images.map((url: any, index: number) => ({
+          key: index,
+          url,
+        }))
+      );
+      setThumbnail(product_thumb);
+
+      setProduct_variants(product_variants);
       setSkus(final);
       const __skusSort = [...__skus];
       __skusSort.sort((sk1: any, sk2: any) =>
@@ -332,19 +348,44 @@ const SingleProduct = () => {
               <div className="col-md-6">
                 <div className="single-image">
                   <img
+                    className="product_thumb"
                     loading="lazy"
-                    src={product?.product_thumb}
+                    src={thumbnail}
                     alt="product_thumb"
                   />
+                  <div className="img-slide">
+                    {imgSlide.length > 0 &&
+                      imgSlide.map((image: any, index: any) => {
+                        return (
+                          <div key={index}>
+                            <img
+                              loading="lazy"
+                              src={image?.url}
+                              className="slide-item"
+                              alt="img-main"
+                              width={100}
+                              height={100}
+                              onClick={() => {
+                                let imgSlide_temp: any = [...imgSlide];
+                                const thumbnail_next = image?.url;
+                                imgSlide_temp[image?.key].url = thumbnail;
+                                setThumbnail(thumbnail_next);
+                                setImgSlide(imgSlide_temp);
+                              }}
+                            />
+                          </div>
+                        );
+                      })}
+                  </div>
                 </div>
               </div>
               <div className="col-md-6">
                 <div className="product-dtl">
-                <div className="product-info">
-                    <div className="product-name">{product?.product_name}</div>
+                  <div className="product-info">
+                    <div className="ml12px product-name">{product?.product_name}</div>
                   </div>
                   <div className="product-count col-lg-7 ">
-                    {product_variants.map((ppp: any, index: number) => {
+                    {productVariants.map((ppp: any, index: number) => {
                       const { values = [] } = ppp;
                       return (
                         <div
@@ -436,14 +477,13 @@ const SingleProduct = () => {
                       </>
                     ) : null}
                   </div>
-                    <div className="mt24px">
+                  <div className="mt24px">
                     <div
-                    dangerouslySetInnerHTML={rawMarkup(
-                      product?.product_description
-                    )}
-                  ></div>
-                    </div>
-
+                      dangerouslySetInnerHTML={rawMarkup(
+                        product?.product_description
+                      )}
+                    ></div>
+                  </div>
                 </div>
               </div>
             </div>

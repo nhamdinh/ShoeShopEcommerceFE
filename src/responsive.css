@@ -21,6 +21,9 @@
   }
   .single-image,
   .single-image img {
+    /* height: 400px; */
+  }
+  .product_thumb {
     height: 400px;
   }
   .author-card-avatar img {
@@ -160,6 +163,9 @@
 
   .single-image,
   .single-image img {
+    /* height: 200px; */
+  }
+  .product_thumb {
     height: 200px;
   }
 }
