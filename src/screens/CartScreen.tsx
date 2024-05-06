@@ -506,6 +506,21 @@ const CompTableCartLv2 = memo(({ itemProduct, cart_shopId }: any) => {
   //@ts-ignore
   const [iterator, setiterator] = useState<any>([...Array(10).keys()]);
 
+  let countdown: any = null;
+
+  useEffect(() => {
+    clearTimeout(countdown);
+    if (qty !== itemProduct?.quantity && itemProduct?.quantity) {
+      countdown = setTimeout(() => {
+        AddToCartHandle({ ...itemProduct, quantity: qty });
+      }, 600);
+    }
+
+    return () => {
+      clearTimeout(countdown);
+    };
+  }, [qty]);
+
   const [createCart, { isLoading: LoadingcreateCart }] =
     useCreateCartMutation();
 
@@ -605,8 +620,8 @@ const CompTableCartLv2 = memo(({ itemProduct, cart_shopId }: any) => {
             <div
               className={qty === 1 ? "order-passive minus" : "minus"}
               onClick={() => {
-                if (qty > 1)
-                  AddToCartHandle({ ...itemProduct, quantity: qty - 1 });
+                // if (qty > 1)
+                //   AddToCartHandle({ ...itemProduct, quantity: qty - 1 });
 
                 setQty((prev: number) => {
                   if (prev > 1) return prev - 1;
@@ -635,7 +650,7 @@ const CompTableCartLv2 = memo(({ itemProduct, cart_shopId }: any) => {
                 if (!val || val.match(RE_ONLY_NUMBER)) {
                   if (+val > 0) {
                     setQty(+val);
-                    AddToCartHandle({ ...itemProduct, quantity: +val });
+                    // AddToCartHandle({ ...itemProduct, quantity: +val });
                   }
                 }
               }}
@@ -644,7 +659,7 @@ const CompTableCartLv2 = memo(({ itemProduct, cart_shopId }: any) => {
               className="plus"
               onClick={() => {
                 setQty((prev: number) => prev + 1);
-                AddToCartHandle({ ...itemProduct, quantity: qty + 1 });
+                // AddToCartHandle({ ...itemProduct, quantity: qty + 1 });
               }}
             >
               +
