@@ -22,6 +22,7 @@ import { useCreateCartMutation } from "../store/components/orders/ordersApi";
 import { getProductsCart, getUserInfo } from "../store/selector/RootSelector";
 import { openToast } from "../store/components/customDialog/toastSlice";
 import DocumentTitle from "../components/DocumentTitle";
+import { RE_ONLY_NUMBER } from "../utils/constants";
 
 const BF1 = "===";
 const BF2 = ";;;";
@@ -382,7 +383,9 @@ const SingleProduct = () => {
               <div className="col-md-6">
                 <div className="product-dtl">
                   <div className="product-info">
-                    <div className="ml12px product-name">{product?.product_name}</div>
+                    <div className="ml12px product-name">
+                      {product?.product_name}
+                    </div>
                   </div>
                   <div className="product-count col-lg-7 ">
                     {productVariants.map((ppp: any, index: number) => {
@@ -457,7 +460,51 @@ const SingleProduct = () => {
                       <>
                         <div className="flex-box d-flex justify-content-between align-items-center">
                           <h6>Quantity</h6>
-                          <select
+
+                          <div className="order-quantity">
+                            <div
+                              className={
+                                qty < 2 ? "order-passive minus" : "minus"
+                              }
+                              onClick={() => {
+                                setQty((prev: number) => {
+                                  if (prev > 1) return prev - 1;
+                                  return prev;
+                                });
+
+                                // if (vv?.quantity >= 2) {
+                                //   updateQuantityVariantsSelected(
+                                //     vv._id,
+                                //     "minus"
+                                //   );
+                                // }
+                              }}
+                            >
+                              -
+                            </div>
+                            <input
+                              value={qty}
+                              type="text"
+                              className="quantity w48px"
+                              onChange={(e) => {
+                                let val = e.target.value;
+                                val = val.replaceAll(",", "");
+                                if (!val || val.match(RE_ONLY_NUMBER)) {
+                                  if (+val > 0) setQty(+val);
+                                }
+                              }}
+                            />
+                            <div
+                              className="plus"
+                              onClick={() => {
+                                setQty((prev: number) => prev + 1);
+                              }}
+                            >
+                              +
+                            </div>
+                          </div>
+
+                          {/* <select
                             value={qty}
                             onChange={(e) => setQty(+e.target.value)}
                           >
@@ -466,7 +513,7 @@ const SingleProduct = () => {
                                 {x + 1}
                               </option>
                             ))}
-                          </select>
+                          </select> */}
                         </div>
                         <button
                           onClick={AddToCartHandle}

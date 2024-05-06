@@ -18,7 +18,7 @@ import { useGetCouponsByShopsMutation } from "../store/components/coupons/coupon
 import { Checkbox } from "antd";
 import moment from "moment";
 
-import { FORMAT_DATE8 } from "../utils/constants";
+import { FORMAT_DATE8, RE_ONLY_NUMBER } from "../utils/constants";
 import { stSetCheckoutCartsParams } from "../store/components/orders/ordersSlice";
 import { getCheckoutCartsParam } from "../store/selector/RootSelector";
 import DocumentTitle from "../components/DocumentTitle";
@@ -601,21 +601,55 @@ const CompTableCartLv2 = memo(({ itemProduct, cart_shopId }: any) => {
         {LoadingcreateCart ? (
           <Loading />
         ) : (
-          <select
-            value={qty}
-            onChange={(e) => {
-              e.preventDefault();
+          <div className="order-quantity">
+            <div
+              className={qty === 1 ? "order-passive minus" : "minus"}
+              onClick={() => {
+                if (qty > 1)
+                  AddToCartHandle({ ...itemProduct, quantity: qty - 1 });
 
-              setQty(+e.target.value);
-              AddToCartHandle({ ...itemProduct, quantity: +e.target.value });
-            }}
-          >
-            {iterator.map((x: any, index: number) => (
-              <option key={index} value={x + 1}>
-                {x + 1}
-              </option>
-            ))}
-          </select>
+                setQty((prev: number) => {
+                  if (prev > 1) return prev - 1;
+                  return prev;
+                });
+
+                // if (vv?.quantity >= 2) {
+                //   updateQuantityVariantsSelected(
+                //     vv._id,
+                //     "minus"
+                //   );
+                // }
+              }}
+            >
+              -
+            </div>
+            <input
+              value={qty}
+              type="text"
+              className="quantity w48px"
+              onChange={(e) => {
+                e.preventDefault();
+
+                let val = e.target.value;
+                val = val.replaceAll(",", "");
+                if (!val || val.match(RE_ONLY_NUMBER)) {
+                  if (+val > 0) {
+                    setQty(+val);
+                    AddToCartHandle({ ...itemProduct, quantity: +val });
+                  }
+                }
+              }}
+            />
+            <div
+              className="plus"
+              onClick={() => {
+                setQty((prev: number) => prev + 1);
+                AddToCartHandle({ ...itemProduct, quantity: qty + 1 });
+              }}
+            >
+              +
+            </div>
+          </div>
         )}
       </div>
       <div className="cart-price mt-3 mt-md-0 col-md-2 align-items-sm-end align-items-start  d-flex flex-column justify-content-center col-sm-7">

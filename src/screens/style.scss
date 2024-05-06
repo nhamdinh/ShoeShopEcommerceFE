@@ -32,3 +32,29 @@
         transform: scale(102%);
     }
 }
+.order-quantity {
+    display: flex;
+    .minus,
+    .quantity,
+    .plus {
+        width: 36px;
+        height: 36px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        border: 1px solid #e0e0e0;
+        padding: 10px;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 16px;
+        line-height: 24px;
+        color: #000000;
+        color: #222222;
+        background-color: #fff;
+        cursor: pointer;
+    }
+    .order-passive {
+        cursor: not-allowed !important;
+    }
+}
